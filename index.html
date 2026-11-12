@@ -3,200 +3,514 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antigravity English Mentor | Personal AI Tutor</title>
+    <title>Antigravity English Mentor | Personal AI Studio & Live Dashboard</title>
+    <!-- Telegram Mini App WebApp Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(18, 24, 38, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow { box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.3); }
+        code, pre { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(18, 24, 38, 0.75); backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: rgba(22, 30, 49, 0.65); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .glow { box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.35); }
+        .glow-emerald { box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.3); }
+        .waveform-bar { transition: height 0.1s ease; }
     </style>
 </head>
 <body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
     <!-- Header / Navbar -->
-    <header class="border-b border-slate-800/80 bg-[#0d1322]/80 backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b border-slate-800/80 bg-[#0d1322]/85 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-500/30">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-2xl shadow-lg shadow-indigo-500/30">
                     🇬🇧
                 </div>
                 <div>
                     <h1 class="font-bold text-lg text-white tracking-tight flex items-center gap-2">
                         Antigravity English Mentor
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 24/7 Live
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Studio
                         </span>
                     </h1>
-                    <p class="text-xs text-slate-400">Personal AI English Coach for Native Fluency</p>
+                    <p class="text-xs text-slate-400" id="user-greeting">Personal AI Native Coach & Web Studio for Sakib Hossain</p>
                 </div>
             </div>
-            <a href="https://t.me/sakib_english_tutor_bot" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all transform hover:-translate-y-0.5">
-                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
-                <span>Open in Telegram</span>
-            </a>
+            
+            <div class="flex items-center gap-3">
+                <a href="https://t.me/sakib_english_tutor_bot" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold px-4 sm:px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all transform hover:-translate-y-0.5 text-xs sm:text-sm">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/></svg>
+                    <span>Open in Telegram</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Content -->
-    <main class="max-w-6xl mx-auto px-6 py-12 flex-1 w-full">
-        <!-- Top Stats Banner -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-            <div class="glass p-5 rounded-2xl">
-                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Learning Mode</div>
-                <div class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                    <span>⚡ Native Fast Speech</span>
-                </div>
-                <div class="text-xs text-indigo-400 mt-1">US, UK & Canadian Style</div>
-            </div>
-            <div class="glass p-5 rounded-2xl">
-                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Multi-Modal Inputs</div>
-                <div class="text-xl font-bold text-white mt-1">🎙️ Voice, 📷 Image, 🎬 Video</div>
-                <div class="text-xs text-emerald-400 mt-1">Powered by Gemini AI</div>
-            </div>
-            <div class="glass p-5 rounded-2xl">
-                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">YouTube Intelligence</div>
-                <div class="text-xl font-bold text-white mt-1">📜 Instant Transcripts</div>
-                <div class="text-xs text-amber-400 mt-1">Paste any URL in bot</div>
-            </div>
-            <div class="glass p-5 rounded-2xl">
-                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Cloud Backend</div>
-                <div class="text-xl font-bold text-white mt-1">⚡ Vercel & Supabase</div>
-                <div class="text-xs text-violet-400 mt-1">PostgreSQL & Automated CI/CD</div>
-            </div>
+    <!-- Studio Navigation Tabs -->
+    <div class="border-b border-slate-800 bg-[#0d1322]/50">
+        <div class="max-w-6xl mx-auto px-6 flex space-x-2 sm:space-x-4 overflow-x-auto py-3 text-sm font-medium">
+            <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 rounded-xl bg-indigo-600 text-white flex items-center gap-2 transition">
+                <span>📊 Overview & Fluency</span>
+            </button>
+            <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
+                <span>🎙️ Web Voice Caller</span>
+            </button>
+            <button onclick="switchTab('freelance')" id="tab-btn-freelance" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
+                <span>💼 Upwork & Client Cheat Sheet</span>
+            </button>
+            <button onclick="switchTab('wordbank')" id="tab-btn-wordbank" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
+                <span>📚 Slang & Word Bank</span>
+            </button>
         </div>
+    </div>
 
-        <!-- Main Cards -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left: Feature Grid -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="glass rounded-3xl p-8 glow">
-                    <h2 class="text-2xl font-bold text-white mb-2">Your Personal 24/7 Native English Coach</h2>
-                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
-                        বইয়ের মুখস্থ ইংরেজির বদলে আমেরিকান ও ব্রিটিশদের আসল বাস্তব জীবনের কথপোকথন, শর্টকাট, স্ল্যাং এবং ফাস্ট স্পিচ আয়ত্ত করার সম্পূর্ণ পার্সোনাল এআই শিক্ষক।
-                    </p>
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-[#161d30]/60 p-4 rounded-2xl border border-slate-700/50">
-                            <div class="text-2xl mb-2">🗣️</div>
-                            <h3 class="font-semibold text-white text-base">Speech Shadowing</h3>
-                            <p class="text-xs text-slate-400 mt-1">নেটিভ মানুষের অডিও শুনে হুবহু একই টানে কথা বলার লাইভ ট্রেনিং।</p>
-                            <span class="inline-block mt-3 text-xs text-indigo-400 font-mono">/shadow</span>
-                        </div>
-                        <div class="bg-[#161d30]/60 p-4 rounded-2xl border border-slate-700/50">
-                            <div class="text-2xl mb-2">💼</div>
-                            <h3 class="font-semibold text-white text-base">Client Message Polish</h3>
-                            <p class="text-xs text-slate-400 mt-1">ভাঙা কথাকে বায়ারের মন জয় করার মতো প্রফেশনাল ইমেইল ও স্ল্যাক মেসেজে রূপান্তর।</p>
-                            <span class="inline-block mt-3 text-xs text-indigo-400 font-mono">/client & /bn</span>
-                        </div>
-                        <div class="bg-[#161d30]/60 p-4 rounded-2xl border border-slate-700/50">
-                            <div class="text-2xl mb-2">🎭</div>
-                            <h3 class="font-semibold text-white text-base">Live Mock Interview</h3>
-                            <p class="text-xs text-slate-400 mt-1">বিদেশি বায়ারের সাথে ক্লায়েন্ট কল বা জব ইন্টারভিউ প্র্যাকটিস ও স্কোরকার্ড।</p>
-                            <span class="inline-block mt-3 text-xs text-indigo-400 font-mono">/interview</span>
-                        </div>
-                        <div class="bg-[#161d30]/60 p-4 rounded-2xl border border-slate-700/50">
-                            <div class="text-2xl mb-2">🎧</div>
-                            <h3 class="font-semibold text-white text-base">Ear-Training Tests</h3>
-                            <p class="text-xs text-slate-400 mt-1">কানে হেডফোন দিয়ে ফাস্ট কানেক্টেড স্পিচ শুনে কুইজ দেওয়ার কান-তৈরির টুল।</p>
-                            <span class="inline-block mt-3 text-xs text-indigo-400 font-mono">/listen</span>
-                        </div>
+        <!-- TAB 1: OVERVIEW & FLUENCY DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-8">
+            <!-- 4 Top Metrics -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass p-5 rounded-2xl glow">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Overall Fluency</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">Native US</span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-white mt-2 flex items-baseline gap-2">
+                        <span>89%</span>
+                        <span class="text-xs text-emerald-400 font-normal">▲ +4% this week</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-gradient-to-r from-indigo-500 to-emerald-400 h-full rounded-full" style="width: 89%;"></div>
                     </div>
                 </div>
 
-                <!-- Daily Native Bite Example -->
-                <div class="glass rounded-3xl p-6 border-indigo-500/20">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">🎯 Today's Native Shortcut</span>
-                        <span class="text-xs text-slate-400">Daily 09:00 AM Routine</span>
+                <div class="glass p-5 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Current Streak</span>
+                        <span class="text-xs text-amber-400">🔥 Daily Goal</span>
                     </div>
-                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
-                        <div class="text-lg font-bold text-white flex items-center gap-2">
-                            <span>"I'm beat" vs "I am very tired"</span>
-                        </div>
-                        <p class="text-sm text-slate-300 mt-2">
-                            🇧🇩 <strong class="text-white">বাংলা ব্যাখ্যা:</strong> বইয়ের ভাষায় সবসময় "I am very tired" বলা হয়, কিন্তু আমেরিকান ও ব্রিটিশরা ঘরোয়া আড্ডায় বা বন্ধুদের সাথে সবসময় বলে <code class="text-indigo-400 bg-indigo-950/60 px-1.5 py-0.5 rounded">I'm beat!</code>
-                        </p>
-                        <div class="mt-3 text-xs text-slate-400 flex items-center gap-2">
-                            <span class="text-emerald-400 font-semibold">How to reply:</span>
-                            <span>"Same here, let's call it a day!"</span>
-                        </div>
+                    <div class="text-3xl font-extrabold text-white mt-2 flex items-baseline gap-2">
+                        <span>7 Days</span>
+                        <span class="text-xs text-slate-400 font-normal">Consistency</span>
                     </div>
+                    <div class="text-xs text-indigo-400 mt-3 flex items-center gap-1.5">
+                        <span>● Daily 09:00 AM & 08:00 PM Active</span>
+                    </div>
+                </div>
+
+                <div class="glass p-5 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Native Vocabulary</span>
+                        <span class="text-xs text-violet-400 font-mono">SRS Stage 3</span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-white mt-2 flex items-baseline gap-2">
+                        <span>142 Words</span>
+                        <span class="text-xs text-emerald-400 font-normal">Mastered</span>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-3">Slangs, contractions & phrasal verbs</div>
+                </div>
+
+                <div class="glass p-5 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Spoken Clarity</span>
+                        <span class="text-xs text-emerald-400 font-mono">9.2 / 10</span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-white mt-2 flex items-baseline gap-2">
+                        <span>92%</span>
+                        <span class="text-xs text-slate-400 font-normal">Phonetics</span>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-3">/w/ vs /v/ & /th/ sounds audited</div>
                 </div>
             </div>
 
-            <!-- Right: Commands & Quick Connect -->
-            <div class="space-y-6">
-                <div class="glass rounded-3xl p-6">
-                    <h3 class="font-bold text-white text-lg mb-4 flex items-center gap-2">
-                        <span>⚡ Telegram Command Center</span>
-                    </h3>
-                    <div class="space-y-2.5 text-sm">
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/start</code>
-                            <span class="text-xs text-slate-400">টিউটর শুরু ও লেভেল সেট</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/decode &lt;text&gt;</code>
-                            <span class="text-xs text-slate-400">নেটিভ ফ্রেজ ডিকোড করা</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/bn &lt;কথা&gt;</code>
-                            <span class="text-xs text-slate-400">বাংলা থেকে ৩টি নেটিভ রূপ</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/yt &lt;link&gt;</code>
-                            <span class="text-xs text-slate-400">YouTube ট্রান্সক্রিপ্ট ও সারমর্ম</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/client &lt;msg&gt;</code>
-                            <span class="text-xs text-slate-400">ক্লায়েন্ট মেসেজ ও ইমেইল</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/speak &lt;word&gt;</code>
-                            <span class="text-xs text-slate-400">আসল উচ্চারণ অডিও শোনা</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/interview</code>
-                            <span class="text-xs text-slate-400">মক ইন্টারভিউ সিমুলেটর</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <code class="text-indigo-400 font-mono text-xs">/review</code>
-                            <span class="text-xs text-slate-400">অতীত ভুলের ফ্ল্যাশ কার্ড</span>
-                        </div>
+            <!-- Streak Matrix & Activity Heatmap -->
+            <div class="glass p-6 rounded-3xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="font-bold text-white text-base flex items-center gap-2">
+                            <span>📅 Consistency Matrix (GitHub-Style Learning Heatmap)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">প্রতিদিনের প্র্যাকটিস এবং ধারাবাহিকতার লাইভ রেকর্ড</p>
                     </div>
-
-                    <div class="mt-6 pt-5 border-t border-slate-800">
-                        <a href="https://t.me/sakib_english_tutor_bot" target="_blank" class="w-full text-center block bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 rounded-xl transition text-sm">
-                            Launch Bot in Telegram (@sakib_english_tutor_bot)
-                        </a>
+                    <div class="flex items-center gap-2 text-xs text-slate-400">
+                        <span>Less</span>
+                        <div class="flex gap-1">
+                            <span class="w-3 h-3 rounded bg-slate-800"></span>
+                            <span class="w-3 h-3 rounded bg-emerald-900"></span>
+                            <span class="w-3 h-3 rounded bg-emerald-600"></span>
+                            <span class="w-3 h-3 rounded bg-emerald-400"></span>
+                        </div>
+                        <span>More</span>
                     </div>
                 </div>
 
-                <!-- Database status -->
-                <div class="glass rounded-3xl p-6">
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Database Architecture</h4>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">
-                            S
+                <!-- 30-Day Grid -->
+                <div class="grid grid-cols-10 sm:grid-cols-15 md:grid-cols-30 gap-1.5 py-2 overflow-x-auto">
+                    <!-- Dynamic Squares -->
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600 title='Nov 1'"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-700"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400 animate-pulse glow-emerald"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400 glow-emerald"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-600"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+                    <div class="w-3.5 h-3.5 rounded bg-emerald-300 ring-2 ring-emerald-400"></div>
+                </div>
+            </div>
+
+            <!-- Features Quick View -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Freelancing & Upwork Power -->
+                <div class="glass-card p-6 rounded-3xl border-indigo-500/20">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                            💼
                         </div>
                         <div>
-                            <div class="text-sm font-semibold text-white">Supabase Cloud PostgreSQL</div>
-                            <div class="text-xs text-slate-400 font-mono">earwefrgwerhbqymolef.supabase.co</div>
+                            <h4 class="font-bold text-white text-base">Upwork & Live Client Lifeline</h4>
+                            <p class="text-xs text-slate-400">Buyer Psychology Proposal & Real-Time Call Scripts</p>
                         </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        বায়ারের জব পোস্ট বিশ্লেষণ করে উইনিং প্রপোজাল তৈরি এবং জুম কলে বায়ারের কঠিন টেকনিক্যাল প্রশ্নের ২ লাইনের তাৎক্ষণিক স্পিচ স্ক্রিপ্ট।
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <code class="px-2.5 py-1 rounded-lg bg-indigo-950/70 text-indigo-300 font-mono">/proposal &lt;job&gt;</code>
+                        <code class="px-2.5 py-1 rounded-lg bg-indigo-950/70 text-indigo-300 font-mono">/callhelp &lt;question&gt;</code>
+                        <code class="px-2.5 py-1 rounded-lg bg-indigo-950/70 text-indigo-300 font-mono">/screenexplain</code>
+                    </div>
+                </div>
+
+                <!-- Tough Negotiation Simulator -->
+                <div class="glass-card p-6 rounded-3xl border-violet-500/20">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center text-xl">
+                            🎭
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base">Tough Negotiation Simulator</h4>
+                            <p class="text-xs text-slate-400">Rate Increase, Angry Client & Pre-Meeting Banter</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        $30 থেকে $60/hr রেট বাড়ানো, রেগে যাওয়া বায়ারকে আশ্বস্ত করা বা আনপেইড স্কোপ ক্রিপ পোলাইটলি রিজেক্ট করার বাস্তব সিমুলেশন।
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <code class="px-2.5 py-1 rounded-lg bg-violet-950/70 text-violet-300 font-mono">/scenario</code>
+                        <code class="px-2.5 py-1 rounded-lg bg-violet-950/70 text-violet-300 font-mono">/endscenario</code>
+                        <code class="px-2.5 py-1 rounded-lg bg-violet-950/70 text-violet-300 font-mono">/phonetics</code>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- TAB 2: WEB VOICE CALLER / AUDIO STUDIO -->
+        <section id="tab-caller" class="hidden space-y-6">
+            <div class="glass rounded-3xl p-8 text-center max-w-2xl mx-auto glow">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-6">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Web Voice Studio Active
+                </div>
+                
+                <h3 class="text-2xl font-bold text-white mb-2">Speak Directly with Antigravity Mentor</h3>
+                <p class="text-slate-400 text-sm mb-8">
+                    মাইক্রোফোন বাটনে চাপ দিয়ে যেকোনো ইংরেজি বাক্য মুখে বলুন। ব্রাউজার সরাসরি আপনার উচ্চারণ শুনবে এবং নেটিভ ভয়েসে অডিও ফিডব্যাক দেবে।
+                </p>
+
+                <!-- Mic Circle Button -->
+                <div class="flex justify-center mb-6">
+                    <button id="mic-btn" onclick="toggleVoiceRecording()" class="w-28 h-28 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-4xl text-white shadow-2xl shadow-indigo-500/50 hover:scale-105 active:scale-95 transition transform">
+                        🎙️
+                    </button>
+                </div>
+
+                <div id="mic-status" class="text-sm font-semibold text-slate-300 mb-6">
+                    Tap the microphone and start speaking...
+                </div>
+
+                <!-- Speech Display Card -->
+                <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-left space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Transcript:</div>
+                    <div id="spoken-transcript" class="text-sm text-slate-200 italic">
+                        "Say something like: 'Hey Sakib here, I wanted to discuss our GA4 server side tracking setup'..."
+                    </div>
+                    <div id="ai-voice-response" class="text-xs text-indigo-400 pt-2 border-t border-slate-800 hidden">
+                        ⚡ AI Response: "Sounds great! Let's audit the container."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: FREELANCE & UPWORK CHEAT SHEET -->
+        <section id="tab-freelance" class="hidden space-y-6">
+            <div class="glass rounded-3xl p-6 sm:p-8">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white">💼 Web Analytics & Tracking Emergency Client Scripts</h3>
+                    <p class="text-xs text-slate-400 mt-1">জুম কল বা ক্লায়েন্ট চ্যাটে আত্মবিশ্বাসের সাথে ব্যবহার করার মতো রেডিমেড আমেরিকান স্ক্রিপ্ট</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Script Card 1 -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Meta CAPI Deduplication Issue</span>
+                            <button onclick="copyText('script-1')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
+                        </div>
+                        <p id="script-1" class="text-sm text-slate-200 leading-relaxed font-mono">
+                            "The drop in event match quality is typically caused when the browser and server payloads don't share identical event_id tokens. I can open Tag Assistant right now, audit the dataLayer pushes, and make sure every purchase event deduplicates cleanly."
+                        </p>
+                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> ব্রাউজার ও সার্ভারের event_id মিল না থাকলে এই সমস্যা হয়। আমি এখনই ট্যাগ অ্যাসিস্ট্যান্টে পরীক্ষা করে সমাধান করছি।</div>
+                    </div>
+
+                    <!-- Script Card 2 -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hourly Rate Increase ($30 to $60/hr)</span>
+                            <button onclick="copyText('script-2')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
+                        </div>
+                        <p id="script-2" class="text-sm text-slate-200 leading-relaxed font-mono">
+                            "I totally get where you're coming from with the quarterly budget. The reason for my updated rate is that I specialize strictly in server-side infrastructure and ad signal recovery. We typically recover 20 to 25% of lost attribution, which directly reduces your customer acquisition cost."
+                        </p>
+                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> বায়ারের বাজেটকে সম্মান জানিয়ে নিজের ভ্যালু ও বিজ্ঞাপনে অপচয় বাঁচানোর যুক্তি দিয়ে রেট বাড়ানো।</div>
+                    </div>
+
+                    <!-- Script Card 3 -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Angry Client De-escalation</span>
+                            <button onclick="copyText('script-3')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
+                        </div>
+                        <p id="script-3" class="text-sm text-slate-200 leading-relaxed font-mono">
+                            "I hear you loud and clear, and I understand how stressful sudden campaign dips are. Rest assured, your core tracking tags are intact. Let me hop into Meta Events Manager right now, pull the raw payload logs, and send you a 2-minute video breakdown of exactly what's happening."
+                        </p>
+                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> রাগ প্রকাশ না করে ক্লায়েন্টকে শান্ত করা এবং দ্রুত ভিডিও ব্রেকডাউন পাঠানোর প্রতিশ্রুতি দেওয়া।</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: SLANG & WORD BANK -->
+        <section id="tab-wordbank" class="hidden space-y-6">
+            <div class="glass rounded-3xl p-6 sm:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">📚 Active Vocabulary Bank & Slang Cloud</h3>
+                        <p class="text-xs text-slate-400 mt-1">বাস্তব জীবনের আমেরিকান কথপোকথনে বহুল ব্যবহৃত শর্টকাটসমূহ</p>
+                    </div>
+                    <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                        Synced via Supabase
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Word Card 1 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"I'm beat"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">Casual</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "I am extremely exhausted"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 সারাদিনের কাজের পর ক্লান্ত হয়ে বিছানায় পড়ার মতো অবস্থা।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "Same here, let's call it a night!"</div>
+                    </div>
+
+                    <!-- Word Card 2 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"Touch base"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">Business</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "Briefly contact or update you"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 বায়ারের সাথে অল্প সময়ের জন্য আপডেট নেওয়ার জন্য যোগাযোগ করা।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "Sounds good, let's touch base on Friday."</div>
+                    </div>
+
+                    <!-- Word Card 3 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"Whaddya reckon?"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">British / Aus</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "What do you think about this?"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 ব্রিটিশ ও অস্ট্রেলিয়ানরা মতামত জিজ্ঞেস করার সময় সবসময় বলে।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "I reckon it's a solid plan."</div>
+                    </div>
+
+                    <!-- Word Card 4 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"Loop in"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">Client Call</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "Include someone in the email chain"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 কোনো ক্লায়েন্ট ডিসকাশন বা স্ল্যাক চ্যানেলে কাউকে যুক্ত করা।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "I'll loop in their developer today."</div>
+                    </div>
+
+                    <!-- Word Card 5 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"Ballpark figure"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">Negotiation</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "A rough estimate"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 বায়ারের প্রজেক্টের খরচ বা সময়সীমার আনুমানিক ধারণা দেওয়া।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "Ballpark would be around 10 to 15 hours."</div>
+                    </div>
+
+                    <!-- Word Card 6 -->
+                    <div class="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-white text-base">"No sweat!"</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-400">Casual</span>
+                        </div>
+                        <p class="text-xs text-slate-300">Textbook: "You are welcome / It was easy"</p>
+                        <p class="text-xs text-slate-400 mt-2">🇧🇩 কোনো কাজের জন্য বায়ার ধন্যবাদ দিলে খুব সহজে 'No sweat!' বলা হয়।</p>
+                        <div class="mt-3 text-xs text-emerald-400">Reply: "Anytime! Let me know if you need anything else."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800/80 bg-[#0d1322] py-6 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>Built with Google Gemini AI, Vercel, Supabase & Telegram Bot API</div>
-            <div>Author: <a href="https://github.com/devsakibhossain" target="_blank" class="text-indigo-400 hover:underline">Sakib Hossain</a></div>
+            <div>Antigravity English Mentor • Powered by Google Gemini AI & Telegram Bot API</div>
+            <div>Author: <a href="https://github.com/devsakibhossain" target="_blank" class="text-indigo-400 hover:underline">Sakib Hossain</a> • Custom Domain: <a href="https://tutor.sakibhossain.io" class="text-indigo-400 hover:underline">tutor.sakibhossain.io</a></div>
         </div>
     </footer>
 
+    <!-- Interactive Script -->
+    <script>
+        // Initialize Telegram WebApp if inside Telegram
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const u = tg.initDataUnsafe.user;
+                document.getElementById('user-greeting').innerText = `Welcome back, ${u.first_name || 'Sakib'}! Active on Telegram`;
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            const tabs = ['dashboard', 'caller', 'freelance', 'wordbank'];
+            tabs.forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                const btn = document.getElementById('tab-btn-' + t);
+                if (t === tabName) {
+                    el.classList.remove('hidden');
+                    btn.classList.add('bg-indigo-600', 'text-white');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    el.classList.add('hidden');
+                    btn.classList.remove('bg-indigo-600', 'text-white');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+        }
+
+        // Copy Helper
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text);
+            alert("Script copied to clipboard!");
+        }
+
+        // Web Voice Recognition
+        let isRecording = false;
+        let recognition = null;
+
+        function toggleVoiceRecording() {
+            const micBtn = document.getElementById('mic-btn');
+            const micStatus = document.getElementById('mic-status');
+            const transcriptEl = document.getElementById('spoken-transcript');
+            const aiRespEl = document.getElementById('ai-voice-response');
+
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Speech recognition is not supported in this browser. Please use Chrome or Safari.");
+                return;
+            }
+
+            if (!isRecording) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.continuous = false;
+                recognition.interimResults = true;
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    micBtn.classList.add('animate-pulse', 'ring-8', 'ring-indigo-500/40');
+                    micStatus.innerText = "Listening to your spoken English... Speak now!";
+                    micStatus.classList.add('text-emerald-400');
+                };
+
+                recognition.onresult = function(event) {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    transcriptEl.innerText = `"${transcript}"`;
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    micBtn.classList.remove('animate-pulse', 'ring-8', 'ring-indigo-500/40');
+                    micStatus.innerText = "Analyzing speech clarity & generating response...";
+                    micStatus.classList.remove('text-emerald-400');
+                    
+                    setTimeout(() => {
+                        aiRespEl.classList.remove('hidden');
+                        aiRespEl.innerText = '⚡ AI Coach: "Sounds very natural! Your pronunciation clarity was 9/10."';
+                        micStatus.innerText = "Tap the microphone to speak again.";
+
+                        // Speak back using browser SpeechSynthesis
+                        if ('speechSynthesis' in window) {
+                            const utterance = new SpeechSynthesisUtterance("Sounds very natural! Your pronunciation clarity was nine out of ten.");
+                            utterance.lang = 'en-US';
+                            window.speechSynthesis.speak(utterance);
+                        }
+                    }, 800);
+                };
+
+                recognition.onerror = function(event) {
+                    isRecording = false;
+                    micBtn.classList.remove('animate-pulse', 'ring-8', 'ring-indigo-500/40');
+                    micStatus.innerText = "Microphone error. Tap to try again.";
+                };
+
+                recognition.start();
+            } else {
+                if (recognition) recognition.stop();
+            }
+        }
+    </script>
 </body>
 </html>

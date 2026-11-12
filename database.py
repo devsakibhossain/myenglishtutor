@@ -91,6 +91,24 @@ def init_db():
         )
     """)
 
+    # Spaced Repetition System (SRS) table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS srs_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            item_type TEXT DEFAULT 'vocab',
+            prompt TEXT NOT NULL,
+            correct_answer TEXT NOT NULL,
+            options_json TEXT NOT NULL,
+            explanation TEXT,
+            interval_stage INTEGER DEFAULT 1,
+            next_review_date TEXT,
+            review_count INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (user_id)
+        )
+    """)
+
     # Safe migrations for new features
     try:
         cursor.execute("ALTER TABLE users ADD COLUMN voice_enabled INTEGER DEFAULT 1")
@@ -104,6 +122,16 @@ def init_db():
 
     try:
         cursor.execute("ALTER TABLE users ADD COLUMN interview_state TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN scenario_state TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN fluency_score INTEGER DEFAULT 75")
     except sqlite3.OperationalError:
         pass
 
@@ -403,3 +431,123 @@ def sync_sqlite_to_supabase() -> Dict[str, int]:
 
     conn.close()
     return stats
+
+def set_scenario_state(user_id: int, state: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET scenario_state = ? WHERE user_id = ?", (state, user_id))
+    conn.commit()
+    conn.close()
+
+def get_scenario_state(user_id: int) -> str:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT scenario_state FROM users WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row["scenario_state"] if row and row["scenario_state"] else ""
+
+def add_srs_item(user_id: int, prompt: str, correct_answer: str, options: List[str], explanation: str = "", item_type: str = "vocab"):
+    import json
+    from datetime import date, timedelta
+    conn = get_connection()
+    cursor = conn.cursor()
+    # Next review tomorrow by default (1 day interval)
+    next_date = (date.today() + timedelta(days=1)).isoformat()
+    cursor.execute("""
+        INSERT INTO srs_items (user_id, item_type, prompt, correct_answer, options_json, explanation, interval_stage, next_review_date)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+    """, (user_id, item_type, prompt, correct_answer, json.dumps(options), explanation, next_date))
+    conn.commit()
+    conn.close()
+
+def get_due_srs_items(user_id: int, limit: int = 3) -> List[Dict[str, Any]]:
+    import json
+    from datetime import date
+    conn = get_connection()
+    cursor = conn.cursor()
+    today_str = date.today().isoformat()
+    cursor.execute("""
+        SELECT * FROM srs_items 
+        WHERE user_id = ? AND (next_review_date <= ? OR next_review_date IS NULL)
+        ORDER BY interval_stage ASC, id ASC
+        LIMIT ?
+    """, (user_id, today_str, limit))
+    rows = cursor.fetchall()
+    results = []
+    for r in rows:
+        d = dict(r)
+        try:
+            d["options"] = json.loads(d["options_json"])
+        except Exception:
+            d["options"] = []
+        results.append(d)
+    conn.close()
+    return results
+
+def update_srs_item_result(item_id: int, is_correct: bool):
+    from datetime import date, timedelta
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT interval_stage, review_count FROM srs_items WHERE id = ?", (item_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return
+
+    current_stage = row["interval_stage"]
+    review_count = row["review_count"] + 1
+
+    if is_correct:
+        # Progress stages: 1 day -> 3 days -> 7 days -> 21 days
+        new_stage = min(current_stage + 1, 4)
+        intervals = {1: 1, 2: 3, 3: 7, 4: 21}
+        days_to_add = intervals.get(new_stage, 7)
+    else:
+        # Reset on failure
+        new_stage = 1
+        days_to_add = 1
+
+    next_review = (date.today() + timedelta(days=days_to_add)).isoformat()
+    cursor.execute("""
+        UPDATE srs_items 
+        SET interval_stage = ?, next_review_date = ?, review_count = ?
+        WHERE id = ?
+    """, (new_stage, next_review, review_count, item_id))
+    conn.commit()
+    conn.close()
+
+def get_user_learning_metrics(user_id: int) -> Dict[str, Any]:
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))
+    user = cursor.fetchone()
+    user_dict = dict(user) if user else {}
+
+    cursor.execute("SELECT COUNT(*) FROM vocabulary WHERE user_id = ?", (user_id,))
+    vocab_count = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM mistakes_log WHERE user_id = ?", (user_id,))
+    mistakes_count = cursor.fetchone()[0]
+
+    cursor.execute("SELECT word, meaning_bn, example_sentence, learned_at FROM vocabulary WHERE user_id = ? ORDER BY id DESC LIMIT 15", (user_id,))
+    recent_vocabs = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("SELECT original_text, corrected_text, explanation FROM mistakes_log WHERE user_id = ? ORDER BY id DESC LIMIT 10", (user_id,))
+    recent_mistakes = [dict(r) for r in cursor.fetchall()]
+
+    # Calculate dynamic fluency score
+    streak = user_dict.get("streak", 1)
+    base_score = 65
+    score = min(99, base_score + (streak * 2) + min(vocab_count, 15) - min(mistakes_count // 3, 5))
+
+    conn.close()
+    return {
+        "user": user_dict,
+        "vocab_count": vocab_count,
+        "mistakes_count": mistakes_count,
+        "fluency_score": score,
+        "recent_vocabs": recent_vocabs,
+        "recent_mistakes": recent_mistakes
+    }

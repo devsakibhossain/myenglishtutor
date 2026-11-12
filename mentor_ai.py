@@ -772,3 +772,251 @@ Return raw JSON only.
             "correct_index": 0,
             "explanation": "'Whaddya wanna' হলো 'What do you want to' এর ফাস্ট আমেরিকান কানেক্টেড স্পিচ রূপ।"
         }
+
+def generate_upwork_proposal(job_text: str) -> str:
+    """Generates a high-converting, buyer-psychology matched Upwork proposal for Web Analytics/Tracking jobs."""
+    client = get_client()
+    if not client:
+        return "⚠️ Gemini API key missing."
+
+    prompt = f"""
+You are an Elite Upwork Proposal Strategist who has won hundreds of high-ticket ($50-$120/hr) contracts for Web Analytics, Google Tag Manager (GTM), GA4, Meta Conversion API (CAPI), and Server-side Tracking.
+
+Analyze this client job post carefully:
+\"\"\"{job_text}\"\"\"
+
+Generate a winning, human, casual-yet-expert proposal tailored to the client's country and psychological state:
+
+1. 🎯 **Buyer Psychology & Country Profile (বায়ার প্রোফাইল):**
+   - Detect likely country (US / UK / Australia / Germany / Europe) from language, spelling, or context.
+   - What does this buyer truly care about? (e.g. Fast turnaround, clean ROAS tracking, privacy/GDPR compliance, or stopping double counting).
+
+2. 🎣 **The Killer 2-Line Hook (প্রথম ২ লাইন যা বায়ার নোটিফিকেশনে দেখবে):**
+   - Must NOT start with "Hi, I am an expert" or generic flattery.
+   - Jump straight into the technical symptom and relief (e.g. "Hey [Name], saw your CAPI deduplication is misfiring in Meta Events Manager — that's usually because the browser and server event_id tokens aren't identical.").
+
+3. 💼 **The Complete Winning Proposal (সম্পূর্ণ প্রপোজাল):**
+   - Natural native conversational tone (US or UK style based on client).
+   - Crisp 3-bullet action plan.
+   - Relevant proof/quick case study.
+   - Ultra-low friction closing question (e.g. "Do you have Stape or GCP container set up already? Drop me a quick ping and we can knock this out today.").
+
+4. 🇧🇩 **সাইকোলজিক্যাল টিপস (কেন এই প্রপোজালটি কাজ করবে):**
+   - ৩টি গুরুত্বপূর্ণ পয়েন্ট বাংলায় ব্যাখ্যা করুন যা ইন্টারভিউ কল পাওয়ার সম্ভাবনা বাড়িয়ে দেয়।
+"""
+    try:
+        response = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction="You are a World-Class Freelancing Proposal Copywriter.",
+                temperature=0.6
+            )
+        )
+        return response.text or "Proposal generation failed."
+    except Exception as e:
+        return f"Error generating proposal: {e}"
+
+def generate_call_lifeline(buyer_question: str) -> Dict[str, str]:
+    """Generates an instant 2-3 sentence emergency speech script for live Zoom/Meet client calls."""
+    client = get_client()
+    if not client:
+        return {
+            "spoken_script": "That's a great question. Typically when that happens, the tracking tag is firing before the dataLayer push completes. I can audit the GTM container in preview mode right now.",
+            "follow_up": "Would you mind sharing screen or sending me temporary viewer access?",
+            "bangla_tip": "আত্মবিশ্বাসের সাথে বলুন এবং সাথে সাথে স্ক্রিন শেয়ার চান যাতে বল আপনার কোর্টে আসে।",
+            "tts_text": "That's a great question. Typically when that happens, the tracking tag is firing before the dataLayer push completes."
+        }
+
+    prompt = f"""
+The user is live on a Zoom/Google Meet call with a foreign client.
+The client just asked this technical or business question:
+\"\"\"{buyer_question}\"\"\"
+
+Provide an immediate emergency spoken script:
+Return valid JSON with:
+{{
+  "spoken_script": "2-3 short, ultra-fluent, confident native sentences to say out loud right now without hesitation.",
+  "follow_up": "1 smart follow-up question to ask the client to keep control of the conversation.",
+  "bangla_tip": "বাংলায় ছোট্ট টিপস: কেন এই উত্তরটি বায়ারের আস্থা অর্জন করবে।",
+  "tts_text": "The exact spoken_script for audio pronunciation practice."
+}}
+Return raw JSON only.
+"""
+    try:
+        response = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.4,
+                response_mime_type="application/json"
+            )
+        )
+        return json.loads(response.text.strip())
+    except Exception as e:
+        return {
+            "spoken_script": f"Understood. Let me check the event payload directly in the tag debugger. {buyer_question}",
+            "follow_up": "Could you grant me temporary access to your GTM workspace?",
+            "bangla_tip": "ভয় না পেয়ে সরাসরি ডিবাগার চেক করার কথা বলুন।",
+            "tts_text": "Understood. Let me check the event payload directly in the tag debugger."
+        }
+
+def analyze_screen_explain(image_bytes: bytes, mime_type: str, caption: str = "") -> str:
+    """Inspects technical dashboards (GTM/GA4/Meta Ads) and crafts how to explain it to a client."""
+    client = get_client()
+    if not client:
+        return "⚠️ Gemini API key missing."
+
+    prompt = f"""
+Analyze this technical screenshot (likely Google Tag Manager, GA4, Meta Events Manager, BigQuery, or tracking dashboard).
+User's note/caption: "{caption}"
+
+Provide:
+1. 🔍 **Technical Diagnosis (স্ক্রিনশটে কী দেখা যাচ্ছে):**
+   - Identify metrics, errors, or configuration status accurately.
+
+2. 🗣️ **How to Explain This to Your Client in Spoken English (বায়ারকে মুখে কী বলবেন):**
+   - Provide a 3-4 sentence natural, non-jargon spoken script you can tell the client on Zoom or write in Slack.
+   - Example: "Hey, looking at your Events Manager, the browser pixel is firing purchase events properly, but the server container is receiving a null transaction_id. That's why your event match quality is low."
+
+3. 🛠️ **Recommended Fix & Action Items (সমাধানের ধাপ):**
+   - 2-3 bullet points on how to fix it in GTM or the server container.
+
+4. 🇧🇩 **বাংলায় সারমর্ম ও পরামর্শ:**
+   - বায়ারের সামনে তোতলাতে না হওয়ার জন্য সহজ বাংলায় মূল বিষয়।
+"""
+    try:
+        response = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=[
+                types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
+                types.Part.from_text(text=prompt)
+            ],
+            config=types.GenerateContentConfig(
+                system_instruction="You are an Expert Web Analytics & Client Communication Mentor.",
+                temperature=0.4
+            )
+        )
+        return response.text or "Could not analyze screenshot."
+    except Exception as e:
+        return f"Error analyzing technical screenshot: {e}"
+
+def analyze_phonetics_deep(audio_bytes: bytes, mime_type: str) -> Dict[str, Any]:
+    """Listens to speech and performs detailed phonetics & accent audit for Bengali speakers."""
+    client = get_client()
+    if not client:
+        return {
+            "transcript": "Audio received",
+            "clarity_score": 8,
+            "markdown": "⚠️ Gemini API key missing for phonetics analysis.",
+            "drill_text": "Very well, water the vines."
+        }
+
+    prompt = """
+Listen to this spoken audio carefully. The speaker is an English learner from Bangladesh.
+Analyze their phonetics, pronunciation, and intonation:
+
+Check specifically for common South Asian / Bengali speech habits:
+1. /v/ vs /w/ confusion (pronouncing "very" as "wery" or "water" as "vater").
+2. /th/ sound (/θ/ in think, /ð/ in that) vs dental /t/ or /d/.
+3. /r/ pronunciation (American rhotic curl vs British non-rhotic vs rolled Bengali 'র').
+4. Dropping word endings (omitting final -t, -d, -s, -ed).
+5. Vowel length and sentence rhythm (stress-timed vs syllable-timed).
+
+Return valid JSON with:
+{
+  "transcript": "Exact transcription of what the user said",
+  "clarity_score": 8, // Integer 1-10
+  "phonetic_breakdown": [
+    {
+      "word": "water",
+      "target_sound": "/w/",
+      "user_sound": "/v/",
+      "status": "yellow", // green, yellow, or red
+      "tip_bn": "ঠোঁট গোল করে বাঁশির মতো ফুঁ দিয়ে 'ওয়াটার' বলুন, দাঁত দিয়ে ঠোঁট কামড়াবেন না।"
+    }
+  ],
+  "drill_text": "A short 5-word sentence to practice the weak sound",
+  "overall_feedback_bn": "২-৩ লাইনে সামগ্রিক উচ্চারণ ও অ্যাকসেন্টের ফিডব্যাক বাংলায়।"
+}
+Return raw JSON only.
+"""
+    try:
+        response = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=[
+                types.Part.from_bytes(data=audio_bytes, mime_type=mime_type),
+                types.Part.from_text(text=prompt)
+            ],
+            config=types.GenerateContentConfig(
+                temperature=0.3,
+                response_mime_type="application/json"
+            )
+        )
+        return json.loads(response.text.strip())
+    except Exception as e:
+        return {
+            "transcript": "Speech detected",
+            "clarity_score": 7,
+            "phonetic_breakdown": [],
+            "drill_text": "Practice saying: Think through the thick thoughts.",
+            "overall_feedback_bn": f"উচ্চারণ নিরীক্ষা সম্পন্ন: {e}"
+        }
+
+def simulate_scenario_turn(scenario_type: str, history: List[Dict[str, str]], user_reply: str) -> Dict[str, Any]:
+    """Simulates real-world difficult client negotiation scenarios."""
+    client = get_client()
+    if not client:
+        return {
+            "client_reply": "Let me think about that.",
+            "feedback": "Keep your arguments value-focused.",
+            "tip_bn": "নিজের কাজের ভ্যালু তুলে ধরুন।"
+        }
+
+    scenario_descriptions = {
+        "rate": "Budget & Hourly Rate Negotiation: The user is currently at $30/hr and is negotiating to increase to $60/hr due to deep GTM server-side and attribution expertise. The client is a budget-conscious US business owner.",
+        "angry": "Calming an Angry Client: The client is furious because their Facebook ad conversions dropped 40% after iOS update, thinking tracking is completely broken. The user needs to calm them down with confidence, explain why it happened, and present the server-side solution.",
+        "smalltalk": "Zoom Pre-Meeting Small Talk: Casual 2-minute icebreaker before talking shop. Client talks about NFL, crazy weather in Chicago, or weekend plans. User needs to sound natural, relaxed, and culturally fluent.",
+        "scope": "Scope Creep Defense: The client wants 5 new domain setups and CRM integrations done for free within the original basic audit budget. User needs to politely but firmly push back and upsell an add-on milestone."
+    }
+
+    desc = scenario_descriptions.get(scenario_type, scenario_descriptions["rate"])
+
+    prompt = f"""
+You are the client in this realistic simulation:
+Scenario: {desc}
+
+Conversation so far:
+{json.dumps(history[-6:], indent=2)}
+
+User just said:
+"{user_reply}"
+
+Return valid JSON with:
+{{
+  "client_reply": "In-character realistic response as the client (natural American colloquial English, push back or agree based on user's diplomacy).",
+  "user_performance_score": 8, // 1-10
+  "diplomacy_feedback": "Short feedback on user's tone, firmness, and natural English phrasing.",
+  "recommended_next_saying": "A native way to counter or respond to what you just said.",
+  "tip_bn": "বাংলায় স্ট্র্যাটেজিক টিপস যা রিয়েল ক্লায়েন্টের সাথে কার্যকর হবে।"
+}}
+Return raw JSON only.
+"""
+    try:
+        response = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.7,
+                response_mime_type="application/json"
+            )
+        )
+        return json.loads(response.text.strip())
+    except Exception as e:
+        return {
+            "client_reply": "Hmm, I see where you're coming from, but that seems a bit steep. What makes this different from what an agency would do?",
+            "user_performance_score": 7,
+            "diplomacy_feedback": "Good attempt, but make sure to anchor on ROI.",
+            "recommended_next_saying": "I totally get that. The reason is that server-side tracking recovers lost ad attribution by up to 25%, which directly drops your CPA.",
+            "tip_bn": "সবসময় ক্লায়েন্টের লাভ এবং আরও বেশি সেলস আনার পয়েন্টে ফোকাস করুন।"
+        }

@@ -71,30 +71,32 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
         "🤖 **Antigravity English Mentor - পাওয়ারফুল ফিচারসমূহ:**\n\n"
-        "🎧 **নেটিভ স্পিচ ও লিসেনিং টুলস:**\n"
+        "💼 **ফ্রিল্যান্সিং, আপওয়ার্ক ও ক্লায়েন্ট কল (New!):**\n"
+        "• `/proposal <জব পোস্ট>` - বায়ারের দেশ ও সাইকোলজি বুঝে উইনিং প্রপোজাল তৈরি\n"
+        "• `/callhelp <বায়ারের প্রশ্ন>` - লাইভ জুমে মুখে বলার মতো ২ লাইনের জরুরি স্পিচ ও অডিও\n"
+        "• `/screenexplain` - GA4/GTM/CAPI এরর স্ক্রিনশট বায়ারকে মুখে বুঝিয়ে বলার স্ক্রিপ্ট\n"
+        "• `/scenario` - কঠিন পরিস্থিতি নেগোসিয়েশন সিমুলেটর (রেট বৃদ্ধি, রাগী বায়ার শান্ত করা, স্মলটক)\n"
+        "• `/endscenario` - রানিং সিনারিও সিমুলেশন বন্ধ করা\n"
+        "• `/client <মেসেজ>` - রাফ টেক্সটকে বায়ারের মন জয় করার মতো নেটিভ মেসেজে রূপান্তর\n"
+        "• `/interview` - লাইভ বায়ার কল ও জব ইন্টারভিউ সিমুলেটর (শেষে `/endinterview`)\n\n"
+        "🎧 **নেটিভ স্পিচ, অ্যাকসেন্ট ও ফোনেটিক্স:**\n"
+        "• `/phonetics` - অ্যাকসেন্ট অডিট গাইড ও ৫টি প্রধান উচ্চারণ ত্রুটি সমাধান\n"
         "• `/listen` - কানেক্টেড স্পিচ ও ফাস্ট নেটিভ স্পোকেন অডিও টেস্ট\n"
-        "• `/decode <বাক্য>` - যেকোনো নেটিভ স্ল্যাং/শর্টকাট ডিকোড করা (যেমন: `/decode I'm beat`)\n"
-        "• `/speak <শব্দ/বাক্য>` - যেকোনো বাক্যের আসল নেটিভ উচ্চারণ অডিও আকারে শোনা\n"
+        "• `/shadow` - স্পিচ শ্যাডোয়িং ট্রেনিং (অডিও শুনে হুবহু মুখে রিপিট করা)\n"
+        "• `/decode <বাক্য>` - যেকোনো নেটিভ স্ল্যাং/শর্টকাট ডিকোড করা\n"
+        "• `/speak <বাক্য>` - যেকোনো বাক্যের আসল নেটিভ উচ্চারণ অডিও আকারে শোনা\n"
         "• `/accent` - অ্যাকসেন্ট নির্বাচন (American / British / Australian)\n"
         "• `/voice on|off` - স্বয়ংক্রিয় ভয়েস রিপ্লাই চালু বা বন্ধ রাখা\n\n"
-        "🎬 **ইউটিউব ভিডিও লার্নিং:**\n"
-        "• `/yt <লিংক>` - যেকোনো YouTube ভিডিও বা শর্টসের পুরো ট্রান্সক্রিপ্ট, সারসংক্ষেপ ও নেটিভ স্পিচ বিশ্লেষণ\n\n"
-        "💼 **ফ্রিল্যান্সিং ও ক্যারিয়ার টুলস:**\n"
-        "• `/bn <বাংলা/বাংলিশ>` - আপনার মনের ভাবনাকে সরাসরি ৩টি নেটিভ ইংরেজি রূপ ও অডিওতে রূপান্তর\n"
-        "• `/client <মেসেজ>` - আপনার রাফ টেক্সটকে প্রফেশনাল নেটিভ ক্লায়েন্ট মেসেজ ও ইমেইলে রূপান্তর\n"
-        "• `/interview` - রিয়েল-লাইভ বায়ার কল ও জব ইন্টারভিউ সিমুলেটর (শেষে `/endinterview` দিলে স্কোরকার্ড পাবেন)\n"
-        "• `/shadow` - স্পিচ শ্যাডোয়িং ট্রেনিং (নেটিভ অডিও শুনে হুবহু মুখে রিপিট করার প্র্যাকটিস)\n"
-        "• `/review` - আপনার অতীত ভুলের স্পেসড-রিপিটিশন ফ্ল্যাশ কার্ড\n"
-        "• `/correct <বাক্য>` - যেকোনো বাক্যকে ন্যাচারাল নেটিভ স্টাইলে রূপান্তর\n"
-        "• 📄 **PDF/DOC ফাইল:** যেকোনো ইংরেজি PDF পাঠালে বট সারসংক্ষেপ ও কঠিন শব্দ বাংলায় বুঝিয়ে দেবে\n\n"
-        "📚 **প্রতিদিনের লার্নিং:**\n"
-        "• `/lesson` - আজকের নেটিভ স্পিকিং ও ফাস্ট স্পিচ টিপস\n"
-        "• `/vocab` - গুরুত্বপূর্ণ নেটিভ স্ল্যাং বা ফ্রেজ শেখা\n"
-        "• `/quiz` - নেটিভ স্পিচ ও স্ল্যাং কুইজ দেওয়া\n"
-        "• `/stats` - আপনার অগ্রগতি ও স্ট্রিক\n"
-        "• `/mode` - মোড পরিবর্তন (Native / Business / Strict)\n"
-        "• `/clear` - চ্যাট মেমোরি রিসেট করা\n\n"
-        "🎙️ **টিপ:** আপনি সরাসরি **ভয়েস মেসেজ (Voice Note)** পাঠাতে পারেন! টিউটর আপনার ভয়েস শুনে ইংরেজি উচ্চারণ ঠিক করে দেবে এবং নিজেও আসল নেটিভ ভয়েসে রিপ্লাই দেবে।"
+        "🧠 **স্মৃতি ও স্পেসড-রিপিটিশন:**\n"
+        "• `/srs` - Ebbinghaus স্পেসড-রিপিটিশন ফ্ল্যাশ কার্ড কুইজ (ভুলে যাওয়ার আগেই প্র্যাকটিস)\n"
+        "• `/review` - আপনার অতীত ভুলের ফ্ল্যাশ কার্ড\n"
+        "• `/quiz` - নেটিভ স্পিচ কুইজ\n"
+        "• `/vocab` - আজকের নতুন স্ল্যাং বা ফ্রেজ\n"
+        "• `/stats` - স্ট্রিক ও অগ্রগতি\n\n"
+        "🌐 **টেলিগ্রাম মিনি অ্যাপ ও ওয়েব হাব:**\n"
+        "• `/app` - লাইভ ওয়েব স্টুডিও ও অডিও কলার (tutor.sakibhossain.io)\n"
+        "• চ্যাট বারের পাশে **'🚀 Web Studio'** বাটনে চাপ দিয়ে যেকোনো সময় মিনি অ্যাপ ওপেন করতে পারেন!\n\n"
+        "🎙️ **টিপ:** আপনি যেকোনো সময় মুখে কথা বলে **ভয়েস মেসেজ** পাঠাতে পারেন! বট আপনার অ্যাকসেন্ট ও গ্রামার স্ক্যান করে নেটিভ ভয়েসে অডিও রিপ্লাই দেবে।"
     )
     await update.message.reply_text(help_text, parse_mode=ParseMode.MARKDOWN)
 
@@ -569,6 +571,192 @@ async def clear_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     database.clear_chat_history(update.effective_user.id)
     await update.message.reply_text("🧹 আগের কথোপকথনের মেমোরি ক্লিয়ার করা হয়েছে! চলুন নতুন বিষয় নিয়ে আলোচনা শুরু করি।", parse_mode=ParseMode.MARKDOWN)
 
+async def proposal_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    if not context.args:
+        await update.message.reply_text(
+            "💼 **Upwork Winning Proposal Generator:**\n\n"
+            "বায়ারের জব পোস্ট পেস্ট করুন। যেমন:\n"
+            "`/proposal We need an expert to fix Meta CAPI deduplication and GA4 server side tracking on Stape.io`\n\n"
+            "আমি বায়ারের দেশ (USA/UK/AU) এবং সাইকোলজি বুঝে পারফেক্ট প্রপোজাল সাজিয়ে দেব।",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+
+    job_text = " ".join(context.args)
+    await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+    await update.message.reply_text("🧠 বায়ারের সাইকোলজি ও টেকনিক্যাল রিকোয়ারমেন্ট অ্যানালাইজ করা হচ্ছে, অনুগ্রহ করে কয়েক সেকেন্ড অপেক্ষা করুন...")
+    
+    proposal = await asyncio.to_thread(mentor_ai.generate_upwork_proposal, job_text)
+    try:
+        await update.message.reply_text(proposal, parse_mode=ParseMode.MARKDOWN)
+    except Exception as e:
+        logger.warning(f"Markdown proposal failed: {e}")
+        await update.message.reply_text(proposal)
+
+async def callhelp_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    if not context.args:
+        await update.message.reply_text(
+            "🚨 **Live Client Call Emergency Lifeline:**\n\n"
+            "বায়ার জুমে বা কলে যা জিজ্ঞেস করেছে তা লিখুন। যেমন:\n"
+            "`/callhelp Why are our purchase conversion values not matching between Shopify and GA4?`\n\n"
+            "আমি সাথে সাথে মুখে বলার মতো ফ্লুয়েন্ট স্পিচ স্ক্রিপ্ট ও অডিও ভয়েস নোট পাঠিয়ে দেব!",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+
+    buyer_q = " ".join(context.args)
+    await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+    
+    result = await asyncio.to_thread(mentor_ai.generate_call_lifeline, buyer_q)
+    spoken_script = result.get("spoken_script", "")
+    follow_up = result.get("follow_up", "")
+    bangla_tip = result.get("bangla_tip", "")
+    tts_text = result.get("tts_text", spoken_script)
+
+    card = (
+        f"🎙️ **Spoken Native Script (বায়ারকে মুখে যা বলবেন):**\n"
+        f"*{spoken_script}*\n\n"
+        f"💬 **Follow-up Question (কথোপকথন নিজের নিয়ন্ত্রণে রাখতে):**\n"
+        f"*{follow_up}*\n\n"
+        f"💡 **সাইকোলজিক্যাল টিপস:**\n{bangla_tip}"
+    )
+    try:
+        await update.message.reply_text(card, parse_mode=ParseMode.MARKDOWN)
+    except Exception:
+        await update.message.reply_text(card)
+
+    db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+    accent = db_user.get("accent", "US")
+    voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+    audio_bytes = await tts_service.text_to_speech_bytes(tts_text, voice=voice)
+    if audio_bytes:
+        try:
+            await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+        except Exception as e:
+            logger.error(f"Callhelp audio failed: {e}")
+
+async def screenexplain_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "📷 **Technical Screenshot Explainer:**\n\n"
+        "যেকোনো GA4, GTM, Meta Events Manager, BigQuery বা ট্র্যাকিং ড্যাশবোর্ডের স্ক্রিনশট আমাকে সরাসরি পাঠান (ছবি পাঠানোর সময় ক্যাপশনে কিছু লিখতে পারেন বা শুধু ছবি পাঠালেও হবে)।\n\n"
+        "বট স্ক্রিনশটের এরর/মেট্রিক দেখে বায়ারকে জুম কলে বা চ্যাটে মুখে কীভাবে সহজ ইংরেজিতে বুঝিয়ে বলবেন তার সুন্দর টেক্সট ও সমাধান সাজিয়ে দেবে!",
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+async def phonetics_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    msg = (
+        "🎯 **Phonetics & Accent Audit System:**\n\n"
+        "বাঙালি ইংরেজি শিক্ষার্থীদের ক্ষেত্রে সবচেয়ে বেশি যে ৫টি উচ্চারণ অভ্যাস লক্ষ্য করা যায়:\n"
+        "1. **/w/ vs /v/:** 'water' কে 'vater' বা 'very' কে 'wery' বলা।\n"
+        "2. **/th/ Sound:** 'think' বা 'this' উচ্চারণ করার সময় দাঁতের সাথে জিহ্বা স্পর্শ না করা।\n"
+        "3. **/r/ Rhoticity:** আমেরিকান রোবোটিক কার্ল ও ব্রিটিশ নন-রোটিক উচ্চারণ।\n"
+        "4. **Dropped Endings:** শব্দের শেষের -ed, -s, -t উচ্চারণ বাদ পড়ে যাওয়া।\n"
+        "5. **Speech Rhythm:** স্ট্রেস-টাইমড ন্যাচারাল রিদম।\n\n"
+        "🎙️ **উচ্চারণ অডিট করতে:**\n"
+        "যেকোনো ইংরেজি বাক্য মুখে পড়ে আমাকে একটি **ভয়েস মেসেজ (Voice Note)** পাঠান। আমি আপনার অডিও স্ক্যান করে অ্যাকসেন্ট হিটম্যাপ ও টিপস দিয়ে দেব!"
+    )
+    await update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+
+async def scenario_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [
+        [
+            InlineKeyboardButton("💰 $30 to $60/hr Rate Negotiation", callback_data="start_scen_rate"),
+        ],
+        [
+            InlineKeyboardButton("😡 Angry Client De-escalation", callback_data="start_scen_angry"),
+        ],
+        [
+            InlineKeyboardButton("☕ Zoom Pre-Meeting Small Talk", callback_data="start_scen_smalltalk"),
+        ],
+        [
+            InlineKeyboardButton("🛑 Scope Creep Defense (Unpaid Work)", callback_data="start_scen_scope"),
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    intro = (
+        "🎭 **Real-World Client Negotiation Simulator:**\n\n"
+        "বাস্তব জীবনের কঠিন পরিস্থিতিগুলোতে আমেরিকান ক্লায়েন্টদের সাথে কীভাবে কনফিডেন্টলি এবং ডিপ্লোম্যাটিক্যালি কথা বলতে হয় তা প্র্যাকটিস করুন।\n\n"
+        "কোন পরিস্থিতিটি সিমুলেট করতে চান নির্বাচন করুন:"
+    )
+    await update.message.reply_text(intro, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+async def endscenario_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    current = database.get_scenario_state(user_id)
+    if not current:
+        await update.message.reply_text("বর্তমানে কোনো অ্যাক্টিভ সিনারিও সিমুলেশন চালু নেই। নতুন সিনারিও শুরু করতে `/scenario` লিখুন।")
+        return
+    database.set_scenario_state(user_id, "")
+    await update.message.reply_text("🏁 **সিনারিও সিমুলেশন শেষ হয়েছে!**\n\nআপনি স্বাভাবিক টিউটর মোডে ফিরে এসেছেন। আবার শুরু করতে `/scenario` লিখুন।", parse_mode=ParseMode.MARKDOWN)
+
+async def srs_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    due_items = database.get_due_srs_items(user_id, limit=1)
+
+    if not due_items:
+        srs_data = {
+            "id": 0,
+            "prompt": "What is the native meaning of 'touch base'?",
+            "correct": "To briefly make contact or talk to someone",
+            "options": [
+                "To briefly make contact or talk to someone",
+                "To play baseball in the park",
+                "To finish the entire project today",
+                "To blame someone for an error"
+            ],
+            "explanation": "'Touch base' হলো একটি অত্যন্ত বহুল ব্যবহৃত আমেরিকান কর্পোরেট/ক্লায়েন্ট স্ল্যাং, যার অর্থ সংক্ষিপ্তভাবে খোঁজ নেওয়া বা আপডেট দেওয়া।"
+        }
+    else:
+        item = due_items[0]
+        srs_data = {
+            "id": item["id"],
+            "prompt": item["prompt"],
+            "correct": item["correct_answer"],
+            "options": item.get("options", []),
+            "explanation": item.get("explanation", "")
+        }
+
+    question_text = (
+        f"🧠 **Spaced Repetition Flashcard (Ebbinghaus System):**\n\n"
+        f"*{srs_data['prompt']}*\n\n"
+        f"সঠিক উত্তর বেছে নিন:"
+    )
+    keyboard = []
+    options = srs_data["options"]
+    correct_ans = srs_data["correct"]
+    for i, opt in enumerate(options):
+        is_correct = "1" if opt == correct_ans else "0"
+        cb_id = srs_data.get("id", 0)
+        keyboard.append([InlineKeyboardButton(f"{chr(65+i)}. {opt}", callback_data=f"srs_ans_{cb_id}_{is_correct}")])
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text(question_text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+async def app_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    card = (
+        "🚀 **Antigravity English Web Studio & Live Voice Caller:**\n\n"
+        "আপনার কাস্টম ডোমেইন ড্যাশবোর্ড ও ইন্টারঅ্যাক্টিভ অডিও স্টুডিও সরাসরি ভিজিট করুন:\n"
+        "👉 **[tutor.sakibhossain.io](https://tutor.sakibhossain.io)**\n"
+        "👉 **[tutor.sakibhossain.online](https://tutor.sakibhossain.online)**\n\n"
+        "✨ **ফিচারসমূহ:**\n"
+        "• 🎙️ Web Voice Caller (লাইভ অডিও কথা বলা)\n"
+        "• 📊 স্ট্রিক ও ফ্লুয়েন্সি স্কোরকার্ড\n"
+        "• 💼 ফ্রিল্যান্সিং ও আপওয়ার্ক চিটশিট\n"
+        "• 🗂️ ফ্ল্যাশ কার্ড ওয়ার্ড ব্যাংক"
+    )
+    keyboard = [
+        [
+            InlineKeyboardButton("🌐 Open Web Studio", url="https://tutor.sakibhossain.io"),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text(card, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
 async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -664,6 +852,68 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
         active_quizzes.pop(chat_id, None)
         await query.edit_message_text(response_msg, parse_mode=ParseMode.MARKDOWN)
 
+    elif data.startswith("start_scen_"):
+        scen_type = data.replace("start_scen_", "")
+        database.set_scenario_state(user_id, scen_type)
+
+        scen_titles = {
+            "rate": "💰 $30 to $60/hr Rate Negotiation",
+            "angry": "😡 Angry Client De-escalation",
+            "smalltalk": "☕ Pre-Meeting Small Talk",
+            "scope": "🛑 Scope Creep Defense"
+        }
+        openings = {
+            "rate": "Hey Sakib, we really appreciate your work on our Google Tag Manager container. But honestly, bumping the rate from $30 up to $60 an hour is a big jump for our quarterly budget. How do you justify doubling the cost?",
+            "angry": "Sakib, what happened to our Facebook campaigns?! Our reported purchase conversions plummeted by 40% over the weekend right after you touched the tags! We're burning money on ads!",
+            "smalltalk": "Hey Sakib! Good to see you on the call. Man, it has been pouring down rain here in Chicago all morning! How are things on your end today?",
+            "scope": "Hey, by the way, since you're already in our GTM container fixing GA4, could you also quickly set up tracking on our other 4 subdomain stores and connect them to our ActiveCampaign CRM?"
+        }
+
+        opening_text = openings.get(scen_type, "Hey, thanks for joining. Let's discuss the project.")
+        database.add_chat_history(user_id, "model", opening_text)
+
+        db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+        accent = db_user.get("accent", "US")
+        voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+        audio_bytes = await tts_service.text_to_speech_bytes(opening_text, voice=voice)
+
+        await query.edit_message_text(
+            f"🎬 **সিনারিও সিমুলেশন শুরু হয়েছে!**\n"
+            f"*{scen_titles.get(scen_type, 'Negotiation')}*\n\n"
+            f"👤 **Client:**\n*\"{opening_text}\"*\n\n"
+            f"👉 আপনি টেক্সট লিখে অথবা **ভয়েস মেসেজে** ক্লায়েন্টকে উত্তর দিন।\n"
+            f"(সিনারিও বন্ধ করতে লিখবেন: `/endscenario`)",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        if audio_bytes:
+            try:
+                await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+            except Exception as e:
+                logger.error(f"Scenario opening voice failed: {e}")
+
+    elif data.startswith("srs_ans_"):
+        parts = data.replace("srs_ans_", "").split("_")
+        item_id = int(parts[0]) if len(parts) > 0 and parts[0].isdigit() else 0
+        is_correct = (parts[1] == "1") if len(parts) > 1 else False
+
+        if item_id > 0:
+            database.update_srs_item_result(item_id, is_correct)
+
+        if is_correct:
+            res_text = (
+                "🎉 **Brilliant! একদম সঠিক উত্তর!**\n\n"
+                "🧠 **Ebbinghaus SRS Progress:**\n"
+                "আপনার মেমোরি ইন্টারভ্যাল পরবর্তী স্টেজে উন্নীত হয়েছে (+৩/৭ দিন পর আবার রিভিজিট করা হবে)।\n\n"
+                "পরবর্তী ফ্ল্যাশ কার্ডের জন্য `/srs` লিখুন।"
+            )
+        else:
+            res_text = (
+                "❌ **Oops! উত্তরটি সঠিক হয়নি।**\n\n"
+                "💡 **টিপস:** কোনো সমস্যা নেই! Ebbinghaus মেমোরি অ্যালগরিদম অনুযায়ী এই শব্দটি কাল আবার আপনার সামনে আনা হবে যাতে স্থায়ীভাবে মাথায় গেঁথে যায়।\n\n"
+                "পরবর্তী ফ্ল্যাশ কার্ডের জন্য `/srs` লিখুন।"
+            )
+        await query.edit_message_text(res_text, parse_mode=ParseMode.MARKDOWN)
+
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
         return
@@ -722,6 +972,46 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         accent = db_user.get("accent", "US")
         voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
         audio_bytes = await tts_service.text_to_speech_bytes(reply, voice=voice)
+        if audio_bytes:
+            try:
+                await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+            except Exception as e:
+                logger.error(f"Voice send failed: {e}")
+        return
+
+    # Check for active negotiation scenario
+    active_scenario = database.get_scenario_state(user.id)
+    if active_scenario:
+        scenario_result = await asyncio.to_thread(
+            mentor_ai.simulate_scenario_turn,
+            scenario_type=active_scenario,
+            history=history,
+            user_reply=user_text
+        )
+        client_reply = scenario_result.get("client_reply", "")
+        score = scenario_result.get("user_performance_score", 8)
+        feedback = scenario_result.get("diplomacy_feedback", "")
+        rec_saying = scenario_result.get("recommended_next_saying", "")
+        tip_bn = scenario_result.get("tip_bn", "")
+
+        msg = (
+            f"👤 **Client Reaction:**\n*\"{client_reply}\"*\n\n"
+            f"━━━━━━━━━━━━━━━━━━━\n"
+            f"📊 **Performance Score:** {score}/10\n"
+            f"🔍 **Diplomacy & Tone:** {feedback}\n"
+            f"💡 **Better Native Phrasing:** *\"{rec_saying}\"*\n"
+            f"🇧🇩 **কৌশলগত পরামর্শ:** {tip_bn}\n\n"
+            f"👉 আপনি ক্লায়েন্টকে পরবর্তী জবাব দিন (বা শেষ করতে `/endscenario` লিখুন)।"
+        )
+        database.add_chat_history(user.id, "model", client_reply)
+        try:
+            await update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+        except Exception:
+            await update.message.reply_text(msg)
+
+        accent = db_user.get("accent", "US")
+        voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+        audio_bytes = await tts_service.text_to_speech_bytes(client_reply, voice=voice)
         if audio_bytes:
             try:
                 await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
@@ -797,6 +1087,25 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_mode=mode
     )
 
+    # Phonetics and Accent Audit
+    try:
+        phonetics = await asyncio.to_thread(
+            mentor_ai.analyze_phonetics_deep,
+            audio_bytes=bytes(audio_bytes),
+            mime_type="audio/ogg"
+        )
+        clarity = phonetics.get("clarity_score", 8)
+        pb = phonetics.get("phonetic_breakdown", [])
+        overall_bn = phonetics.get("overall_feedback_bn", "")
+        phonetic_box = f"\n\n━━━━━━━━━━━━━━━━━━━\n🎯 **Phonetic & Accent Audit:** {clarity}/10\n"
+        for item in pb[:2]:
+            phonetic_box += f"• **{item.get('word')}** ({item.get('target_sound')}): {item.get('tip_bn')}\n"
+        if overall_bn:
+            phonetic_box += f"💡 {overall_bn}\n"
+        reply += phonetic_box
+    except Exception as e:
+        logger.debug(f"Phonetic audit error: {e}")
+
     database.add_chat_history(user.id, "user", "[Voice Message]")
     database.add_chat_history(user.id, "model", reply)
 
@@ -843,12 +1152,25 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     level = db_user.get("level", "Intermediate")
 
-    reply = await asyncio.to_thread(
-        mentor_ai.generate_image_tutor_reply,
-        image_bytes=bytes(photo_bytes),
-        caption=caption,
-        user_level=level
-    )
+    lower_caption = caption.lower()
+    is_screen_explain = any(k in lower_caption for k in [
+        "/screenexplain", "screen", "explain", "client", "error", "gtm", "ga4", "capi", "buyer", "tag", "pixel", "metric", "dashboard"
+    ])
+
+    if is_screen_explain:
+        reply = await asyncio.to_thread(
+            mentor_ai.analyze_screen_explain,
+            image_bytes=bytes(photo_bytes),
+            mime_type="image/jpeg",
+            caption=caption
+        )
+    else:
+        reply = await asyncio.to_thread(
+            mentor_ai.generate_image_tutor_reply,
+            image_bytes=bytes(photo_bytes),
+            caption=caption,
+            user_level=level
+        )
 
     try:
         await update.message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
@@ -906,6 +1228,17 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def post_init(application):
     scheduler.setup_scheduler(application.bot)
+    try:
+        from telegram import MenuButtonWebApp, WebAppInfo
+        await application.bot.set_chat_menu_button(
+            menu_button=MenuButtonWebApp(
+                text="🚀 Web Studio",
+                web_app=WebAppInfo(url="https://tutor.sakibhossain.io")
+            )
+        )
+        logger.info("Telegram Mini App menu button configured: https://tutor.sakibhossain.io")
+    except Exception as e:
+        logger.warning(f"Could not set web app menu button: {e}")
     logger.info("Background scheduler initialized in post_init.")
 
 def main():
@@ -944,6 +1277,16 @@ def main():
     app.add_handler(CommandHandler("mode", mode_command))
     app.add_handler(CommandHandler("level", level_command))
     app.add_handler(CommandHandler("clear", clear_command))
+
+    # New Superpowers
+    app.add_handler(CommandHandler("proposal", proposal_command))
+    app.add_handler(CommandHandler("callhelp", callhelp_command))
+    app.add_handler(CommandHandler("screenexplain", screenexplain_command))
+    app.add_handler(CommandHandler("phonetics", phonetics_command))
+    app.add_handler(CommandHandler("scenario", scenario_command))
+    app.add_handler(CommandHandler("endscenario", endscenario_command))
+    app.add_handler(CommandHandler("srs", srs_command))
+    app.add_handler(CommandHandler("app", app_command))
 
     # Callback queries (Buttons)
     app.add_handler(CallbackQueryHandler(handle_callback_query))

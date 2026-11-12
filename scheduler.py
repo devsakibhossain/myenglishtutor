@@ -52,6 +52,40 @@ async def send_evening_vocab_quiz(bot):
         except Exception as e:
             logger.error(f"Failed to send evening vocab to {chat_id}: {e}")
 
+async def send_daily_srs_quiz(bot):
+    """Checks for due SRS review items (Ebbinghaus forgetting curve intervals) and sends interactive buttons."""
+    logger.info("Executing daily SRS review job...")
+    from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+    subscribers = database.get_all_subscribers()
+    for user in subscribers:
+        user_id = user["user_id"]
+        chat_id = user["chat_id"]
+        due_items = database.get_due_srs_items(user_id, limit=1)
+        if not due_items:
+            continue
+        item = due_items[0]
+        prompt = item["prompt"]
+        options = item.get("options", [])
+        correct_ans = item["correct_answer"]
+        item_id = item["id"]
+
+        keyboard = []
+        for i, opt in enumerate(options):
+            is_correct = "1" if opt == correct_ans else "0"
+            keyboard.append([InlineKeyboardButton(f"{chr(65+i)}. {opt}", callback_data=f"srs_ans_{item_id}_{is_correct}")])
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        msg = (
+            f"🧠 **Spaced Repetition Review (স্মৃতি পরীক্ষা):**\n\n"
+            f"*{prompt}*\n\n"
+            f"সঠিক উত্তর বেছে নিন:"
+        )
+        try:
+            await bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup, parse_mode="Markdown")
+            logger.info(f"Daily SRS quiz sent to {chat_id}")
+        except Exception as e:
+            logger.error(f"Failed to send daily SRS quiz to {chat_id}: {e}")
+
 def setup_scheduler(bot):
     scheduler = AsyncIOScheduler()
 
@@ -61,6 +95,15 @@ def setup_scheduler(bot):
         CronTrigger(hour=9, minute=0),
         args=[bot],
         id="morning_lesson",
+        replace_existing=True
+    )
+
+    # Afternoon Spaced Repetition (SRS) at 15:00 (3:00 PM) every day
+    scheduler.add_job(
+        send_daily_srs_quiz,
+        CronTrigger(hour=15, minute=0),
+        args=[bot],
+        id="daily_srs",
         replace_existing=True
     )
 
