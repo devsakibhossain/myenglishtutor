@@ -1,7 +1,30 @@
 import sqlite3
+import logging
 from datetime import datetime, date
 from typing import Optional, List, Dict, Any
-from config import DATABASE_PATH
+from config import DATABASE_PATH, SUPABASE_URL, SUPABASE_KEY
+
+logger = logging.getLogger(__name__)
+
+# Initialize Supabase client if configured
+supabase_client = None
+if SUPABASE_URL and SUPABASE_KEY:
+    try:
+        from supabase import create_client, Client
+        supabase_client: Optional[Client] = create_client(SUPABASE_URL, SUPABASE_KEY)
+        logger.info("Supabase cloud client initialized successfully.")
+    except Exception as e:
+        logger.warning(f"Could not initialize Supabase client: {e}")
+
+def get_supabase():
+    global supabase_client
+    if supabase_client is None and SUPABASE_URL and SUPABASE_KEY:
+        try:
+            from supabase import create_client
+            supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        except Exception as e:
+            logger.warning(f"Failed to create Supabase client on demand: {e}")
+    return supabase_client
 
 def get_connection():
     conn = sqlite3.connect(DATABASE_PATH)
@@ -123,6 +146,27 @@ def get_or_create_user(user_id: int, chat_id: int, username: str = "", first_nam
 
     user_dict = dict(row)
     conn.close()
+
+    # Cloud sync to Supabase
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("users").upsert({
+                "user_id": user_id,
+                "chat_id": chat_id,
+                "username": username,
+                "first_name": first_name,
+                "streak": user_dict.get("streak", 1),
+                "last_active_date": user_dict.get("last_active_date", today_str),
+                "level": user_dict.get("level", "Intermediate"),
+                "mode": user_dict.get("mode", "Native"),
+                "accent": user_dict.get("accent", "US"),
+                "voice_enabled": user_dict.get("voice_enabled", 1),
+                "interview_state": user_dict.get("interview_state", "")
+            }).execute()
+        except Exception as e:
+            logger.debug(f"Supabase upsert user error: {e}")
+
     return user_dict
 
 def update_user_level(user_id: int, level: str):
@@ -131,6 +175,12 @@ def update_user_level(user_id: int, level: str):
     cursor.execute("UPDATE users SET level = ? WHERE user_id = ?", (level, user_id))
     conn.commit()
     conn.close()
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("users").update({"level": level}).eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.debug(f"Supabase update_user_level error: {e}")
 
 def update_user_voice(user_id: int, enabled: int):
     conn = get_connection()
@@ -138,6 +188,12 @@ def update_user_voice(user_id: int, enabled: int):
     cursor.execute("UPDATE users SET voice_enabled = ? WHERE user_id = ?", (enabled, user_id))
     conn.commit()
     conn.close()
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("users").update({"voice_enabled": enabled}).eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.debug(f"Supabase update_user_voice error: {e}")
 
 def update_user_accent(user_id: int, accent: str):
     conn = get_connection()
@@ -145,6 +201,12 @@ def update_user_accent(user_id: int, accent: str):
     cursor.execute("UPDATE users SET accent = ? WHERE user_id = ?", (accent, user_id))
     conn.commit()
     conn.close()
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("users").update({"accent": accent}).eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.debug(f"Supabase update_user_accent error: {e}")
 
 def set_interview_state(user_id: int, state: str):
     conn = get_connection()
@@ -152,6 +214,12 @@ def set_interview_state(user_id: int, state: str):
     cursor.execute("UPDATE users SET interview_state = ? WHERE user_id = ?", (state, user_id))
     conn.commit()
     conn.close()
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("users").update({"interview_state": state}).eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.debug(f"Supabase set_interview_state error: {e}")
 
 def get_interview_state(user_id: int) -> str:
     conn = get_connection()
@@ -196,6 +264,13 @@ def add_chat_history(user_id: int, role: str, content: str):
     conn.commit()
     conn.close()
 
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("chat_history").insert({"user_id": user_id, "role": role, "content": content}).execute()
+        except Exception as e:
+            logger.debug(f"Supabase add_chat_history error: {e}")
+
 def get_chat_history(user_id: int, limit: int = 8) -> List[Dict[str, str]]:
     conn = get_connection()
     cursor = conn.cursor()
@@ -210,6 +285,12 @@ def clear_chat_history(user_id: int):
     cursor.execute("DELETE FROM chat_history WHERE user_id = ?", (user_id,))
     conn.commit()
     conn.close()
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("chat_history").delete().eq("user_id", user_id).execute()
+        except Exception as e:
+            logger.debug(f"Supabase clear_chat_history error: {e}")
 
 def save_vocabulary(user_id: int, word: str, meaning_bn: str, part_of_speech: str = "", example_sentence: str = ""):
     conn = get_connection()
@@ -220,6 +301,19 @@ def save_vocabulary(user_id: int, word: str, meaning_bn: str, part_of_speech: st
     """, (user_id, word, meaning_bn, part_of_speech, example_sentence))
     conn.commit()
     conn.close()
+
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("vocabulary").insert({
+                "user_id": user_id,
+                "word": word,
+                "meaning_bn": meaning_bn,
+                "part_of_speech": part_of_speech,
+                "example_sentence": example_sentence
+            }).execute()
+        except Exception as e:
+            logger.debug(f"Supabase save_vocabulary error: {e}")
 
 def get_user_vocab_count(user_id: int) -> int:
     conn = get_connection()
@@ -239,6 +333,18 @@ def save_mistake(user_id: int, original: str, corrected: str, explanation: str):
     conn.commit()
     conn.close()
 
+    sb = get_supabase()
+    if sb:
+        try:
+            sb.table("mistakes_log").insert({
+                "user_id": user_id,
+                "original_text": original,
+                "corrected_text": corrected,
+                "explanation": explanation
+            }).execute()
+        except Exception as e:
+            logger.debug(f"Supabase save_mistake error: {e}")
+
 def get_user_mistakes_count(user_id: int) -> int:
     conn = get_connection()
     cursor = conn.cursor()
@@ -254,3 +360,46 @@ def get_all_subscribers() -> List[Dict[str, Any]]:
     rows = cursor.fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+def sync_sqlite_to_supabase() -> Dict[str, int]:
+    """One-click batch sync from local SQLite database to Supabase Cloud."""
+    sb = get_supabase()
+    if not sb:
+        return {"error": "Supabase client not configured or key missing"}
+    
+    conn = get_connection()
+    cursor = conn.cursor()
+    stats = {"users": 0, "vocabulary": 0, "mistakes": 0}
+
+    # 1. Users
+    cursor.execute("SELECT * FROM users")
+    users = [dict(r) for r in cursor.fetchall()]
+    for u in users:
+        try:
+            sb.table("users").upsert(u).execute()
+            stats["users"] += 1
+        except Exception as e:
+            logger.debug(f"User sync error: {e}")
+
+    # 2. Vocabulary
+    cursor.execute("SELECT user_id, word, meaning_bn, part_of_speech, example_sentence FROM vocabulary")
+    vocabs = [dict(r) for r in cursor.fetchall()]
+    for v in vocabs:
+        try:
+            sb.table("vocabulary").insert(v).execute()
+            stats["vocabulary"] += 1
+        except Exception as e:
+            logger.debug(f"Vocab sync error: {e}")
+
+    # 3. Mistakes
+    cursor.execute("SELECT user_id, original_text, corrected_text, explanation FROM mistakes_log")
+    mistakes = [dict(r) for r in cursor.fetchall()]
+    for m in mistakes:
+        try:
+            sb.table("mistakes_log").insert(m).execute()
+            stats["mistakes"] += 1
+        except Exception as e:
+            logger.debug(f"Mistake sync error: {e}")
+
+    conn.close()
+    return stats
