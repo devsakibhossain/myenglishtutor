@@ -17,6 +17,42 @@
         .glow { box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.35); }
         .glow-emerald { box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.3); }
         .waveform-bar { transition: height 0.1s ease; }
+        
+        /* Zoom Avatar and Meeting Animations */
+        @keyframes mouthTalk {
+            0%, 100% { transform: scaleY(0.2); }
+            50% { transform: scaleY(1.1); }
+        }
+        @keyframes headNod {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(3px); }
+        }
+        @keyframes eyeBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        @keyframes pulseRec {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.9); }
+        }
+        .mouth-talking {
+            animation: mouthTalk 0.2s infinite ease-in-out;
+            transform-origin: center 78%;
+        }
+        .head-nodding {
+            animation: headNod 3s infinite ease-in-out;
+        }
+        .eye-blinking {
+            animation: eyeBlink 3.8s infinite ease-in-out;
+            transform-origin: center;
+        }
+        .rec-dot {
+            animation: pulseRec 1.2s infinite ease-in-out;
+        }
+        .active-speaker-ring {
+            box-shadow: 0 0 0 3px #10b981, 0 0 25px rgba(16, 185, 129, 0.4) !important;
+            border-color: #10b981 !important;
+        }
     </style>
 </head>
 <body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -58,8 +94,9 @@
                 <span class="text-amber-400">⚡</span>
                 <span class="font-semibold text-indigo-300">200 Fast-Speech Skills</span>
             </button>
-            <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
-                <span>🎙️ Web Caller</span>
+            <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-rose-500/20 bg-rose-950/10">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                <span class="font-bold text-rose-300">📹 Zoom AI Interview Studio</span>
             </button>
             <button onclick="switchTab('freelance')" id="tab-btn-freelance" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
                 <span>💼 Upwork & Client</span>
@@ -233,230 +270,462 @@
             </div>
         </section>
 
-        <!-- TAB 2: WEB VOICE CALLER / AUDIO STUDIO -->
+        <!-- TAB 2: ZOOM AI INTERVIEW STUDIO -->
         <section id="tab-caller" class="hidden space-y-6">
-            <!-- Studio Card Container -->
-            <div class="glass rounded-3xl p-6 sm:p-8 glow border border-indigo-500/20 bg-gradient-to-br from-indigo-950/30 via-slate-900/70 to-slate-950 max-w-4xl mx-auto space-y-6">
+            <!-- Zoom Window Container -->
+            <div class="bg-[#0f1422] rounded-3xl border border-slate-800 shadow-2xl overflow-hidden max-w-6xl mx-auto flex flex-col">
                 
-                <!-- Call Top Header -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
-                    <div class="flex items-center gap-3.5">
-                        <div id="caller-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-indigo-500/30">
-                            🇺🇸
+                <!-- Zoom Top Window Header -->
+                <div class="bg-[#141a29] px-5 py-3 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1.5 text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                            <span>Zoom Verified • 256-Bit Encrypted Meeting</span>
                         </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 id="caller-name" class="font-extrabold text-white text-lg">Alex Vance</h3>
-                                <span id="call-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700">
-                                    <span id="call-status-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
-                                    <span id="call-status-text">Ready to Call</span>
-                                </span>
-                            </div>
-                            <p id="caller-role" class="text-xs text-slate-400">VP of Marketing & Ecommerce (US Brand)</p>
-                        </div>
+                        <span class="text-slate-400 font-semibold hidden md:inline">Topic: <b class="text-white">Client Technical Interview (Meta CAPI & GA4 Server-Side)</b></span>
                     </div>
 
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <!-- Auto-Listen Toggle -->
-                        <button onclick="toggleAutoListen()" id="auto-listen-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
-                            <span id="auto-listen-icon" class="text-slate-500">⚪</span>
-                            <span>Hands-Free Auto-Listen: <b id="auto-listen-status" class="text-slate-400">OFF</b></span>
-                        </button>
-
-                        <!-- Speed selector -->
-                        <div class="flex items-center bg-slate-900 border border-slate-700 rounded-xl px-2 py-1 text-xs">
-                            <span class="text-slate-400 mr-1.5">Speed:</span>
-                            <select id="voice-speed-select" class="bg-transparent text-indigo-300 font-semibold focus:outline-none cursor-pointer">
-                                <option value="0.9">0.9x Slow</option>
-                                <option value="1.0" selected>1.0x Normal</option>
-                                <option value="1.2">1.2x Fast</option>
-                                <option value="1.4">1.4x Rapid Native</option>
-                            </select>
+                    <div class="flex items-center gap-3">
+                        <!-- Recording Badge -->
+                        <div id="zoom-rec-badge" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 rec-dot"></span>
+                            <span>REC</span>
+                            <span id="zoom-rec-timer" class="font-mono">00:00</span>
                         </div>
 
-                        <!-- Call Timer -->
-                        <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">
+                        <!-- Meeting Timer -->
+                        <div class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono font-bold">
                             ⏱️ <span id="call-timer">00:00</span>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Persona Switcher Chips -->
-                <div class="space-y-2">
-                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                        <span>Select Call Persona & Scenario:</span>
-                        <span class="text-indigo-400 text-xs">Click to switch anytime</span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                        <button onclick="selectPersona('alex')" id="persona-btn-alex" class="p-3 rounded-2xl bg-indigo-600/30 border border-indigo-500 text-left transition transform hover:-translate-y-0.5">
-                            <div class="text-xl mb-1">🇺🇸</div>
-                            <div class="font-bold text-xs text-white">Alex Vance</div>
-                            <div class="text-[10px] text-indigo-300 truncate">US Tech Client (GA4/CAPI)</div>
-                        </button>
-
-                        <button onclick="selectPersona('sarah')" id="persona-btn-sarah" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
-                            <div class="text-xl mb-1">💼</div>
-                            <div class="font-bold text-xs text-white">Sarah Jenkins</div>
-                            <div class="text-[10px] text-slate-400 truncate">Upwork Agency Director</div>
-                        </button>
-
-                        <button onclick="selectPersona('emily')" id="persona-btn-emily" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
-                            <div class="text-xl mb-1">☕</div>
-                            <div class="font-bold text-xs text-white">Emily Clark</div>
-                            <div class="text-[10px] text-slate-400 truncate">Zoom Small Talk & Rapport</div>
-                        </button>
-
-                        <button onclick="selectPersona('coach')" id="persona-btn-coach" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
-                            <div class="text-xl mb-1">🏎️</div>
-                            <div class="font-bold text-xs text-white">Coach Marcus</div>
-                            <div class="text-[10px] text-slate-400 truncate">180-WPM Fast Speech Echo</div>
+                        <!-- Layout Switcher -->
+                        <button onclick="toggleZoomLayout()" id="layout-toggle-btn" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                            ⊞ Gallery View
                         </button>
                     </div>
                 </div>
 
-                <!-- Call Studio Screen with Audio Visualizer -->
-                <div class="relative bg-slate-950/80 rounded-2xl border border-slate-800/80 p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-6 overflow-hidden">
+                <!-- Persona / Client Selector Bar -->
+                <div class="bg-[#101624] px-5 py-2.5 border-b border-slate-800/60 flex items-center justify-between overflow-x-auto gap-3 text-xs">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="text-slate-400 font-medium">Select Client:</span>
+                        <button onclick="selectPersona('alex')" id="persona-btn-alex" class="px-3 py-1 rounded-xl bg-indigo-600/30 border border-indigo-500 text-white font-semibold flex items-center gap-1.5 transition">
+                            <span>🇺🇸</span> Alex Vance (VP Marketing, US)
+                        </button>
+                        <button onclick="selectPersona('sarah')" id="persona-btn-sarah" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+                            <span>💼</span> Sarah Jenkins (Agency Founder, UK)
+                        </button>
+                        <button onclick="selectPersona('emily')" id="persona-btn-emily" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+                            <span>☕</span> Emily Clark (Small Talk Coach)
+                        </button>
+                        <button onclick="selectPersona('coach')" id="persona-btn-coach" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+                            <span>🏎️</span> Marcus (180-WPM Fast Echo)
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="text-slate-400">Speed:</span>
+                        <select id="voice-speed-select" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-lg px-2 py-0.5 text-xs font-semibold focus:outline-none cursor-pointer">
+                            <option value="0.9">0.9x Slow</option>
+                            <option value="1.0" selected>1.0x Normal</option>
+                            <option value="1.2">1.2x Fast</option>
+                            <option value="1.4">1.4x Rapid Native</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Main Video Meeting Stage + Sidebar Area -->
+                <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
                     
-                    <!-- Dynamic Waveform Visualizer -->
-                    <div id="visualizer" class="flex items-center justify-center gap-1.5 h-16 w-full max-w-md">
-                        <div class="waveform-bar w-1.5 bg-indigo-500/40 rounded-full h-3"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/50 rounded-full h-6"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/60 rounded-full h-4"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/70 rounded-full h-8"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/80 rounded-full h-5"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-400 rounded-full h-10"></div>
-                        <div class="waveform-bar w-1.5 bg-violet-400 rounded-full h-14"></div>
-                        <div class="waveform-bar w-1.5 bg-violet-300 rounded-full h-8"></div>
-                        <div class="waveform-bar w-1.5 bg-violet-400 rounded-full h-12"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-400 rounded-full h-9"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/80 rounded-full h-5"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/70 rounded-full h-7"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/60 rounded-full h-3"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/50 rounded-full h-5"></div>
-                        <div class="waveform-bar w-1.5 bg-indigo-500/40 rounded-full h-2"></div>
+                    <!-- Video Grid Stage (Tiles Area) -->
+                    <div id="video-stage-col" class="lg:col-span-8 flex flex-col gap-4">
+                        
+                        <!-- Video Tiles Grid Container -->
+                        <div id="video-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[360px]">
+                            
+                            <!-- TILE 1: AI CLIENT INTERVIEWER AVATAR -->
+                            <div id="tile-client" class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden shadow-xl flex flex-col justify-between transition-all duration-300 min-h-[220px]">
+                                
+                                <!-- Top client tags -->
+                                <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                                    <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-md text-slate-300 text-[11px] font-semibold border border-slate-700">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>1080p HD Client Feed</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 text-slate-400 text-xs">
+                                        <button class="p-1 rounded hover:bg-slate-800/80 transition" title="Pin Video">📌</button>
+                                    </div>
+                                </div>
+
+                                <!-- Realistic Animated Client Avatar Canvas / SVG -->
+                                <div class="relative w-full h-full flex items-center justify-center p-4 pt-10 pb-12 bg-gradient-to-b from-[#1c2438] via-[#111728] to-[#0c101d] overflow-hidden">
+                                    
+                                    <!-- Background Office Decor Elements -->
+                                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                                    <div class="absolute -top-12 -left-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                                    <div class="absolute -bottom-12 -right-12 w-48 h-48 bg-violet-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                                    <!-- Animated Vector Avatar SVG -->
+                                    <svg id="client-avatar-svg" class="w-36 h-36 sm:w-44 sm:h-44 head-nodding drop-shadow-2xl transition transform" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Soft Glow -->
+                                        <circle cx="100" cy="100" r="90" fill="url(#avatarGlow)" opacity="0.4"/>
+                                        <!-- Body / Suit -->
+                                        <path d="M40 195 C40 150, 70 140, 100 140 C130 140, 160 150, 160 195 Z" fill="#1e293b"/>
+                                        <!-- Shirt / Collar -->
+                                        <path d="M85 140 L100 165 L115 140 Z" fill="#f8fafc"/>
+                                        <path d="M96 155 L104 155 L102 185 L98 185 Z" fill="#3b82f6"/> <!-- Tie -->
+                                        <!-- Neck -->
+                                        <rect x="90" y="115" width="20" height="30" rx="4" fill="#fbcfe8"/>
+                                        <!-- Head -->
+                                        <ellipse cx="100" cy="85" rx="36" ry="42" fill="#fde047" opacity="0.15"/>
+                                        <ellipse cx="100" cy="85" rx="34" ry="40" fill="#fcd34d" opacity="0.3"/>
+                                        <ellipse cx="100" cy="85" rx="32" ry="38" fill="#fef08a" opacity="0.15"/>
+                                        <!-- Real Face -->
+                                        <ellipse cx="100" cy="85" rx="32" ry="38" fill="#fde68a"/>
+                                        <!-- Hair -->
+                                        <path d="M66 80 C65 50, 90 40, 100 40 C120 40, 135 50, 134 80 C130 65, 120 55, 100 55 C80 55, 70 65, 66 80 Z" fill="#475569"/>
+                                        <!-- Eyebrows -->
+                                        <path d="M78 72 Q86 68 94 72" stroke="#334155" stroke-width="2.5" stroke-linecap="round"/>
+                                        <path d="M106 72 Q114 68 122 72" stroke="#334155" stroke-width="2.5" stroke-linecap="round"/>
+                                        <!-- Eyes (Blinking) -->
+                                        <g class="eye-blinking">
+                                            <circle cx="86" cy="80" r="4.5" fill="#1e293b"/>
+                                            <circle cx="87.5" cy="78.5" r="1.5" fill="#ffffff"/>
+                                            <circle cx="114" cy="80" r="4.5" fill="#1e293b"/>
+                                            <circle cx="115.5" cy="78.5" r="1.5" fill="#ffffff"/>
+                                        </g>
+                                        <!-- Glasses (Tech Executive look) -->
+                                        <rect x="75" y="73" width="22" height="14" rx="4" stroke="#64748b" stroke-width="2" fill="none" opacity="0.8"/>
+                                        <rect x="103" y="73" width="22" height="14" rx="4" stroke="#64748b" stroke-width="2" fill="none" opacity="0.8"/>
+                                        <line x1="97" y1="80" x2="103" y2="80" stroke="#64748b" stroke-width="2"/>
+                                        <!-- Nose -->
+                                        <path d="M100 82 L98 94 L104 94" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                                        <!-- Animated Mouth -->
+                                        <g id="avatar-mouth-group">
+                                            <path id="avatar-mouth" d="M91 106 Q100 112 109 106" stroke="#b45309" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                        </g>
+                                        <defs>
+                                            <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+                                                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.8"/>
+                                                <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                                            </radialGradient>
+                                        </defs>
+                                    </svg>
+
+                                    <!-- Floating Reactions Layer -->
+                                    <div id="client-reactions" class="absolute inset-0 pointer-events-none overflow-hidden flex items-end justify-center pb-6">
+                                        <!-- Animated emojis inject here -->
+                                    </div>
+                                </div>
+
+                                <!-- Real-time Subtitles / Closed Captions Overlay -->
+                                <div id="client-captions-bar" class="absolute bottom-11 left-3 right-3 bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/80 text-xs text-white text-center shadow-lg font-medium leading-relaxed min-h-[38px] flex items-center justify-center">
+                                    <span id="client-captions-text">"Click 'Start Call' below to begin your interview with Alex."</span>
+                                </div>
+
+                                <!-- Client Tile Bottom Name Badge -->
+                                <div class="bg-[#121826]/90 backdrop-blur-md px-3.5 py-2 border-t border-slate-800 flex items-center justify-between text-xs z-10">
+                                    <div class="flex items-center gap-2">
+                                        <span id="client-mic-icon" class="flex items-center gap-0.5 text-emerald-400">
+                                            <span class="w-1 h-3 bg-emerald-400 rounded-full animate-pulse"></span>
+                                            <span class="w-1 h-4 bg-emerald-400 rounded-full animate-pulse"></span>
+                                            <span class="w-1 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                                        </span>
+                                        <span id="caller-name" class="font-bold text-white">Alex Vance</span>
+                                        <span class="text-[10px] text-slate-400">(VP Marketing, US)</span>
+                                    </div>
+                                    <span id="client-speaking-badge" class="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-semibold border border-indigo-800 hidden">Speaking</span>
+                                </div>
+                            </div>
+
+                            <!-- TILE 2: SAKIB HOSSAIN (CANDIDATE VIEW / WEBCAM / SCREEN SHARE) -->
+                            <div id="tile-candidate" class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden shadow-xl flex flex-col justify-between transition-all duration-300 min-h-[220px]">
+                                
+                                <!-- Top candidate tags -->
+                                <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-md text-slate-300 text-[11px] font-semibold border border-slate-700">
+                                        <span id="camera-status-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                        <span id="candidate-feed-label">Self View (Webcam)</span>
+                                    </div>
+                                    <div id="screenshare-active-badge" class="hidden items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
+                                        🖥️ Screen Sharing Active
+                                    </div>
+                                </div>
+
+                                <!-- Webcam Video Element -->
+                                <video id="user-webcam" autoplay playsinline muted class="w-full h-full object-cover rounded-2xl hidden"></video>
+
+                                <!-- Screen Share Video Element -->
+                                <video id="user-screenshare" autoplay playsinline class="w-full h-full object-contain bg-black rounded-2xl hidden"></video>
+
+                                <!-- Camera Off Fallback Placeholder -->
+                                <div id="webcam-placeholder" class="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-slate-900 via-slate-950 to-[#0c101d]">
+                                    <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-3xl font-black text-white shadow-xl shadow-indigo-500/30 mb-3 border-2 border-indigo-400/40">
+                                        SH
+                                    </div>
+                                    <div class="font-bold text-white text-sm">Sakib Hossain</div>
+                                    <p class="text-xs text-slate-400 mt-0.5">Analytics Specialist (Candidate)</p>
+                                    <button onclick="toggleWebcam()" class="mt-3 px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/40 text-xs font-semibold flex items-center gap-1.5 transition">
+                                        <span>📹</span> Enable Webcam
+                                    </button>
+                                </div>
+
+                                <!-- Candidate Live Transcript Bubble Overlay -->
+                                <div id="candidate-live-speech" class="absolute bottom-11 left-3 right-3 bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/80 text-xs text-emerald-300 text-center shadow-lg font-medium italic min-h-[38px] flex items-center justify-center">
+                                    <span id="spoken-transcript">"Tap mic or speak into your microphone..."</span>
+                                </div>
+
+                                <!-- Candidate Bottom Name Badge -->
+                                <div class="bg-[#121826]/90 backdrop-blur-md px-3.5 py-2 border-t border-slate-800 flex items-center justify-between text-xs z-10">
+                                    <div class="flex items-center gap-2">
+                                        <span id="user-mic-status-icon" class="text-emerald-400">🎙️</span>
+                                        <span class="font-bold text-white">Sakib Hossain</span>
+                                        <span class="text-[10px] text-indigo-300 font-semibold">[You]</span>
+                                    </div>
+                                    <span id="user-speaking-badge" class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-semibold border border-emerald-800 hidden">Speaking</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Zoom Bottom Control Toolbar -->
+                        <div class="bg-[#141a29] rounded-2xl border border-slate-800 p-3 sm:px-6 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+                            
+                            <!-- Left Controls: Mic & Webcam -->
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <!-- Mic Button -->
+                                <button id="mic-btn" onclick="triggerMicManual()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Mute/Unmute Mic">
+                                    <span id="mic-btn-icon" class="text-lg">🎙️</span>
+                                    <span id="mic-btn-label">Mute</span>
+                                </button>
+
+                                <!-- Webcam Toggle Button -->
+                                <button id="webcam-btn" onclick="toggleWebcam()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Start/Stop Video">
+                                    <span id="webcam-btn-icon" class="text-lg">📹</span>
+                                    <span id="webcam-btn-label">Start Video</span>
+                                </button>
+                            </div>
+
+                            <!-- Center Controls: Screen Share, Record, Reactions, Lifeline -->
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <!-- Screen Share Button -->
+                                <button id="screenshare-btn" onclick="toggleScreenShare()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-emerald-400 flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Share your screen with Client">
+                                    <span class="text-lg">🖥️</span>
+                                    <span id="screenshare-label">Share Screen</span>
+                                </button>
+
+                                <!-- Record Meeting Button -->
+                                <button id="record-btn" onclick="toggleRecording()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-rose-400 flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Record Meeting">
+                                    <span id="record-btn-icon" class="text-lg">🔴</span>
+                                    <span id="record-btn-label">Record</span>
+                                </button>
+
+                                <!-- AI Hint / Lifeline Button -->
+                                <button onclick="triggerAiLifeline()" class="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 flex flex-col items-center gap-1 text-[11px] font-semibold border border-amber-500/40 transition" title="Get Instant Spoken Answer Hint">
+                                    <span class="text-lg">💡</span>
+                                    <span>AI Hint</span>
+                                </button>
+
+                                <!-- Reactions Button -->
+                                <button onclick="sendMeetingReaction('👍')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Send Reaction">
+                                    <span class="text-lg">👏</span>
+                                    <span>React</span>
+                                </button>
+                            </div>
+
+                            <!-- Right Controls: Start/End Meeting -->
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <!-- Call Toggle Button -->
+                                <button id="call-toggle-btn" onclick="toggleCall()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition">
+                                    <span id="call-icon">📞</span>
+                                    <span id="call-btn-text">Start Call</span>
+                                </button>
+
+                                <!-- End Meeting Button (Red) -->
+                                <button onclick="endMeetingWithReport()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition">
+                                    <span>❌</span>
+                                    <span>End Meeting</span>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Call Status Text -->
-                    <div class="space-y-1">
-                        <div id="mic-status" class="text-base font-bold text-white">
-                            Click "Start Call" to begin speaking with Alex
+                    <!-- Right In-Meeting Side Panel (Chat, Interview Stages & Scorecard) -->
+                    <div class="lg:col-span-4 bg-[#141a29] rounded-2xl border border-slate-800 p-4 flex flex-col justify-between space-y-4">
+                        
+                        <!-- Panel Tabs -->
+                        <div>
+                            <div class="flex border-b border-slate-800 pb-2 mb-3 text-xs font-semibold gap-1">
+                                <button onclick="switchMeetingPanel('chat')" id="mp-tab-chat" class="flex-1 py-1.5 rounded-lg bg-indigo-600 text-white text-center transition">
+                                    💬 Chat
+                                </button>
+                                <button onclick="switchMeetingPanel('stages')" id="mp-tab-stages" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
+                                    📋 Stages
+                                </button>
+                                <button onclick="switchMeetingPanel('scorecard')" id="mp-tab-scorecard" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
+                                    ⚡ Scorecard
+                                </button>
+                            </div>
+
+                            <!-- Sub-Panel 1: In-Meeting Live Chat -->
+                            <div id="mp-content-chat" class="space-y-3">
+                                <div id="call-transcript-container" class="h-64 sm:h-72 overflow-y-auto space-y-2.5 p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs">
+                                    <div class="text-center py-8 text-slate-500 italic">
+                                        Click "Start Call" to begin the interview. Live meeting transcript will appear here.
+                                    </div>
+                                </div>
+
+                                <!-- In-Meeting Chat Send Box -->
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="meeting-chat-input" onkeydown="if(event.key==='Enter') sendMeetingChat()" placeholder="Type in meeting chat..." 
+                                        class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <button onclick="sendMeetingChat()" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition">
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sub-Panel 2: 5 Interview Stages Flow -->
+                            <div id="mp-content-stages" class="hidden space-y-2 text-xs">
+                                <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-2">
+                                    🎯 Client Interview Roadmap:
+                                </div>
+                                <div id="stage-card-1" class="p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/40 space-y-1">
+                                    <div class="flex items-center justify-between font-bold text-emerald-400">
+                                        <span>Round 1: Introduction & Background</span>
+                                        <span class="text-[10px]">🟢 Active</span>
+                                    </div>
+                                    <p class="text-slate-300 text-[11px]">Tell the client about your tracking journey & background.</p>
+                                </div>
+
+                                <div id="stage-card-2" class="p-2.5 rounded-xl bg-slate-900/40 border border-slate-800 space-y-1">
+                                    <div class="flex items-center justify-between font-bold text-slate-400">
+                                        <span>Round 2: Meta CAPI Deduplication</span>
+                                        <span class="text-[10px]">⏳ Next</span>
+                                    </div>
+                                    <p class="text-slate-500 text-[11px]">Explain why event_id mismatch causes double purchase counting.</p>
+                                </div>
+
+                                <div id="stage-card-3" class="p-2.5 rounded-xl bg-slate-900/40 border border-slate-800 space-y-1">
+                                    <div class="flex items-center justify-between font-bold text-slate-400">
+                                        <span>Round 3: Screen Share Architecture</span>
+                                        <span class="text-[10px]">⏳</span>
+                                    </div>
+                                    <p class="text-slate-500 text-[11px]">Show your GTM/Stape container or explain Safari 7-day cookie cap.</p>
+                                </div>
+
+                                <div id="stage-card-4" class="p-2.5 rounded-xl bg-slate-900/40 border border-slate-800 space-y-1">
+                                    <div class="flex items-center justify-between font-bold text-slate-400">
+                                        <span>Round 4: Rate & Retainer ($55/hr)</span>
+                                        <span class="text-[10px]">⏳</span>
+                                    </div>
+                                    <p class="text-slate-500 text-[11px]">Confidently defend your hourly rate vs cheap freelancers.</p>
+                                </div>
+
+                                <div id="stage-card-5" class="p-2.5 rounded-xl bg-slate-900/40 border border-slate-800 space-y-1">
+                                    <div class="flex items-center justify-between font-bold text-slate-400">
+                                        <span>Round 5: Closing & Evaluation</span>
+                                        <span class="text-[10px]">⏳</span>
+                                    </div>
+                                    <p class="text-slate-500 text-[11px]">Ask smart next-step questions to seal the contract.</p>
+                                </div>
+                            </div>
+
+                            <!-- Sub-Panel 3: Realtime Scorecard HUD -->
+                            <div id="mp-content-scorecard" class="hidden space-y-3 text-xs">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                                        <div class="text-slate-400 text-[10px]">Speed (WPM)</div>
+                                        <div id="metric-wpm" class="text-xl font-black text-amber-400">--</div>
+                                        <div id="metric-wpm-badge" class="text-[10px] text-slate-500">140–180 WPM</div>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                                        <div class="text-slate-400 text-[10px]">Clarity</div>
+                                        <div id="metric-clarity" class="text-xl font-black text-emerald-400">--</div>
+                                        <div class="text-[10px] text-slate-500">Phonetics</div>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                                    <div class="text-slate-400 text-[10px] mb-1">Native Reductions Used:</div>
+                                    <div id="metric-reductions-list" class="flex flex-wrap gap-1 min-h-[22px]">
+                                        <span class="text-slate-500 italic">None yet</span>
+                                    </div>
+                                </div>
+
+                                <div id="upgrade-suggestion-box" class="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/40 space-y-1.5 hidden">
+                                    <div class="font-bold text-indigo-300 text-[11px]">✨ Native Upgrade:</div>
+                                    <div id="upgrade-native-text" class="text-emerald-300 font-medium">"..."</div>
+                                    <div id="upgrade-bangla-tip" class="text-slate-400 text-[10px]">💡 বাংলা টিপস: ...</div>
+                                </div>
+                            </div>
                         </div>
-                        <p id="mic-subtext" class="text-xs text-slate-400">
-                            Microphone will pick up your speech and the AI will respond in native US accent.
+
+                        <!-- Quick Conversation Starters -->
+                        <div class="border-t border-slate-800/80 pt-3 space-y-1.5">
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold flex items-center justify-between">
+                                <span>💡 Quick Spoken Starters:</span>
+                            </div>
+                            <div id="starter-chips" class="flex flex-col gap-1.5 max-h-32 overflow-y-auto text-xs">
+                                <!-- Dynamic chips -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Post-Meeting Performance Scorecard Modal -->
+            <div id="post-interview-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-indigo-500/30 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6 text-center">
+                    <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl mx-auto border border-emerald-500/40">
+                        🏆
+                    </div>
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
+                            Client Decision: Strong Hire!
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-white">Interview Performance Report</h3>
+                        <p class="text-xs text-slate-400 mt-1">Client: Alex Vance • Role: Meta CAPI & GA4 Specialist</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 text-left">
+                        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400">Overall Score</div>
+                            <div class="text-2xl font-black text-emerald-400 mt-0.5">94%</div>
+                            <div class="text-[10px] text-emerald-500">Excellent</div>
+                        </div>
+                        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400">Avg Speed</div>
+                            <div id="modal-avg-wpm" class="text-2xl font-black text-amber-400 mt-0.5">156</div>
+                            <div class="text-[10px] text-slate-400">WPM (Native)</div>
+                        </div>
+                        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400">Fluency</div>
+                            <div class="text-2xl font-black text-indigo-400 mt-0.5">92%</div>
+                            <div class="text-[10px] text-indigo-400">Confident</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-left text-xs space-y-2">
+                        <div class="font-bold text-slate-200">Client Feedback Summary:</div>
+                        <p class="text-slate-300 leading-relaxed">
+                            "Sakib demonstrated authoritative mastery over Meta CAPI deduplication mechanics and Stape.io custom loader setups. Spoken English rhythm was natural with good use of contractions."
                         </p>
                     </div>
 
-                    <!-- Main Call Controls -->
-                    <div class="flex items-center justify-center gap-4 pt-2">
-                        <!-- Call / End Call Toggle -->
-                        <button id="call-toggle-btn" onclick="toggleCall()" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-emerald-600/30 flex items-center gap-2 transition">
-                            <span id="call-icon" class="text-lg">📞</span>
-                            <span id="call-btn-text">Start Call</span>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="download-rec-btn" onclick="downloadRecordedVideo()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs shadow-lg transition flex items-center justify-center gap-2">
+                            <span>💾</span> Download Recording (.webm)
                         </button>
-
-                        <!-- Mic Speak Button (When in call) -->
-                        <button id="mic-btn" onclick="triggerMicManual()" class="w-14 h-14 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-xl text-white transition active:scale-90" title="Tap to Speak">
-                            🎙️
-                        </button>
-
-                        <!-- Repeat Voice Button -->
-                        <button onclick="repeatLastVoice()" class="w-14 h-14 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-xl text-slate-300 hover:text-white transition active:scale-90" title="Replay Last AI Voice">
-                            🔁
+                        <button onclick="closeInterviewModal()" class="py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
+                            Practice Again
                         </button>
                     </div>
-
-                    <!-- Live Interim Transcript Bar -->
-                    <div class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-left">
-                        <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1 flex items-center justify-between">
-                            <span>You are saying (Live Audio Transcript):</span>
-                            <span id="speech-confidence-tag" class="text-emerald-400 text-[10px] hidden">● Recognized</span>
-                        </div>
-                        <div id="spoken-transcript" class="text-xs text-slate-200 italic min-h-[22px]">
-                            "Tap Start Call, then speak naturally..."
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Live Speech Analytics HUD -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
-                        <div class="text-[11px] text-slate-400 font-medium">⚡ Speaking Speed (WPM)</div>
-                        <div class="flex items-baseline gap-2 mt-1">
-                            <span id="metric-wpm" class="text-2xl font-black text-amber-400">--</span>
-                            <span id="metric-wpm-label" class="text-xs text-slate-400">Words / Min</span>
-                        </div>
-                        <div id="metric-wpm-badge" class="text-[11px] text-slate-500 mt-1">Target: 140–180 WPM</div>
-                    </div>
-
-                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
-                        <div class="text-[11px] text-slate-400 font-medium">🎯 Pronunciation Clarity</div>
-                        <div class="flex items-baseline gap-2 mt-1">
-                            <span id="metric-clarity" class="text-2xl font-black text-emerald-400">--</span>
-                            <span class="text-xs text-slate-400">Accuracy</span>
-                        </div>
-                        <div id="metric-clarity-badge" class="text-[11px] text-slate-500 mt-1">AI Phonetic Match</div>
-                    </div>
-
-                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
-                        <div class="text-[11px] text-slate-400 font-medium">🔥 Native Reductions Detected</div>
-                        <div id="metric-reductions-list" class="flex flex-wrap gap-1 mt-2 min-h-[28px]">
-                            <span class="text-xs text-slate-500">None yet</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Real-time Native Upgrade Suggestion Box -->
-                <div id="upgrade-suggestion-box" class="glass-card p-5 rounded-2xl border border-indigo-500/30 bg-indigo-950/20 space-y-2 hidden">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
-                            <span>✨</span> Live Native Speech Upgrade
-                        </span>
-                        <span class="text-[11px] px-2 py-0.5 rounded bg-indigo-900/60 text-indigo-300">Fluency Boost</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-1">
-                        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                            <div class="text-slate-500 font-semibold mb-0.5">What you said:</div>
-                            <div id="upgrade-user-text" class="text-slate-300 italic">"..."</div>
-                        </div>
-                        <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/40">
-                            <div class="text-indigo-400 font-semibold mb-0.5">🌟 Native Spoken Upgrade:</div>
-                            <div id="upgrade-native-text" class="text-emerald-300 font-medium">"..."</div>
-                        </div>
-                    </div>
-                    <p id="upgrade-bangla-tip" class="text-xs text-slate-300 pt-1">
-                        💡 বাংলা টিপস: ...
-                    </p>
-                </div>
-
-                <!-- Clickable Conversation Starters (Prompt Chips) -->
-                <div class="space-y-2">
-                    <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                        💡 Tap a Starter to Practice Immediately:
-                    </div>
-                    <div id="starter-chips" class="flex flex-wrap gap-2 text-xs">
-                        <!-- Injected dynamically by persona -->
-                    </div>
-                </div>
-
-                <!-- Call Dialogue Transcript History -->
-                <div class="space-y-3 pt-2">
-                    <div class="flex items-center justify-between text-xs text-slate-400 font-semibold">
-                        <span>💬 Live Call Transcript:</span>
-                        <div class="flex items-center gap-2">
-                            <button onclick="copyCallTranscript()" class="text-indigo-400 hover:text-indigo-300 transition">📋 Copy Transcript</button>
-                            <span>•</span>
-                            <button onclick="clearCallTranscript()" class="text-slate-500 hover:text-red-400 transition">🗑️ Clear</button>
-                        </div>
-                    </div>
-
-                    <div id="call-transcript-container" class="space-y-3 max-h-80 overflow-y-auto p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80">
-                        <!-- Dialogue bubbles rendered here -->
-                        <div class="text-center py-6 text-xs text-slate-500 italic">
-                            No call history yet. Select a persona and click "Start Call" to practice!
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
@@ -719,7 +988,7 @@
         }
 
         // ==========================================
-        // ADVANCED WEB VOICE CALLER & STUDIO ENGINE
+        // ADVANCED ZOOM AI INTERVIEW STUDIO ENGINE
         // ==========================================
         const PERSONAS = {
             alex: {
@@ -729,7 +998,7 @@
                 avatar: '🇺🇸',
                 voiceLang: 'en-US',
                 defaultRate: 1.05,
-                greeting: "Hey Sakib! Thanks for hopping on the call. I was just reviewing our Meta Ads dashboard, and our purchase conversion tracking looks slightly off. What do you think is going on?",
+                greeting: "Hey Sakib! Thanks for hopping on the Zoom call. I was just reviewing our Shopify store and Meta Ads dashboard, and our purchase conversion tracking looks slightly off. What do you think is going on?",
                 starters: [
                     "Hey Alex, I audited your GTM container and noticed CAPI deduplication is failing.",
                     "We should move your tags to a Stape server-side container to bypass Safari ITP.",
@@ -740,7 +1009,7 @@
             sarah: {
                 id: 'sarah',
                 name: 'Sarah Jenkins',
-                role: 'Upwork Agency Director (UK/US)',
+                role: 'Agency Founder & Director (UK/US)',
                 avatar: '💼',
                 voiceLang: 'en-US',
                 defaultRate: 1.0,
@@ -786,20 +1055,34 @@
 
         let activePersona = 'alex';
         let inCall = false;
-        let autoListen = false;
+        let autoListen = true;
         let isRecording = false;
         let recognition = null;
         let callTimerInterval = null;
         let callSeconds = 0;
         let speechStartTime = 0;
         let lastAiUtterance = "";
-        let visualizerInterval = null;
         let audioCtx = null;
+        let currentInterviewStage = 1;
+
+        // Media Hardware States
+        let webcamStream = null;
+        let webcamActive = false;
+        let screenStream = null;
+        let screenActive = false;
+        let isMuted = false;
+
+        // MediaRecorder State
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let recTimerInterval = null;
+        let recSeconds = 0;
+        let recordedBlobUrl = null;
 
         // Initialize Call Studio
         function initCallStudio() {
             renderPersonaStarters();
-            initVisualizerIdle();
+            selectPersona('alex');
         }
 
         function renderPersonaStarters() {
@@ -807,7 +1090,7 @@
             if (!container) return;
             const p = PERSONAS[activePersona];
             container.innerHTML = p.starters.map(st => `
-                <button onclick="injectStarter('${escapeJs(st)}')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-indigo-600/40 text-slate-300 hover:text-white border border-slate-800 hover:border-indigo-500/50 transition text-left">
+                <button onclick="injectStarter('${escapeJs(st)}')" class="p-2 rounded-xl bg-slate-900/90 hover:bg-indigo-600/40 text-slate-300 hover:text-white border border-slate-800 hover:border-indigo-500/50 transition text-left text-[11px] truncate">
                     💬 "${escapeHtml(st)}"
                 </button>
             `).join('');
@@ -818,48 +1101,27 @@
             activePersona = pId;
             const p = PERSONAS[pId];
 
-            document.getElementById('caller-name').innerText = p.name;
-            document.getElementById('caller-role').innerText = p.role;
-            document.getElementById('caller-avatar').innerText = p.avatar;
+            const nameEl = document.getElementById('caller-name');
+            if (nameEl) nameEl.innerText = p.name;
+            const capText = document.getElementById('client-captions-text');
+            if (capText && !inCall) capText.innerText = `"${p.greeting}"`;
 
             // Highlight buttons
             ['alex', 'sarah', 'emily', 'coach'].forEach(id => {
                 const btn = document.getElementById('persona-btn-' + id);
                 if (!btn) return;
                 if (id === pId) {
-                    btn.classList.add('bg-indigo-600/30', 'border-indigo-500');
-                    btn.classList.remove('bg-slate-900/60', 'border-slate-800');
+                    btn.className = "px-3 py-1 rounded-xl bg-indigo-600/30 border border-indigo-500 text-white font-semibold flex items-center gap-1.5 transition";
                 } else {
-                    btn.classList.remove('bg-indigo-600/30', 'border-indigo-500');
-                    btn.classList.add('bg-slate-900/60', 'border-slate-800');
+                    btn.className = "px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition";
                 }
             });
 
             renderPersonaStarters();
 
             if (inCall) {
-                appendTranscript('system', `Switched call partner to ${p.name} (${p.role}).`);
+                appendTranscript('system', `Switched meeting host to ${p.name} (${p.role}).`);
                 speakAi(p.greeting);
-            } else {
-                document.getElementById('mic-status').innerText = `Click "Start Call" to begin speaking with ${p.name}`;
-            }
-        }
-
-        function toggleAutoListen() {
-            autoListen = !autoListen;
-            const btn = document.getElementById('auto-listen-btn');
-            const status = document.getElementById('auto-listen-status');
-            const icon = document.getElementById('auto-listen-icon');
-            if (autoListen) {
-                status.innerText = "ON";
-                status.className = "text-emerald-400 font-bold";
-                icon.innerText = "🟢";
-                btn.classList.add('border-emerald-500/50', 'bg-emerald-950/20');
-            } else {
-                status.innerText = "OFF";
-                status.className = "text-slate-400 font-bold";
-                icon.innerText = "⚪";
-                btn.classList.remove('border-emerald-500/50', 'bg-emerald-950/20');
             }
         }
 
@@ -867,7 +1129,7 @@
             if (!inCall) {
                 startCall();
             } else {
-                endCall();
+                endMeetingWithReport();
             }
         }
 
@@ -875,17 +1137,12 @@
             inCall = true;
             callSeconds = 0;
             const toggleBtn = document.getElementById('call-toggle-btn');
-            const statusDot = document.getElementById('call-status-dot');
-            const statusText = document.getElementById('call-status-text');
-            const statusBadge = document.getElementById('call-status-badge');
             
-            toggleBtn.className = "px-6 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 transition";
-            document.getElementById('call-icon').innerText = "🔴";
-            document.getElementById('call-btn-text').innerText = "End Call";
-
-            statusDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-            statusText.innerText = "Live Call Active";
-            statusBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+            if (toggleBtn) {
+                toggleBtn.className = "px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-amber-600/30 flex items-center gap-2 transition";
+                document.getElementById('call-icon').innerText = "⏸️";
+                document.getElementById('call-btn-text').innerText = "Pause";
+            }
 
             // Start timer
             clearInterval(callTimerInterval);
@@ -902,33 +1159,232 @@
             speakAi(p.greeting);
         }
 
-        function endCall() {
-            inCall = false;
-            clearInterval(callTimerInterval);
-            if (recognition && isRecording) {
-                recognition.stop();
+        // ==========================================
+        // WEBCAM & SCREEN SHARING HARDWARE CONTROLS
+        // ==========================================
+        async function toggleWebcam() {
+            const videoEl = document.getElementById('user-webcam');
+            const placeholder = document.getElementById('webcam-placeholder');
+            const webcamBtn = document.getElementById('webcam-btn');
+            const btnIcon = document.getElementById('webcam-btn-icon');
+            const btnLabel = document.getElementById('webcam-btn-label');
+            const dot = document.getElementById('camera-status-dot');
+
+            if (!webcamActive) {
+                try {
+                    webcamStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { width: { ideal: 1280 }, height: { ideal: 720 } }, 
+                        audio: false 
+                    });
+                    videoEl.srcObject = webcamStream;
+                    videoEl.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    webcamActive = true;
+                    btnIcon.innerText = "🛑";
+                    btnLabel.innerText = "Stop Video";
+                    dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+                    webcamBtn.classList.add('border-emerald-500/50', 'text-emerald-300');
+                    document.getElementById('candidate-feed-label').innerText = "Webcam HD 1080p";
+                    sendMeetingReaction('📹');
+                } catch (err) {
+                    console.error("Webcam error:", err);
+                    alert("Webcam access note: Camera could not be opened (" + err.message + "). You can still practice with Audio & Screen Share!");
+                }
+            } else {
+                if (webcamStream) {
+                    webcamStream.getTracks().forEach(track => track.stop());
+                    webcamStream = null;
+                }
+                videoEl.classList.add('hidden');
+                if (!screenActive) placeholder.classList.remove('hidden');
+                webcamActive = false;
+                btnIcon.innerText = "📹";
+                btnLabel.innerText = "Start Video";
+                dot.className = "w-1.5 h-1.5 rounded-full bg-slate-500";
+                webcamBtn.classList.remove('border-emerald-500/50', 'text-emerald-300');
+                document.getElementById('candidate-feed-label').innerText = "Self View (Camera Off)";
             }
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-
-            const toggleBtn = document.getElementById('call-toggle-btn');
-            const statusDot = document.getElementById('call-status-dot');
-            const statusText = document.getElementById('call-status-text');
-            const statusBadge = document.getElementById('call-status-badge');
-
-            toggleBtn.className = "px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-emerald-600/30 flex items-center gap-2 transition";
-            document.getElementById('call-icon').innerText = "📞";
-            document.getElementById('call-btn-text').innerText = "Start Call";
-
-            statusDot.className = "w-2 h-2 rounded-full bg-slate-500";
-            statusText.innerText = "Call Ended";
-            statusBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700";
-
-            document.getElementById('mic-status').innerText = "Call ended. Review your metrics & transcript below.";
-            setVisualizerState('idle');
         }
 
+        async function toggleScreenShare() {
+            const screenVideo = document.getElementById('user-screenshare');
+            const webcamVideo = document.getElementById('user-webcam');
+            const placeholder = document.getElementById('webcam-placeholder');
+            const shareBadge = document.getElementById('screenshare-active-badge');
+            const label = document.getElementById('screenshare-label');
+
+            if (!screenActive) {
+                try {
+                    screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                    screenVideo.srcObject = screenStream;
+                    screenVideo.classList.remove('hidden');
+                    if (webcamVideo) webcamVideo.classList.add('hidden');
+                    placeholder.classList.add('hidden');
+                    screenActive = true;
+                    shareBadge.classList.remove('hidden');
+                    shareBadge.classList.add('flex');
+                    label.innerText = "Stop Share";
+
+                    screenStream.getVideoTracks()[0].onended = () => {
+                        stopScreenShare();
+                    };
+
+                    // Client reacts to screen share
+                    setTimeout(() => {
+                        if (inCall) {
+                            const ack = "Great, I can see your screen now! Walk me through your GTM Tag Assistant debugger.";
+                            appendTranscript('ai', ack, PERSONAS[activePersona].name, PERSONAS[activePersona].avatar);
+                            speakAi(ack);
+                        }
+                    }, 800);
+                } catch (err) {
+                    console.warn("Screen share cancelled:", err);
+                }
+            } else {
+                stopScreenShare();
+            }
+        }
+
+        function stopScreenShare() {
+            const screenVideo = document.getElementById('user-screenshare');
+            const webcamVideo = document.getElementById('user-webcam');
+            const placeholder = document.getElementById('webcam-placeholder');
+            const shareBadge = document.getElementById('screenshare-active-badge');
+            const label = document.getElementById('screenshare-label');
+
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => track.stop());
+                screenStream = null;
+            }
+            screenVideo.classList.add('hidden');
+            screenActive = false;
+            shareBadge.classList.add('hidden');
+            shareBadge.classList.remove('flex');
+            label.innerText = "Share Screen";
+
+            if (webcamActive && webcamVideo) {
+                webcamVideo.classList.remove('hidden');
+            } else {
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        // ==========================================
+        // REAL MEETING RECORDING (MediaRecorder API)
+        // ==========================================
+        async function toggleRecording() {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                startMeetingRecording();
+            } else {
+                stopMeetingRecording();
+            }
+        }
+
+        async function startMeetingRecording() {
+            recordedChunks = [];
+            try {
+                let streamToRecord = null;
+                if (screenStream) {
+                    streamToRecord = screenStream;
+                } else if (webcamStream) {
+                    streamToRecord = webcamStream;
+                } else {
+                    streamToRecord = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).catch(() => null);
+                }
+
+                if (!streamToRecord) {
+                    streamToRecord = await navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => null);
+                }
+
+                if (!streamToRecord) {
+                    alert("Please enable microphone or webcam permissions to record the meeting.");
+                    return;
+                }
+
+                let options = { mimeType: 'video/webm;codecs=vp9,opus' };
+                if (!window.MediaRecorder || !MediaRecorder.isTypeSupported(options.mimeType)) {
+                    options = { mimeType: 'video/webm' };
+                }
+
+                mediaRecorder = new MediaRecorder(streamToRecord, options);
+                mediaRecorder.ondataavailable = function(e) {
+                    if (e.data && e.data.size > 0) {
+                        recordedChunks.push(e.data);
+                    }
+                };
+
+                mediaRecorder.onstop = function() {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    recordedBlobUrl = URL.createObjectURL(blob);
+                    const downloadBtn = document.getElementById('download-rec-btn');
+                    if (downloadBtn) {
+                        downloadBtn.innerText = `💾 Download Recording (${(blob.size / (1024 * 1024)).toFixed(1)} MB)`;
+                    }
+                };
+
+                mediaRecorder.start(1000);
+                recSeconds = 0;
+                const badge = document.getElementById('zoom-rec-badge');
+                const timerEl = document.getElementById('zoom-rec-timer');
+                const recBtnLabel = document.getElementById('record-btn-label');
+                const recBtnIcon = document.getElementById('record-btn-icon');
+
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+                recBtnLabel.innerText = "Stop Rec";
+                recBtnIcon.innerText = "⏹️";
+
+                clearInterval(recTimerInterval);
+                recTimerInterval = setInterval(() => {
+                    recSeconds++;
+                    const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+                    const s = String(recSeconds % 60).padStart(2, '0');
+                    if (timerEl) timerEl.innerText = `${m}:${s}`;
+                }, 1000);
+
+                sendMeetingReaction('🔴');
+            } catch (err) {
+                console.error("Recording error:", err);
+                alert("Recording started with audio-only fallback (" + err.message + ")");
+            }
+        }
+
+        function stopMeetingRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            clearInterval(recTimerInterval);
+            const badge = document.getElementById('zoom-rec-badge');
+            const recBtnLabel = document.getElementById('record-btn-label');
+            const recBtnIcon = document.getElementById('record-btn-icon');
+
+            if (badge) {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+            if (recBtnLabel) recBtnLabel.innerText = "Record";
+            if (recBtnIcon) recBtnIcon.innerText = "🔴";
+        }
+
+        function downloadRecordedVideo() {
+            if (!recordedBlobUrl) {
+                alert("No recorded video found yet. Start recording first!");
+                return;
+            }
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = recordedBlobUrl;
+            a.download = `Zoom_Interview_Sakib_${new Date().toISOString().slice(0, 10)}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+            }, 100);
+        }
+
+        // ==========================================
+        // SPEECH RECOGNITION & DIALOGUE ENGINE
+        // ==========================================
         function triggerMicManual() {
             if (!inCall) {
                 startCall();
@@ -953,17 +1409,24 @@
             recognition.continuous = false;
             recognition.interimResults = true;
 
-            const micBtn = document.getElementById('mic-btn');
-            const micStatus = document.getElementById('mic-status');
+            const micBtnIcon = document.getElementById('mic-btn-icon');
+            const micBtnLabel = document.getElementById('mic-btn-label');
             const transcriptEl = document.getElementById('spoken-transcript');
 
             recognition.onstart = function() {
                 isRecording = true;
                 speechStartTime = Date.now();
-                micBtn.classList.add('bg-emerald-600', 'text-white', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
-                micStatus.innerText = "🎙️ Listening... Speak naturally now!";
-                micStatus.className = "text-base font-bold text-emerald-400";
-                setVisualizerState('listening');
+                if (micBtnIcon) micBtnIcon.innerText = "🟢";
+                if (micBtnLabel) micBtnLabel.innerText = "Listening...";
+                
+                // Highlight Candidate Tile
+                const candTile = document.getElementById('tile-candidate');
+                if (candTile) candTile.classList.add('active-speaker-ring');
+                const clientTile = document.getElementById('tile-client');
+                if (clientTile) clientTile.classList.remove('active-speaker-ring');
+
+                const spkBadge = document.getElementById('user-speaking-badge');
+                if (spkBadge) spkBadge.classList.remove('hidden');
             };
 
             let finalTranscript = '';
@@ -976,33 +1439,34 @@
                         interim += event.results[i][0].transcript;
                     }
                 }
-                transcriptEl.innerText = `"${finalTranscript || interim}"`;
+                if (transcriptEl) transcriptEl.innerText = `"${finalTranscript || interim}"`;
             };
 
             recognition.onend = function() {
                 isRecording = false;
-                micBtn.classList.remove('bg-emerald-600', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
-                micStatus.innerText = "⚡ Analyzing your speech & generating response...";
-                micStatus.className = "text-base font-bold text-indigo-300";
-                setVisualizerState('thinking');
+                if (micBtnIcon) micBtnIcon.innerText = "🎙️";
+                if (micBtnLabel) micBtnLabel.innerText = "Mute";
+                
+                const candTile = document.getElementById('tile-candidate');
+                if (candTile) candTile.classList.remove('active-speaker-ring');
+
+                const spkBadge = document.getElementById('user-speaking-badge');
+                if (spkBadge) spkBadge.classList.add('hidden');
 
                 const speechDuration = (Date.now() - speechStartTime) / 1000;
-                const text = (finalTranscript || transcriptEl.innerText.replace(/"/g, '')).trim();
+                const text = (finalTranscript || (transcriptEl ? transcriptEl.innerText.replace(/"/g, '') : '')).trim();
 
-                if (text && text.length > 2 && text !== "Tap Start Call, then speak naturally...") {
+                if (text && text.length > 2 && text !== "Tap mic or speak into your microphone...") {
                     handleUserSpokenTurn(text, speechDuration);
-                } else {
-                    micStatus.innerText = inCall ? "Didn't catch that. Tap mic to speak again." : "Ready.";
-                    setVisualizerState('idle');
                 }
             };
 
             recognition.onerror = function(event) {
                 isRecording = false;
-                micBtn.classList.remove('bg-emerald-600', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
-                micStatus.innerText = "Mic paused. Tap mic to speak.";
-                micStatus.className = "text-base font-bold text-slate-300";
-                setVisualizerState('idle');
+                if (micBtnIcon) micBtnIcon.innerText = "🎙️";
+                if (micBtnLabel) micBtnLabel.innerText = "Mute";
+                const candTile = document.getElementById('tile-candidate');
+                if (candTile) candTile.classList.remove('active-speaker-ring');
             };
 
             try {
@@ -1013,20 +1477,50 @@
         }
 
         function handleUserSpokenTurn(userText, durationSec) {
-            appendTranscript('user', userText, 'Sakib', '👤');
+            appendTranscript('user', userText, 'Sakib Hossain', '👤');
             
+            // Advance interview stages
+            advanceInterviewStage(userText);
+
             // Analyze metrics
             const metrics = calculateSpeechMetrics(userText, durationSec);
             updateHudMetrics(metrics);
             displayUpgradeSuggestion(userText);
 
-            // Generate AI response
+            // AI Client speaks response
             setTimeout(() => {
                 const aiReply = generateAiResponse(userText, activePersona, metrics);
                 const p = PERSONAS[activePersona];
                 appendTranscript('ai', aiReply, p.name, p.avatar);
                 speakAi(aiReply);
             }, 600);
+        }
+
+        function advanceInterviewStage(text) {
+            const lower = text.toLowerCase();
+            let nextStage = currentInterviewStage;
+            if (lower.includes('capi') || lower.includes('dedup') || lower.includes('event_id')) {
+                nextStage = Math.max(nextStage, 2);
+            }
+            if (lower.includes('stape') || lower.includes('safari') || lower.includes('screen') || screenActive) {
+                nextStage = Math.max(nextStage, 3);
+            }
+            if (lower.includes('rate') || lower.includes('55') || lower.includes('hour') || lower.includes('budget')) {
+                nextStage = Math.max(nextStage, 4);
+            }
+
+            if (nextStage !== currentInterviewStage) {
+                currentInterviewStage = nextStage;
+                for (let i = 1; i <= 5; i++) {
+                    const card = document.getElementById(`stage-card-${i}`);
+                    if (!card) continue;
+                    if (i < currentInterviewStage) {
+                        card.className = "p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/60 opacity-70 space-y-1";
+                    } else if (i === currentInterviewStage) {
+                        card.className = "p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/50 space-y-1 shadow-lg";
+                    }
+                }
+            }
         }
 
         function injectStarter(text) {
@@ -1040,6 +1534,38 @@
             }
         }
 
+        function sendMeetingChat() {
+            const input = document.getElementById('meeting-chat-input');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            handleUserSpokenTurn(text, 3.0);
+        }
+
+        function triggerAiLifeline() {
+            const hints = [
+                "I recommend explaining: 'We generate identical event_id tokens in Google Tag Manager dataLayer so Meta deduplicates server and browser events 1:1.'",
+                "Try saying: 'With Safari ITP 7-day cookie cap, a custom loader on Stape with a custom CNAME domain extends cookie lifetime up to 180 days.'",
+                "For rate negotiation: 'My standard hourly rate is $55/hr. I propose starting with a 10-hour audit milestone to prove ROI before retainer.'"
+            ];
+            const chosen = hints[Math.floor(Math.random() * hints.length)];
+            appendTranscript('system', `💡 AI Lifeline Whisper: ${chosen}`);
+            alert("💡 AI Lifeline Whisper:\n" + chosen);
+        }
+
+        function sendMeetingReaction(emoji) {
+            const container = document.getElementById('client-reactions');
+            if (!container) return;
+            const el = document.createElement('div');
+            el.className = "text-4xl animate-bounce transition transform";
+            el.innerText = emoji;
+            container.appendChild(el);
+            setTimeout(() => {
+                if (el.parentNode) el.parentNode.removeChild(el);
+            }, 2500);
+        }
+
         // AI Response Logic for simulated personas
         function generateAiResponse(userText, pId, metrics) {
             const lower = userText.toLowerCase();
@@ -1048,6 +1574,7 @@
             if (pId === 'coach') {
                 const wpm = metrics.wpm;
                 if (wpm >= 140) {
+                    sendMeetingReaction('🔥');
                     return `Phenomenal speed! You clocked ${wpm} words per minute with solid rhythm! Let's level it up. Repeat this: "I gotta bounce in five minutes, but lemme double-check the server container first." Go!`;
                 } else {
                     return `Good attempt! You hit ${wpm} WPM. To sound like a true native, don't separate each word. Blend them together! Let's retry: "Whaddya think about this attribution window?" Say it fast!`;
@@ -1057,9 +1584,11 @@
             // Alex Vance (US Ecommerce Client)
             if (pId === 'alex') {
                 if (lower.includes('capi') || lower.includes('dedup') || lower.includes('event_id')) {
+                    sendMeetingReaction('👏');
                     return "That makes total sense, Sakib. If the event_id isn't 100% identical between browser and server, Meta calculates double purchases and ruins our ROAS. How soon can we deploy this fix to GTM?";
                 }
                 if (lower.includes('stape') || lower.includes('safari') || lower.includes('itp') || lower.includes('cookie')) {
+                    sendMeetingReaction('💡');
                     return "Yeah, that 7-day Safari cookie expiration has been killing our retargeting efficiency. Setting up Stape with a custom loader and 1st-party domain mapping sounds like the best solution. What's the timeline?";
                 }
                 if (lower.includes('consent') || lower.includes('google ads') || lower.includes('v2')) {
@@ -1074,6 +1603,7 @@
             // Sarah Jenkins (Upwork Agency Director)
             if (pId === 'sarah') {
                 if (lower.includes('experience') || lower.includes('year') || lower.includes('client') || lower.includes('store')) {
+                    sendMeetingReaction('👍');
                     return "That's exactly the kind of hands-on experience we need. We've worked with freelancers who just followed YouTube tutorials and broke dataLayers. How do you QA events before handing over to the client?";
                 }
                 if (lower.includes('rate') || lower.includes('55') || lower.includes('hourly') || lower.includes('budget')) {
@@ -1088,6 +1618,7 @@
             // Emily Clark (Small Talk & Rapport)
             if (pId === 'emily') {
                 if (lower.includes('weekend') || lower.includes('relax') || lower.includes('busy') || lower.includes('fun')) {
+                    sendMeetingReaction('☕');
                     return "Oh, totally hear you on that! There's nothing better than unwinding after a busy sprint. I'm hoping to get outdoors if the weather holds up. Anyway, so glad we could catch up—how are your tracking projects going?";
                 }
                 if (lower.includes('weather') || lower.includes('nice') || lower.includes('rain') || lower.includes('hot')) {
@@ -1098,6 +1629,301 @@
 
             return "That sounds very promising! Let's make sure we test that in preview mode and verify the parameters in real time.";
         }
+
+        // Metrics Calculation
+        function calculateSpeechMetrics(text, durationSec) {
+            const dur = Math.max(1.0, durationSec || 2.0);
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wpm = Math.min(240, Math.max(60, Math.round((words.length / dur) * 60)));
+
+            const reductionRegex = /\b(gonna|wanna|gotta|kinda|sorta|whaddya|lemme|gimme|dunno|shoulda|woulda|coulda|gotcha|hafta|asta|c'mon|touch base|wrap up|iron out|no-brainer|drill down|ballpark|circle back)\b/gi;
+            const matches = text.match(reductionRegex) || [];
+            const uniqueMatches = Array.from(new Set(matches.map(m => m.toLowerCase())));
+
+            let clarity = 92;
+            if (words.length > 8) clarity = 95;
+            if (uniqueMatches.length > 0) clarity = 97;
+
+            return {
+                wpm: wpm,
+                clarity: clarity,
+                reductions: uniqueMatches,
+                wordCount: words.length
+            };
+        }
+
+        function updateHudMetrics(m) {
+            const wpmEl = document.getElementById('metric-wpm');
+            const wpmBadge = document.getElementById('metric-wpm-badge');
+            const clarityEl = document.getElementById('metric-clarity');
+            const redList = document.getElementById('metric-reductions-list');
+
+            if (wpmEl) wpmEl.innerText = m.wpm;
+            if (wpmBadge) {
+                if (m.wpm < 110) {
+                    wpmBadge.innerText = "🐢 Slow / Textbook";
+                    wpmBadge.className = "text-[10px] text-amber-400";
+                } else if (m.wpm <= 140) {
+                    wpmBadge.innerText = "🚶 Conversational";
+                    wpmBadge.className = "text-[10px] text-blue-400";
+                } else if (m.wpm <= 185) {
+                    wpmBadge.innerText = "🏎️ Native Fast!";
+                    wpmBadge.className = "text-[10px] text-emerald-400 font-bold";
+                } else {
+                    wpmBadge.innerText = "⚡ Rapid Street";
+                    wpmBadge.className = "text-[10px] text-purple-400 font-bold";
+                }
+            }
+
+            if (clarityEl) clarityEl.innerText = `${m.clarity}%`;
+
+            if (redList) {
+                if (m.reductions.length === 0) {
+                    redList.innerHTML = `<span class="text-slate-500 italic text-[10px]">Try using "gonna" or "lemme"</span>`;
+                } else {
+                    redList.innerHTML = m.reductions.map(r => `
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">⚡ ${escapeHtml(r)}</span>
+                    `).join('');
+                }
+            }
+        }
+
+        // Live Phrasing Upgrade Engine
+        function displayUpgradeSuggestion(text) {
+            const box = document.getElementById('upgrade-suggestion-box');
+            const nText = document.getElementById('upgrade-native-text');
+            const bTip = document.getElementById('upgrade-bangla-tip');
+
+            let upgrade = null;
+            const lower = text.toLowerCase();
+
+            if (lower.includes('i will fix') || lower.includes('i will do')) {
+                upgrade = {
+                    native: "I'm gonna tackle this first thing tomorrow morning and test it in preview mode.",
+                    tip: "নেটিভরা 'I will do' এর জায়গায় প্রায়শই 'I'm gonna tackle / take care of' ব্যবহার করে।"
+                };
+            } else if (lower.includes('i want to check') || lower.includes('i want to see')) {
+                upgrade = {
+                    native: "Lemme take a quick look at your GTM server container logs real quick.",
+                    tip: "'I want to' এর চেয়ে 'Lemme take a look' অনেক বেশি কনফিডেন্ট এবং ন্যাচারাল শোনায়।"
+                };
+            } else if (lower.includes('can you tell me')) {
+                upgrade = {
+                    native: "Could you walk me through how your purchase event is currently being pushed?",
+                    tip: "ইন্টারভিউ বা কলে 'Can you tell me' এর জায়গায় 'Could you walk me through' বলাটা হাইলি প্রফেশনাল।"
+                };
+            } else if (lower.includes('because of safari')) {
+                upgrade = {
+                    native: "Due to Safari's 7-day ITP cookie restrictions, client-side attribution drops off.",
+                    tip: "টেকনিক্যাল ক্লায়েন্টকে বোঝাতে 'due to Safari ITP restrictions' বলা অনেক বেশি অথরিটেটিভ।"
+                };
+            } else if (lower.includes('my rate is')) {
+                upgrade = {
+                    native: "My standard hourly rate is $55/hr for full-funnel CAPI and server-side tagging.",
+                    tip: "রেট জানানোর সময় কোনো দ্বিধা না রেখে 'My standard hourly rate is...' দিয়ে শুরু করবেন।"
+                };
+            }
+
+            if (upgrade && box) {
+                nText.innerText = `"${upgrade.native}"`;
+                bTip.innerText = `💡 বাংলা টিপস: ${upgrade.tip}`;
+                box.classList.remove('hidden');
+            }
+        }
+
+        // Speech Synthesis & Waveform
+        function speakAi(text) {
+            lastAiUtterance = text;
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const speedSelect = document.getElementById('voice-speed-select');
+            const rateVal = speedSelect ? parseFloat(speedSelect.value) : 1.0;
+            
+            utterance.rate = rateVal;
+            utterance.lang = PERSONAS[activePersona].voiceLang || 'en-US';
+
+            // Pick natural US voice if available
+            const voices = window.speechSynthesis.getVoices();
+            const bestVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Christopher')));
+            if (bestVoice) utterance.voice = bestVoice;
+
+            utterance.onstart = function() {
+                // Animate mouth
+                const mouth = document.getElementById('avatar-mouth');
+                if (mouth) mouth.classList.add('mouth-talking');
+
+                // Active speaker border on client tile
+                const tileClient = document.getElementById('tile-client');
+                if (tileClient) tileClient.classList.add('active-speaker-ring');
+                const tileCand = document.getElementById('tile-candidate');
+                if (tileCand) tileCand.classList.remove('active-speaker-ring');
+
+                // Update live subtitles & badges
+                const capText = document.getElementById('client-captions-text');
+                if (capText) capText.innerText = `"${text}"`;
+                const spkBadge = document.getElementById('client-speaking-badge');
+                if (spkBadge) spkBadge.classList.remove('hidden');
+            };
+
+            utterance.onend = function() {
+                const mouth = document.getElementById('avatar-mouth');
+                if (mouth) mouth.classList.remove('mouth-talking');
+
+                const tileClient = document.getElementById('tile-client');
+                if (tileClient) tileClient.classList.remove('active-speaker-ring');
+
+                const spkBadge = document.getElementById('client-speaking-badge');
+                if (spkBadge) spkBadge.classList.add('hidden');
+
+                if (inCall && autoListen) {
+                    playGentleChime();
+                    setTimeout(() => {
+                        if (inCall && autoListen && !isRecording) {
+                            startRecognition();
+                        }
+                    }, 600);
+                }
+            };
+
+            utterance.onerror = function() {
+                const mouth = document.getElementById('avatar-mouth');
+                if (mouth) mouth.classList.remove('mouth-talking');
+                const tileClient = document.getElementById('tile-client');
+                if (tileClient) tileClient.classList.remove('active-speaker-ring');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function playGentleChime() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
+                // Ignore audio context autoplay restrictions
+            }
+        }
+
+        // Panel Switching inside Zoom
+        function switchMeetingPanel(panelName) {
+            ['chat', 'stages', 'scorecard'].forEach(p => {
+                const content = document.getElementById('mp-content-' + p);
+                const tab = document.getElementById('mp-tab-' + p);
+                if (!content || !tab) return;
+                if (p === panelName) {
+                    content.classList.remove('hidden');
+                    tab.className = "flex-1 py-1.5 rounded-lg bg-indigo-600 text-white text-center transition";
+                } else {
+                    content.classList.add('hidden');
+                    tab.className = "flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition";
+                }
+            });
+        }
+
+        function toggleZoomLayout() {
+            const grid = document.getElementById('video-grid');
+            const btn = document.getElementById('layout-toggle-btn');
+            if (grid.classList.contains('md:grid-cols-2')) {
+                grid.classList.remove('md:grid-cols-2');
+                grid.classList.add('grid-cols-1');
+                if (btn) btn.innerText = "⊞ Speaker View";
+            } else {
+                grid.classList.remove('grid-cols-1');
+                grid.classList.add('md:grid-cols-2');
+                if (btn) btn.innerText = "⊞ Gallery View";
+            }
+        }
+
+        // Transcript Management
+        function appendTranscript(sender, text, name, avatar) {
+            const container = document.getElementById('call-transcript-container');
+            if (!container) return;
+
+            if (container.children.length === 1 && container.children[0].innerText.includes('Click "Start Call"')) {
+                container.innerHTML = '';
+            }
+
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            if (sender === 'system') {
+                const sysEl = document.createElement('div');
+                sysEl.className = "text-center my-1.5 text-[10px] text-slate-500 italic";
+                sysEl.innerText = text;
+                container.appendChild(sysEl);
+            } else if (sender === 'user') {
+                const uEl = document.createElement('div');
+                uEl.className = "flex justify-end gap-2 items-start";
+                uEl.innerHTML = `
+                    <div class="max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-tr-none p-2.5 shadow text-xs">
+                        <div class="flex items-center justify-between gap-2 text-[10px] text-indigo-200 mb-0.5">
+                            <span class="font-bold">${escapeHtml(name)}</span>
+                            <span>${timeStr}</span>
+                        </div>
+                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
+                    </div>
+                `;
+                container.appendChild(uEl);
+            } else {
+                const aEl = document.createElement('div');
+                aEl.className = "flex justify-start gap-2 items-start";
+                aEl.innerHTML = `
+                    <div class="max-w-[85%] bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl rounded-tl-none p-2.5 shadow text-xs">
+                        <div class="flex items-center justify-between gap-2 text-[10px] text-slate-400 mb-0.5">
+                            <span class="font-bold text-indigo-300">${escapeHtml(name)}</span>
+                            <div class="flex items-center gap-1">
+                                <span>${timeStr}</span>
+                                <button onclick="speakAi('${escapeJs(text)}')" class="hover:text-white" title="Replay voice">🔊</button>
+                            </div>
+                        </div>
+                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
+                    </div>
+                `;
+                container.appendChild(aEl);
+            }
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function endMeetingWithReport() {
+            inCall = false;
+            clearInterval(callTimerInterval);
+            if (recognition && isRecording) recognition.stop();
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') stopMeetingRecording();
+
+            const modal = document.getElementById('post-interview-modal');
+            if (modal) modal.classList.remove('hidden');
+
+            const toggleBtn = document.getElementById('call-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.className = "px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition";
+                document.getElementById('call-icon').innerText = "📞";
+                document.getElementById('call-btn-text').innerText = "Start Call";
+            }
+        }
+
+        function closeInterviewModal() {
+            const modal = document.getElementById('post-interview-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // Initialize Call Studio on Load
+        document.addEventListener('DOMContentLoaded', function() {
+            initCallStudio();
+        });
+        initCallStudio();
 
         // Metrics Calculation
         function calculateSpeechMetrics(text, durationSec) {
