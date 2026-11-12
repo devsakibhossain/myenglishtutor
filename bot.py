@@ -88,6 +88,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• `/accent` - অ্যাকসেন্ট নির্বাচন (American / British / Australian)\n"
         "• `/voice on|off` - স্বয়ংক্রিয় ভয়েস রিপ্লাই চালু বা বন্ধ রাখা\n\n"
         "🧠 **স্মৃতি ও স্পেসড-রিপিটিশন:**\n"
+        "• `/skills` - ৬টি সম্পূর্ণ ইংলিশ লার্নিং স্কিলস ক্যাটালগ (অ্যাকসেন্ট, ক্লায়েন্ট প্লেবুক, স্ল্যাং, আইইএলটিএস, গ্রামার, টেকনিক্যাল)\n"
         "• `/srs` - Ebbinghaus স্পেসড-রিপিটিশন ফ্ল্যাশ কার্ড কুইজ (ভুলে যাওয়ার আগেই প্র্যাকটিস)\n"
         "• `/review` - আপনার অতীত ভুলের ফ্ল্যাশ কার্ড\n"
         "• `/quiz` - নেটিভ স্পিচ কুইজ\n"
@@ -571,6 +572,35 @@ async def clear_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     database.clear_chat_history(update.effective_user.id)
     await update.message.reply_text("🧹 আগের কথোপকথনের মেমোরি ক্লিয়ার করা হয়েছে! চলুন নতুন বিষয় নিয়ে আলোচনা শুরু করি।", parse_mode=ParseMode.MARKDOWN)
 
+async def skills_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [
+        [
+            InlineKeyboardButton("🎙️ 1. Pronunciation & Accent", callback_data="show_skill_pron"),
+            InlineKeyboardButton("💼 2. Freelance Client Playbook", callback_data="show_skill_client"),
+        ],
+        [
+            InlineKeyboardButton("⚡ 3. Native Slangs & Shortcuts", callback_data="show_skill_slang"),
+            InlineKeyboardButton("🎓 4. IELTS & Exam Speaking", callback_data="show_skill_ielts"),
+        ],
+        [
+            InlineKeyboardButton("📝 5. Real Grammar Patterns", callback_data="show_skill_grammar"),
+            InlineKeyboardButton("📊 6. Technical Analytics English", callback_data="show_skill_tech"),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    intro = (
+        "📚 **English Mastery Skills Catalog (৬টি বিশেষায়িত লার্নিং স্কিল):**\n\n"
+        "আপনার ইংরেজি শেখাকে আন্তর্জাতিক মানে নিয়ে যাওয়ার জন্য ৬টি পাওয়ারফুল স্কিল মডিউল প্রস্তুত করা হয়েছে:\n\n"
+        "1. 🎙️ **Pronunciation & Accent Coach:** IPA, Flap-T, /w/ vs /v/, /th/ সাউন্ড ও রিদম\n"
+        "2. 💼 **Freelance Client English:** আপওয়ার্ক বিডিং, জুম কল নেগোসিয়েশন ও $60/hr রেট বাড়ানো\n"
+        "3. ⚡ **Native Slangs & Contractions:** ৩০০+ আমেরিকান ও ব্রিটিশ বাস্তব জীবনের স্ল্যাং ও শর্টকাট\n"
+        "4. 🎓 **IELTS Speaking Band 8+:** AREA ও PPF মেথড দিয়ে ব্যান্ড ৭.৫-৮.৫ পাওয়ার কৌশল\n"
+        "5. 📝 **Grammar in Real Life:** মুখস্থ ছাড়া বাস্তব জীবনে ১২টি টেন্স ও কন্ডিশনাল বাক্যের ব্যবহার\n"
+        "6. 📊 **Technical Tracking Presenter:** GTM, GA4, CAPI ও সার্ভার ট্র্যাকিং মুখে বোঝানোর স্ক্রিপ্ট\n\n"
+        "👉 নিচের বাটন থেকে যেকোনো একটি স্কিল সিলেক্ট করুন:"
+    )
+    await update.message.reply_text(intro, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
 async def proposal_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     chat_id = update.effective_chat.id
@@ -913,6 +943,58 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
                 "পরবর্তী ফ্ল্যাশ কার্ডের জন্য `/srs` লিখুন।"
             )
         await query.edit_message_text(res_text, parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("show_skill_"):
+        sk = data.replace("show_skill_", "")
+        skill_cards = {
+            "pron": (
+                "🎙️ **Skill 1: Pronunciation & Accent Coach**\n\n"
+                "• **American Flap-T:** 'water' -> 'wader', 'city' -> 'cidy'\n"
+                "• **Glottal Stop:** 'button' -> 'bu-n', 'important' -> 'impor-nt'\n"
+                "• **/w/ vs /v/:** ঠোঁট গোল করে বাঁশির মতো ফুঁ দিয়ে 'water' বলুন।\n"
+                "• **/th/ Sound:** জিহ্বার ডগা ওপর-নিচের দাঁতের মাঝে চেপে হালকা বাতাস ছাড়ুন ('think', 'this')।\n\n"
+                "👉 উচ্চারণ টেস্ট করতে একটি ইংরেজি ভয়েস নোট পাঠান!"
+            ),
+            "client": (
+                "💼 **Skill 2: Freelance Client English Playbook**\n\n"
+                "• **উইনিং প্রপোজাল:** প্রথম ২ লাইনে বায়ারের টেকনিক্যাল সমস্যা বলুন।\n"
+                "• **$60/hr রেট বাড়ানো:** বায়ারের লাভ ও অ্যাড স্পেন্ড লস রিকভারির যুক্তি দিন।\n"
+                "• **জরুরি কল হেল্প:** বায়ারকে বলুন *'Let me pull up Tag Assistant to verify the payload.'*\n\n"
+                "👉 প্রপোজাল বানাতে লিখুন: `/proposal <জব পোস্ট>`"
+            ),
+            "slang": (
+                "⚡ **Skill 3: Native Slangs & Contractions**\n\n"
+                "• **Gonna / Wanna / Gotta:** Going to / Want to / Have got to\n"
+                "• **I'm beat:** খুব ক্লান্ত\n"
+                "• **Touch base:** সংক্ষেপে আপডেট নেওয়া\n"
+                "• **Ballpark:** আনুমানিক হিসাব\n"
+                "• **No sweat:** কোনো ব্যাপারই না\n\n"
+                "👉 যেকোনো স্ল্যাং ডিকোড করতে লিখুন: `/decode <স্ল্যাং>`"
+            ),
+            "ielts": (
+                "🎓 **Skill 4: IELTS & Exam Speaking Band 8+**\n\n"
+                "• **AREA Method:** Answer + Reason + Example + Alternative\n"
+                "• **PPF Method (Part 2 Cue Card):** Past (শুরু) + Present (সমাধান) + Future (ভবিষ্যৎ শিক্ষা)\n"
+                "• **Band 8 Signposts:** *'On balance, I'm inclined to believe...'* / *'It's a double-edged sword...'* \n\n"
+                "👉 লাইভ ইন্টারভিউ প্র্যাকটিস করতে লিখুন: `/interview`"
+            ),
+            "grammar": (
+                "📝 **Skill 5: Real-World Grammar Patterns**\n\n"
+                "• **Past Simple vs Present Perfect:** সময় শেষ হলে Past Simple ('fixed yesterday'), ফল এখনও কার্যকর হলে Present Perfect ('have fixed').\n"
+                "• **Diplomatic 2nd Conditional:** *'If we updated the container, it would take 5 hours.'*\n"
+                "• **Preposition Magic:** AT 9:00 AM, ON Monday, IN November.\n\n"
+                "👉 বাক্য চেক করতে লিখুন: `/correct <বাক্য>`"
+            ),
+            "tech": (
+                "📊 **Skill 6: Technical Tracking Presenter**\n\n"
+                "• **Deduplication:** *'Preventing double counting via browser and server event_id matching.'*\n"
+                "• **Server-Side Pitch:** *'Bypasses ad blockers and recovers 20-25% lost conversions.'*\n"
+                "• **EMQ Score 8+:** *'Passing normalized SHA-256 hashed customer parameters.'*\n\n"
+                "👉 স্ক্রিনশট বুঝিয়ে বলতে পাঠান ছবি বা লিখুন: `/screenexplain`"
+            )
+        }
+        text = skill_cards.get(sk, "স্কিল মডিউল লোড করা হয়েছে।")
+        await query.edit_message_text(text, parse_mode=ParseMode.MARKDOWN)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
@@ -1287,6 +1369,7 @@ def main():
     app.add_handler(CommandHandler("endscenario", endscenario_command))
     app.add_handler(CommandHandler("srs", srs_command))
     app.add_handler(CommandHandler("app", app_command))
+    app.add_handler(CommandHandler("skills", skills_command))
 
     # Callback queries (Buttons)
     app.add_handler(CallbackQueryHandler(handle_callback_query))
