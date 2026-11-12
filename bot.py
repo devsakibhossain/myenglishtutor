@@ -16,6 +16,8 @@ import database
 import mentor_ai
 import scheduler
 import tts_service
+import skills_data
+import random
 
 # Configure logging
 logging.basicConfig(
@@ -575,31 +577,137 @@ async def clear_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def skills_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [
-            InlineKeyboardButton("🎙️ 1. Pronunciation & Accent", callback_data="show_skill_pron"),
-            InlineKeyboardButton("💼 2. Freelance Client Playbook", callback_data="show_skill_client"),
+            InlineKeyboardButton("🚀 Mod 1: Reductions (1-20)", callback_data="show_mod_1"),
+            InlineKeyboardButton("🌊 Mod 2: Linking & Blending (21-40)", callback_data="show_mod_2"),
         ],
         [
-            InlineKeyboardButton("⚡ 3. Native Slangs & Shortcuts", callback_data="show_skill_slang"),
-            InlineKeyboardButton("🎓 4. IELTS & Exam Speaking", callback_data="show_skill_ielts"),
+            InlineKeyboardButton("⚡ Mod 3: Weak Forms (41-60)", callback_data="show_mod_3"),
+            InlineKeyboardButton("🎯 Mod 4: Thought Chunking (61-80)", callback_data="show_mod_4"),
         ],
         [
-            InlineKeyboardButton("📝 5. Real Grammar Patterns", callback_data="show_skill_grammar"),
-            InlineKeyboardButton("📊 6. Technical Analytics English", callback_data="show_skill_tech"),
+            InlineKeyboardButton("🏃 Mod 5: Phrasal Verbs (81-100)", callback_data="show_mod_5"),
+            InlineKeyboardButton("🗽 Mod 6: Slangs & Idioms (101-120)", callback_data="show_mod_6"),
+        ],
+        [
+            InlineKeyboardButton("💼 Mod 7: Freelance Client (121-140)", callback_data="show_mod_7"),
+            InlineKeyboardButton("📊 Mod 8: Technical Tracking (141-160)", callback_data="show_mod_8"),
+        ],
+        [
+            InlineKeyboardButton("🎙️ Mod 9: Rapid Storytelling (161-180)", callback_data="show_mod_9"),
+            InlineKeyboardButton("🏎️ Mod 10: 180-WPM Drills (181-200)", callback_data="show_mod_10"),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     intro = (
-        "📚 **English Mastery Skills Catalog (৬টি বিশেষায়িত লার্নিং স্কিল):**\n\n"
-        "আপনার ইংরেজি শেখাকে আন্তর্জাতিক মানে নিয়ে যাওয়ার জন্য ৬টি পাওয়ারফুল স্কিল মডিউল প্রস্তুত করা হয়েছে:\n\n"
-        "1. 🎙️ **Pronunciation & Accent Coach:** IPA, Flap-T, /w/ vs /v/, /th/ সাউন্ড ও রিদম\n"
-        "2. 💼 **Freelance Client English:** আপওয়ার্ক বিডিং, জুম কল নেগোসিয়েশন ও $60/hr রেট বাড়ানো\n"
-        "3. ⚡ **Native Slangs & Contractions:** ৩০০+ আমেরিকান ও ব্রিটিশ বাস্তব জীবনের স্ল্যাং ও শর্টকাট\n"
-        "4. 🎓 **IELTS Speaking Band 8+:** AREA ও PPF মেথড দিয়ে ব্যান্ড ৭.৫-৮.৫ পাওয়ার কৌশল\n"
-        "5. 📝 **Grammar in Real Life:** মুখস্থ ছাড়া বাস্তব জীবনে ১২টি টেন্স ও কন্ডিশনাল বাক্যের ব্যবহার\n"
-        "6. 📊 **Technical Tracking Presenter:** GTM, GA4, CAPI ও সার্ভার ট্র্যাকিং মুখে বোঝানোর স্ক্রিপ্ট\n\n"
-        "👉 নিচের বাটন থেকে যেকোনো একটি স্কিল সিলেক্ট করুন:"
+        "🏛️ **The 200-Skill Super-Fast English Mastery Matrix:**\n\n"
+        "বেসিক থেকে অ্যাডভান্সড ২০০টি স্পোকেন স্কিল এবং সুপার-ফাস্ট স্পিডে (১৫০-১৮০ WPM) কথা বলার ১০টি মূল মডিউল:\n\n"
+        "• **Mod 1:** সাউন্ড রিডাকশন ও কনট্রাকশন (১-২০)\n"
+        "• **Mod 2:** কানেক্টেড স্পিচ ও ব্লেন্ডিং (২১-৪০)\n"
+        "• **Mod 3:** দুর্বল ফাংশন ওয়ার্ড কম্প্রেশন (৪১-৬০)\n"
+        "• **Mod 4:** দ্রুত চিন্তা চ্যাকিং ও ফিলার্স (৬১-৮০)\n"
+        "• **Mod 5:** ১০০টি ফাস্ট ফ্রেজাল ভার্ব (৮১-১০০)\n"
+        "• **Mod 6:** আমেরিকান চলতি স্ল্যাং ও ইডিয়াম (১০১-১২০)\n"
+        "• **Mod 7:** ফ্রিল্যান্সিং, আপওয়ার্ক ও বায়ার কল (১২১-১৪০)\n"
+        "• **Mod 8:** টেকনিক্যাল ট্র্যাকিং ও অ্যানালিটিক্স (১৪১-১৬০)\n"
+        "• **Mod 9:** দ্রুত কনভারসেশনাল ফ্লো ও গল্প বলা (১৬১-১৮০)\n"
+        "• **Mod 10:** ১৮০-WPM স্পিড ও অ্যাকসেন্ট ড্রিলস (১৮১-২০০)\n\n"
+        "💡 **টিপ:** যেকোনো স্কিল সরাসরি ওপেন করতে লিখুন: `/skill <১-২০০>` (যেমন: `/skill 1` বা `/skill 45`)\n"
+        "🏎️ দ্রুত স্পিড ড্রিল পেতে লিখুন: `/fast`\n\n"
+        "👉 নিচের যেকোনো মডিউল সিলেক্ট করে স্কিলসমূহ দেখুন:"
     )
     await update.message.reply_text(intro, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+async def skill_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    if not context.args:
+        await update.message.reply_text(
+            "⚡ **200 Fast-Speech Skill Explorer:**\n\n"
+            "স্কিল নম্বর বা কীওয়ার্ড লিখুন। যেমন:\n"
+            "• `/skill 1` (Gonna)\n"
+            "• `/skill 25` (T+Y Palatalization / Mee-chu)\n"
+            "• `/skill 81` (Touch base)\n"
+            "• `/skill 142` (CAPI Deduplication)\n"
+            "• `/skill 181` (Flap-T Speed Loops)\n"
+            "• বা সার্চ করুন: `/skill safari` বা `/skill deduplication`",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+
+    arg = " ".join(context.args).strip()
+    skill_item = None
+    if arg.isdigit():
+        skill_item = skills_data.get_skill(int(arg))
+    else:
+        results = skills_data.search_skills(arg, limit=1)
+        if results:
+            skill_item = results[0]
+
+    if not skill_item:
+        await update.message.reply_text(f"❌ '{arg}' নম্বরের কোনো স্কিল পাওয়া যায়নি। ১ থেকে ২০০ এর মধ্যে নম্বর দিন বা কীওয়ার্ড দিয়ে সার্চ করুন। (যেমন: `/skill 1`)")
+        return
+
+    card = (
+        f"⚡ **Skill #{skill_item['number']}: {skill_item['title']}**\n"
+        f"📁 *Module {skill_item['module_id']}: {skill_item['module_name']}*\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        f"🚀 **Fast-Speed Formula:** `{skill_item['formula']}`\n\n"
+        f"🗣️ **Real Spoken Example:**\n"
+        f"*{skill_item['example']}*\n\n"
+        f"🇧🇩 **বাংলা অর্থ ও ব্যবহার:**\n"
+        f"{skill_item['bangla']}\n\n"
+        f"🏎️ **180-WPM Speed Drill:**\n"
+        f"*{skill_item['drill']}*\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        f"👉 এই বাক্যটির নেটিভ উচ্চারণ অডিও নিচে শুনুন এবং শ্যাডোয়িং করে বলুন!"
+    )
+    try:
+        await update.message.reply_text(card, parse_mode=ParseMode.MARKDOWN)
+    except Exception:
+        await update.message.reply_text(card)
+
+    db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+    accent = db_user.get("accent", "US")
+    voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+    audio_bytes = await tts_service.text_to_speech_bytes(skill_item['example'], voice=voice)
+    if audio_bytes:
+        try:
+            await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+        except Exception as e:
+            logger.error(f"Skill voice failed: {e}")
+
+async def fast_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    random_num = random.randint(1, 200)
+    skill_item = skills_data.get_skill(random_num)
+
+    card = (
+        f"🏎️ **Super-Fast Native Speech Challenge! (Skill #{skill_item['number']})**\n"
+        f"📁 *{skill_item['module_name']}*\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        f"🎙️ **আপনার স্পিড চ্যালেঞ্জ:** মুখে এই বাক্যটি ৩ বার না থেমে দ্রুত বলুন:\n\n"
+        f"🔥 *\"{skill_item['example']}\"*\n\n"
+        f"⚡ **Fast Reduction:** `{skill_item['formula']}`\n"
+        f"🇧🇩 **বাংলায় অর্থ:** {skill_item['bangla']}\n"
+        f"🎯 **Drill Tip:** {skill_item['drill']}\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        f"👉 নিচে অডিও শুনুন এবং হুবহু একই গতিতে একটি **ভয়েস মেসেজ** পাঠিয়ে চ্যালেঞ্জটি কমপ্লিট করুন!"
+    )
+    try:
+        await update.message.reply_text(card, parse_mode=ParseMode.MARKDOWN)
+    except Exception:
+        await update.message.reply_text(card)
+
+    db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+    accent = db_user.get("accent", "US")
+    voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+    audio_bytes = await tts_service.text_to_speech_bytes(skill_item['example'], voice=voice)
+    if audio_bytes:
+        try:
+            await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+        except Exception as e:
+            logger.error(f"Fast speech audio failed: {e}")
 
 async def proposal_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -943,6 +1051,94 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
                 "পরবর্তী ফ্ল্যাশ কার্ডের জন্য `/srs` লিখুন।"
             )
         await query.edit_message_text(res_text, parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("show_mod_"):
+        mod_id = int(data.replace("show_mod_", ""))
+        mod_name = skills_data.MODULES.get(mod_id, f"Module {mod_id}")
+        mod_skills = skills_data.get_module_skills(mod_id)
+
+        keyboard = []
+        row = []
+        for s in mod_skills:
+            row.append(InlineKeyboardButton(f"#{s['number']} {s['title'][:10]}..", callback_data=f"show_sk_{s['number']}"))
+            if len(row) == 2:
+                keyboard.append(row)
+                row = []
+        if row:
+            keyboard.append(row)
+        keyboard.append([InlineKeyboardButton("🔙 Back to Modules", callback_data="back_to_mods")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        text = (
+            f"📁 **Module {mod_id}: {mod_name}**\n\n"
+            f"এই মডিউলে ২০টি বিশেষায়িত ফাস্ট-স্পিচ স্কিল রয়েছে। বিস্তারিত দেখতে যেকোনো স্কিল বাটনে চাপ দিন বা লিখুন: `/skill <নম্বর>`"
+        )
+        await query.edit_message_text(text, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+    elif data == "back_to_mods":
+        keyboard = [
+            [
+                InlineKeyboardButton("🚀 Mod 1: Reductions (1-20)", callback_data="show_mod_1"),
+                InlineKeyboardButton("🌊 Mod 2: Linking & Blending (21-40)", callback_data="show_mod_2"),
+            ],
+            [
+                InlineKeyboardButton("⚡ Mod 3: Weak Forms (41-60)", callback_data="show_mod_3"),
+                InlineKeyboardButton("🎯 Mod 4: Thought Chunking (61-80)", callback_data="show_mod_4"),
+            ],
+            [
+                InlineKeyboardButton("🏃 Mod 5: Phrasal Verbs (81-100)", callback_data="show_mod_5"),
+                InlineKeyboardButton("🗽 Mod 6: Slangs & Idioms (101-120)", callback_data="show_mod_6"),
+            ],
+            [
+                InlineKeyboardButton("💼 Mod 7: Freelance Client (121-140)", callback_data="show_mod_7"),
+                InlineKeyboardButton("📊 Mod 8: Technical Tracking (141-160)", callback_data="show_mod_8"),
+            ],
+            [
+                InlineKeyboardButton("🎙️ Mod 9: Rapid Storytelling (161-180)", callback_data="show_mod_9"),
+                InlineKeyboardButton("🏎️ Mod 10: 180-WPM Drills (181-200)", callback_data="show_mod_10"),
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        intro = (
+            "🏛️ **The 200-Skill Super-Fast English Mastery Matrix:**\n\n"
+            "বেসিক থেকে অ্যাডভান্সড ২০০টি স্পোকেন স্কিল এবং সুপার-ফাস্ট স্পিডে কথা বলার ১০টি মূল মডিউল।\n"
+            "👉 যেকোনো মডিউল নির্বাচন করুন:"
+        )
+        await query.edit_message_text(intro, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("show_sk_"):
+        sk_num = int(data.replace("show_sk_", ""))
+        skill_item = skills_data.get_skill(sk_num)
+        if skill_item:
+            card = (
+                f"⚡ **Skill #{skill_item['number']}: {skill_item['title']}**\n"
+                f"📁 *Module {skill_item['module_id']}: {skill_item['module_name']}*\n"
+                f"━━━━━━━━━━━━━━━━━━━\n"
+                f"🚀 **Fast-Speed Formula:** `{skill_item['formula']}`\n\n"
+                f"🗣️ **Real Spoken Example:**\n"
+                f"*{skill_item['example']}*\n\n"
+                f"🇧🇩 **বাংলা অর্থ ও ব্যবহার:**\n"
+                f"{skill_item['bangla']}\n\n"
+                f"🏎️ **180-WPM Speed Drill:**\n"
+                f"*{skill_item['drill']}*"
+            )
+            keyboard = [
+                [
+                    InlineKeyboardButton(f"🔙 Back to Module {skill_item['module_id']}", callback_data=f"show_mod_{skill_item['module_id']}")
+                ]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text(card, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+
+            db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+            accent = db_user.get("accent", "US")
+            voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+            audio_bytes = await tts_service.text_to_speech_bytes(skill_item['example'], voice=voice)
+            if audio_bytes:
+                try:
+                    await context.bot.send_voice(chat_id=chat_id, voice=audio_bytes)
+                except Exception as e:
+                    logger.error(f"Skill voice callback failed: {e}")
 
     elif data.startswith("show_skill_"):
         sk = data.replace("show_skill_", "")
@@ -1370,6 +1566,9 @@ def main():
     app.add_handler(CommandHandler("srs", srs_command))
     app.add_handler(CommandHandler("app", app_command))
     app.add_handler(CommandHandler("skills", skills_command))
+    app.add_handler(CommandHandler("skill", skill_command))
+    app.add_handler(CommandHandler("fast", fast_command))
+    app.add_handler(CommandHandler("speed", fast_command))
 
     # Callback queries (Buttons)
     app.add_handler(CallbackQueryHandler(handle_callback_query))

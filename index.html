@@ -7,6 +7,7 @@
     <!-- Telegram Mini App WebApp Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="skills200.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -51,16 +52,20 @@
     <div class="border-b border-slate-800 bg-[#0d1322]/50">
         <div class="max-w-6xl mx-auto px-6 flex space-x-2 sm:space-x-4 overflow-x-auto py-3 text-sm font-medium">
             <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 rounded-xl bg-indigo-600 text-white flex items-center gap-2 transition">
-                <span>📊 Overview & Fluency</span>
+                <span>📊 Overview</span>
+            </button>
+            <button onclick="switchTab('skills200')" id="tab-btn-skills200" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-indigo-500/20 bg-indigo-950/20">
+                <span class="text-amber-400">⚡</span>
+                <span class="font-semibold text-indigo-300">200 Fast-Speech Skills</span>
             </button>
             <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
-                <span>🎙️ Web Voice Caller</span>
+                <span>🎙️ Web Caller</span>
             </button>
             <button onclick="switchTab('freelance')" id="tab-btn-freelance" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
-                <span>💼 Upwork & Client Cheat Sheet</span>
+                <span>💼 Upwork & Client</span>
             </button>
             <button onclick="switchTab('wordbank')" id="tab-btn-wordbank" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
-                <span>📚 Slang & Word Bank</span>
+                <span>📚 Word Bank</span>
             </button>
         </div>
     </div>
@@ -395,6 +400,84 @@
             </div>
         </section>
 
+        <!-- TAB 5: 200 FAST-SPEECH SKILLS EXPLORER -->
+        <section id="tab-skills200" class="hidden space-y-6">
+            <!-- Header card -->
+            <div class="glass p-6 sm:p-8 rounded-3xl glow border border-indigo-500/20 bg-gradient-to-br from-indigo-950/40 via-slate-900/60 to-slate-950">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 mb-3">
+                            <span>⚡</span> Complete 200-Skill Fast-Speech Mastery (150–180 WPM)
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                            Native Fast-Speech Matrix
+                        </h2>
+                        <p class="text-sm text-slate-300 mt-1 max-w-2xl">
+                            আমেরিকান ও ব্রিটিশ নেটিভ স্পিকারদের মতো সুপার-ফাস্ট ফ্লুয়েন্সিতে কথা বলার জন্য ১০টি মডিউলের ২০০টি প্র্যাক্টিক্যাল স্কিল, রিডাকশন ফর্মুলা, রিয়েল এক্সাম্পল ও অডিও প্র্যাকটিস ড্রিল।
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="glass-card px-4 py-3 rounded-2xl text-center border border-indigo-500/30">
+                            <div class="text-2xl font-black text-indigo-400" id="total-skills-count">200</div>
+                            <div class="text-[11px] text-slate-400 font-medium">Active Skills</div>
+                        </div>
+                        <div class="glass-card px-4 py-3 rounded-2xl text-center border border-emerald-500/30">
+                            <div class="text-2xl font-black text-emerald-400">10</div>
+                            <div class="text-[11px] text-slate-400 font-medium">Core Modules</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Filters Bar -->
+                <div class="mt-6 pt-6 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <div class="md:col-span-7 relative">
+                        <input type="text" id="skill-search-input" oninput="filterSkills()" placeholder="Search skills, formulas, or keywords (e.g. gonna, safari, CAPI, meet-you, flap-t)..." 
+                            class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition pl-11">
+                        <svg class="w-5 h-5 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <select id="module-filter-select" onchange="filterSkills()" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                            <option value="all">🌟 All Modules (1 to 10)</option>
+                            <option value="1">Mod 1: Sound Reductions & Contractions (1-20)</option>
+                            <option value="2">Mod 2: Connected Speech & Blending (21-40)</option>
+                            <option value="3">Mod 3: Weak Forms & Compressions (41-60)</option>
+                            <option value="4">Mod 4: Thought Chunking & Fillers (61-80)</option>
+                            <option value="5">Mod 5: 100 Rapid Phrasal Verbs (81-100)</option>
+                            <option value="6">Mod 6: Everyday American Slangs & Idioms (101-120)</option>
+                            <option value="7">Mod 7: Upwork & Client English (121-140)</option>
+                            <option value="8">Mod 8: Technical Analytics & Tracking Fluency (141-160)</option>
+                            <option value="9">Mod 9: Conversational Flow & Storytelling (161-180)</option>
+                            <option value="10">Mod 10: Elite Pronunciation & 180-WPM Drills (181-200)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quick Filter Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto pt-3 text-xs">
+                    <span class="text-slate-400 shrink-0 font-medium">Quick Tags:</span>
+                    <button onclick="setSearchFilter('gonna')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition shrink-0">#Contractions</button>
+                    <button onclick="setSearchFilter('linking')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition shrink-0">#ConnectedSpeech</button>
+                    <button onclick="setSearchFilter('CAPI')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition shrink-0">#WebAnalytics</button>
+                    <button onclick="setSearchFilter('proposal')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition shrink-0">#Upwork</button>
+                    <button onclick="setSearchFilter('flap-t')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition shrink-0">#FlapT</button>
+                    <button onclick="setSearchFilter('clear')" class="px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-red-500/30 text-slate-400 hover:text-red-300 transition shrink-0">✕ Reset</button>
+                </div>
+            </div>
+
+            <!-- Results status bar -->
+            <div class="flex items-center justify-between text-xs text-slate-400 px-2">
+                <span id="skills-filter-status">Showing 200 skills</span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Native Speech Synthesis Ready</span>
+            </div>
+
+            <!-- Skills Grid Container -->
+            <div id="skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamically populated by renderSkills() -->
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -420,10 +503,11 @@
 
         // Tab Switching
         function switchTab(tabName) {
-            const tabs = ['dashboard', 'caller', 'freelance', 'wordbank'];
+            const tabs = ['dashboard', 'skills200', 'caller', 'freelance', 'wordbank'];
             tabs.forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 const btn = document.getElementById('tab-btn-' + t);
+                if (!el || !btn) return;
                 if (t === tabName) {
                     el.classList.remove('hidden');
                     btn.classList.add('bg-indigo-600', 'text-white');
@@ -510,6 +594,140 @@
             } else {
                 if (recognition) recognition.stop();
             }
+        }
+
+        // 200 Skills Explorer Logic
+        function renderSkills(list) {
+            const container = document.getElementById('skills-grid');
+            const statusEl = document.getElementById('skills-filter-status');
+            if (!container) return;
+            
+            if (statusEl) statusEl.innerText = `Showing ${list.length} of 200 skills`;
+            
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 text-center py-16 bg-slate-900/40 rounded-3xl border border-slate-800">
+                        <div class="text-4xl mb-3">🔍</div>
+                        <div class="text-slate-300 font-semibold text-base">No matching skills found</div>
+                        <div class="text-slate-500 text-xs mt-1">Try another keyword like "gonna", "safari", "CAPI", "zoom", or "flap-t"</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(item => `
+                <div class="glass-card p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#${item.num}</span>
+                                <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Mod ${item.mod}</span>
+                            </div>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-300 font-mono font-medium">⚡ ${escapeHtml(item.formula)}</span>
+                        </div>
+
+                        <h3 class="font-bold text-white text-base group-hover:text-indigo-300 transition">${escapeHtml(item.title)}</h3>
+
+                        <div class="mt-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800/60">
+                            <div class="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">🗣️ Spoken Example:</div>
+                            <p class="text-sm text-slate-200 font-medium italic">"${escapeHtml(item.example)}"</p>
+                        </div>
+
+                        <div class="mt-2.5 text-xs text-slate-300 leading-relaxed">
+                            <span class="text-slate-400 font-semibold">🇧🇩 বাংলা:</span> ${escapeHtml(item.bangla)}
+                        </div>
+
+                        <div class="mt-2.5 text-xs text-emerald-400/90 font-medium">
+                            <span class="text-emerald-500 font-semibold">🏎️ Drill:</span> ${escapeHtml(item.drill)}
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                        <button onclick="playSkillAudio('${escapeJs(item.example)}')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-semibold transition">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                            <span>Listen Voice</span>
+                        </button>
+                        <button onclick="copyToClip('${escapeJs(item.example)}')" class="text-xs text-slate-400 hover:text-slate-200 transition px-2 py-1">
+                            📋 Copy Text
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSkills() {
+            if (!window.SKILLS_DATA || !window.SKILLS_DATA.skills) return;
+            const search = (document.getElementById('skill-search-input')?.value || '').toLowerCase().trim();
+            const mod = document.getElementById('module-filter-select')?.value || 'all';
+
+            let filtered = window.SKILLS_DATA.skills;
+
+            if (mod !== 'all') {
+                const modNum = parseInt(mod);
+                filtered = filtered.filter(s => s.mod === modNum);
+            }
+
+            if (search) {
+                filtered = filtered.filter(s => 
+                    s.title.toLowerCase().includes(search) ||
+                    s.formula.toLowerCase().includes(search) ||
+                    s.example.toLowerCase().includes(search) ||
+                    s.bangla.toLowerCase().includes(search) ||
+                    s.drill.toLowerCase().includes(search) ||
+                    s.num.toString() === search
+                );
+            }
+
+            renderSkills(filtered);
+        }
+
+        function setSearchFilter(tag) {
+            const input = document.getElementById('skill-search-input');
+            const select = document.getElementById('module-filter-select');
+            if (tag === 'clear') {
+                if (input) input.value = '';
+                if (select) select.value = 'all';
+            } else {
+                if (input) input.value = tag;
+            }
+            filterSkills();
+        }
+
+        function playSkillAudio(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Audio synthesis is not supported on your browser.");
+            }
+        }
+
+        function copyToClip(text) {
+            navigator.clipboard.writeText(text);
+            alert("Copied: " + text);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function escapeJs(str) {
+            if (!str) return '';
+            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        // Initialize Skills Grid on Page Load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.SKILLS_DATA && window.SKILLS_DATA.skills) {
+                renderSkills(window.SKILLS_DATA.skills);
+            }
+        });
+        if (window.SKILLS_DATA && window.SKILLS_DATA.skills) {
+            renderSkills(window.SKILLS_DATA.skills);
         }
     </script>
 </body>

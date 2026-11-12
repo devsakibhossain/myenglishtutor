@@ -1,0 +1,1816 @@
+window.SKILLS_DATA = {
+  "modules": {
+    "1": "Super-Fast Sound Reductions & Contractions",
+    "2": "Connected Speech, Linking & Word Blending",
+    "3": "Weak Forms & Function Word Compressions",
+    "4": "High-Speed Thought Chunking & Fillers",
+    "5": "100 Essential Phrasal Verbs at Rapid Speed",
+    "6": "Everyday American Colloquial Slangs & Idioms",
+    "7": "High-Speed Freelance, Upwork & Client English",
+    "8": "Technical Analytics & Tracking Spoken Fluency",
+    "9": "Rapid Conversational Flow & Storytelling",
+    "10": "Elite Pronunciation & 180-WPM Speed Drills"
+  },
+  "skills": [
+    {
+      "num": 1,
+      "mod": 1,
+      "title": "Gonna (Going to)",
+      "formula": "gonna",
+      "example": "I'm gonna push the GTM tag right now.",
+      "bangla": "ভবিষ্যতে কিছু করার ফাস্ট আমেরিকান রূপ।",
+      "drill": "Say 5 times fast: I'm gonna do it, I'm gonna go."
+    },
+    {
+      "num": 2,
+      "mod": 1,
+      "title": "Wanna (Want to)",
+      "formula": "wanna",
+      "example": "Do you wanna hop on a quick Zoom call?",
+      "bangla": "কোনো কিছু চাওয়ার বা অফার করার শর্টকাট।",
+      "drill": "Say: Wanna grab lunch? Wanna see this?"
+    },
+    {
+      "num": 3,
+      "mod": 1,
+      "title": "Gotta (Got to / Have to)",
+      "formula": "gotta",
+      "example": "I gotta bounce in five minutes.",
+      "bangla": "কোনো কাজ দ্রুত করার বাধ্যবাধকতা বোঝাতে।",
+      "drill": "Say: I gotta go, you gotta see this."
+    },
+    {
+      "num": 4,
+      "mod": 1,
+      "title": "Kinda (Kind of)",
+      "formula": "kinda",
+      "example": "It's kinda tricky with Safari ITP restrictions.",
+      "bangla": "কিছুটা বা খানিকটা বোঝাতে আমেরিকান ইনফরমাল রূপ।",
+      "drill": "Say: It's kinda hard, kinda cool."
+    },
+    {
+      "num": 5,
+      "mod": 1,
+      "title": "Sorta (Sort of)",
+      "formula": "sorta",
+      "example": "We're sorta waiting on the client's approval.",
+      "bangla": "এক প্রকার বা কিছুটা বোঝাতে ব্যবহৃত হয়।",
+      "drill": "Say: I'm sorta tired, sorta busy."
+    },
+    {
+      "num": 6,
+      "mod": 1,
+      "title": "Shoulda (Should have)",
+      "formula": "shoulda",
+      "example": "We shoulda enabled Consent Mode v2 earlier.",
+      "bangla": "অতীতে কোনো কাজ করা উচিত ছিল বোঝাতে।",
+      "drill": "Say: We shoulda known, you shoulda called."
+    },
+    {
+      "num": 7,
+      "mod": 1,
+      "title": "Woulda (Would have)",
+      "formula": "woulda",
+      "example": "That woulda broken the checkout tracking.",
+      "bangla": "অতীতে কোনো কিছু ঘটতে পারত কিন্তু ঘটেনি।",
+      "drill": "Say: I woulda done it, that woulda worked."
+    },
+    {
+      "num": 8,
+      "mod": 1,
+      "title": "Coulda (Could have)",
+      "formula": "coulda",
+      "example": "They coulda used a server-side container.",
+      "bangla": "অতীতের সামর্থ্য যা কাজে লাগানো হয়নি।",
+      "drill": "Say: You coulda told me, we coulda won."
+    },
+    {
+      "num": 9,
+      "mod": 1,
+      "title": "Whaddya (What do you)",
+      "formula": "whaddya",
+      "example": "Whaddya think about this attribution window?",
+      "bangla": "'What do you' এর সুপার-ফাস্ট ব্লেন্ডেড রূপ।",
+      "drill": "Say: Whaddya mean? Whaddya want?"
+    },
+    {
+      "num": 10,
+      "mod": 1,
+      "title": "Dunno (Don't know)",
+      "formula": "dunno",
+      "example": "I dunno why the purchase event is null.",
+      "bangla": "জানেন না বোঝাতে ক্যাজুয়াল আমেরিকান রূপ।",
+      "drill": "Say: I dunno man, I dunno yet."
+    },
+    {
+      "num": 11,
+      "mod": 1,
+      "title": "Lemme (Let me)",
+      "formula": "lemme",
+      "example": "Lemme share my screen real quick.",
+      "bangla": "অনুমতি নেওয়া বা নিজে কিছু শুরু করার ফাস্ট রূপ।",
+      "drill": "Say: Lemme see, lemme check it."
+    },
+    {
+      "num": 12,
+      "mod": 1,
+      "title": "Gimme (Give me)",
+      "formula": "gimme",
+      "example": "Gimme a sec to test this in preview mode.",
+      "bangla": "কোনো কিছু চাওয়ার দ্রুত ইনফরমাল রূপ।",
+      "drill": "Say: Gimme that, gimme a minute."
+    },
+    {
+      "num": 13,
+      "mod": 1,
+      "title": "Outta (Out of)",
+      "formula": "outta",
+      "example": "We're almost outta time on this sprint.",
+      "bangla": "কোনো কিছু শেষ হয়ে যাওয়া বা বাইরে যাওয়া।",
+      "drill": "Say: Outta here, outta nowhere."
+    },
+    {
+      "num": 14,
+      "mod": 1,
+      "title": "Betcha (Bet you)",
+      "formula": "betcha",
+      "example": "I betcha the transaction_id is missing.",
+      "bangla": "নিশ্চিতভাবে বাজি ধরে বলা।",
+      "drill": "Say: I betcha he knows, betcha it works."
+    },
+    {
+      "num": 15,
+      "mod": 1,
+      "title": "Gotcha (I got you)",
+      "formula": "gotcha",
+      "example": "Gotcha, I'll update the tag right away.",
+      "bangla": "কারো কথা বুঝেছি বোঝাতে সবচেয়ে জনপ্রিয় স্ল্যাং।",
+      "drill": "Say: Ah gotcha! Gotcha covered."
+    },
+    {
+      "num": 16,
+      "mod": 1,
+      "title": "Hafta (Have to)",
+      "formula": "hafta",
+      "example": "You hafta pass normalized email hashes.",
+      "bangla": "কোনো কিছু করতেই হবে বোঝাতে।",
+      "drill": "Say: You hafta listen, we hafta go."
+    },
+    {
+      "num": 17,
+      "mod": 1,
+      "title": "Hasta (Has to)",
+      "formula": "hasta",
+      "example": "The client hasta approve the milestone first.",
+      "bangla": "৩য় ব্যক্তি কাউকে কিছু করতে হবে বোঝাতে।",
+      "drill": "Say: He hasta sign it, she hasta see it."
+    },
+    {
+      "num": 18,
+      "mod": 1,
+      "title": "Usta (Used to)",
+      "formula": "usta",
+      "example": "We usta track via Universal Analytics.",
+      "bangla": "অতীতে নিয়মিত কিছু করা হতো বোঝাতে।",
+      "drill": "Say: I usta live there, we usta play."
+    },
+    {
+      "num": 19,
+      "mod": 1,
+      "title": "Lotta (Lot of)",
+      "formula": "lotta",
+      "example": "A lotta events are dropping attribution.",
+      "bangla": "অনেক বা প্রচুর বোঝাতে দ্রুত উচ্চারণ।",
+      "drill": "Say: A lotta work, a lotta fun."
+    },
+    {
+      "num": 20,
+      "mod": 1,
+      "title": "C'mon (Come on)",
+      "formula": "c'mon",
+      "example": "C'mon, let's wrap this up before 5 PM.",
+      "bangla": "কাউকে উৎসাহিত করা বা তাগাদা দেওয়া।",
+      "drill": "Say: C'mon man, c'mon let's go."
+    },
+    {
+      "num": 21,
+      "mod": 2,
+      "title": "Consonant to Vowel Linking",
+      "formula": "Hold-on -> Hol-don",
+      "example": "Hold on, let me check it out.",
+      "bangla": "শব্দের শেষ ব্যঞ্জনবর্ণ পরের স্বরবর্ণের সাথে জোড়া লাগানো।",
+      "drill": "Drill: Check-it-out, pick-it-up, turn-it-on."
+    },
+    {
+      "num": 22,
+      "mod": 2,
+      "title": "Intrusive /w/ Glide",
+      "formula": "Go-(w)-on",
+      "example": "Go on and deploy the container.",
+      "bangla": "দুটি ভাওয়েল ধ্বনির মাঝে নরম /w/ ঢুকিয়ে দ্রুত বলা।",
+      "drill": "Drill: Go-(w)-away, do-(w)-it, you-(w)-are."
+    },
+    {
+      "num": 23,
+      "mod": 2,
+      "title": "Intrusive /j/ Glide",
+      "formula": "I-(y)-agree",
+      "example": "I agree with your marketing proposal.",
+      "bangla": "ভাওয়েলের পর /j/ ('ইয়') সাউন্ড যোগ করে মেলানো।",
+      "drill": "Drill: See-(y)-it, say-(y)-it, he-(y)-is."
+    },
+    {
+      "num": 24,
+      "mod": 2,
+      "title": "Gemination (Twin Consonants)",
+      "formula": "Black coffee -> Bla-coffee",
+      "example": "Grab a black coffee before the meeting.",
+      "bangla": "একই কনসোনেন্ট পাশাপাশি এলে একবার উচ্চারণ ধরে রাখা।",
+      "drill": "Drill: Social life, bad dog, top post."
+    },
+    {
+      "num": 25,
+      "mod": 2,
+      "title": "T+Y Palatalization (/tʃ/)",
+      "formula": "Meet you -> Mee-chu",
+      "example": "Nice to meet you on Zoom today.",
+      "bangla": "T এবং Y মিলিত হয়ে 'চ' বা /tʃ/ ধ্বনি হওয়া।",
+      "drill": "Drill: Don't you (don-chu), what you (wha-chu)."
+    },
+    {
+      "num": 26,
+      "mod": 2,
+      "title": "D+Y Palatalization (/dʒ/)",
+      "formula": "Did you -> Di-dju",
+      "example": "Did you check the server container logs?",
+      "bangla": "D এবং Y মিলিত হয়ে 'জ' বা /dʒ/ ধ্বনি হওয়া।",
+      "drill": "Drill: Would you (wood-ju), could you (cood-ju)."
+    },
+    {
+      "num": 27,
+      "mod": 2,
+      "title": "Elision of final /t/",
+      "formula": "Next week -> Nex-week",
+      "example": "Let's review the conversions next week.",
+      "bangla": "কনসোনেন্টের আগে শব্দের শেষের 'T' গিলে ফেলা।",
+      "drill": "Drill: Last night -> Las-night, first day -> firs-day."
+    },
+    {
+      "num": 28,
+      "mod": 2,
+      "title": "Elision of final /d/",
+      "formula": "Hold tight -> Hol-tight",
+      "example": "Hold tight while the GTM tags load.",
+      "bangla": "কনসোনেন্টের আগে 'D' ড্রপ করা।",
+      "drill": "Drill: Stand there -> Stan-there, blind man -> blin-man."
+    },
+    {
+      "num": 29,
+      "mod": 2,
+      "title": "Nasal Assimilation",
+      "formula": "Ten bucks -> Tem-bucks",
+      "example": "It costs ten bucks on Stape.",
+      "bangla": "N সাউন্ড B/P এর আগে M হয়ে যাওয়া।",
+      "drill": "Drill: In Paris -> Im-Paris, one person -> wam-person."
+    },
+    {
+      "num": 30,
+      "mod": 2,
+      "title": "Glottal Stop before /n/",
+      "formula": "Button -> Bu'n",
+      "example": "Click the purchase button on mobile.",
+      "bangla": "জিহ্বা ও গলা দিয়ে বাতাস আটকে T না বলা।",
+      "drill": "Drill: Mountain -> Moun'n, curtain -> cur'n."
+    },
+    {
+      "num": 31,
+      "mod": 2,
+      "title": "American Flap-T Across Words",
+      "formula": "Get out -> Ge-dout",
+      "example": "Get out of the preview debugger.",
+      "bangla": "শব্দের মাঝে বা শেষে T নরম D এর মতো ট্যাপ করা।",
+      "drill": "Drill: Put it on -> Pu-di-don, wait a bit -> wai-də-bit."
+    },
+    {
+      "num": 32,
+      "mod": 2,
+      "title": "Schwa Compression in 3-Syllable Words",
+      "formula": "Family -> Fam-lee",
+      "example": "I was discussing this with my family.",
+      "bangla": "মাঝখানের ভাওয়েল ড্রপ করে শব্দকে ২ সিলেবলে নামানো।",
+      "drill": "Drill: Camera -> Cam-ra, chocolate -> choc-lit."
+    },
+    {
+      "num": 33,
+      "mod": 2,
+      "title": "Linking -R (British & Global)",
+      "formula": "Four hours -> Four-r-hours",
+      "example": "The audit took four hours to complete.",
+      "bangla": "ভাওয়েলের আগে R সাউন্ড পরিষ্কার লিঙ্ক করা।",
+      "drill": "Drill: Far away -> Fa-r-away, clear air -> clea-r-air."
+    },
+    {
+      "num": 34,
+      "mod": 2,
+      "title": "Silent Auxiliary Contraction",
+      "formula": "What are you doing? -> Whatcha doin'?",
+      "example": "Whatcha doing with that Meta pixel?",
+      "bangla": "সাহায্যকারী ক্রিয়া চেপে সরাসরি 'ওয়াচা' বলা।",
+      "drill": "Drill: Where are you going? -> Where ya goin'?"
+    },
+    {
+      "num": 35,
+      "mod": 2,
+      "title": "Dropped /h/ in Weak Pronouns",
+      "formula": "Tell him -> Te-lim",
+      "example": "I'll tell him about the attribution fix.",
+      "bangla": "দুর্বল সর্বনাম থেকে H ড্রপ করে পূর্বের শব্দের সাথে মেলানো।",
+      "drill": "Drill: Ask her -> As-ker, see him -> see-im."
+    },
+    {
+      "num": 36,
+      "mod": 2,
+      "title": "Reduction of 'And'",
+      "formula": "Rock and roll -> Rock-n-roll",
+      "example": "Let's test cookies and parameters.",
+      "bangla": "'And' কে শুধু 'এন' বা 'ন' বানিয়ে ফেলা।",
+      "drill": "Drill: Bread and butter, black and white."
+    },
+    {
+      "num": 37,
+      "mod": 2,
+      "title": "Reduction of 'Or'",
+      "formula": "More or less -> More-er-less",
+      "example": "It's more or less identical to yesterday.",
+      "bangla": "'Or' কে দ্রুত 'আর' বা 'এর' উচ্চারণ করা।",
+      "drill": "Drill: Two or three -> Two-er-three."
+    },
+    {
+      "num": 38,
+      "mod": 2,
+      "title": "Reduction of 'Than'",
+      "formula": "Better than -> Bedder-n",
+      "example": "Server-side is better than client pixels.",
+      "bangla": "'Than' কে দ্রুত 'ন' বা 'দেন' বানিয়ে বলা।",
+      "drill": "Drill: Faster than, bigger than."
+    },
+    {
+      "num": 39,
+      "mod": 2,
+      "title": "Fast Preposition Blending",
+      "formula": "At the end of the day",
+      "example": "At the end of the day, ROAS is what matters.",
+      "bangla": "পুরো ফ্রেজকে এক নিশ্বাসে ১টি শব্দের মতো বলা।",
+      "drill": "Drill: Say in 1 breath: At-the-end-of-the-day."
+    },
+    {
+      "num": 40,
+      "mod": 2,
+      "title": "Continuous Speech Sound Ribbon",
+      "formula": "Sound Ribbon Technique",
+      "example": "We are testing the dataLayer push right now.",
+      "bangla": "শব্দে শব্দে না থেমে পুরো বাক্য গানের সুরের মতো জোড়া দেওয়া।",
+      "drill": "Drill: Connect 6 words without taking a breath."
+    },
+    {
+      "num": 41,
+      "mod": 3,
+      "title": "Weak 'To' (/tə/)",
+      "formula": "Want to -> Want-tə",
+      "example": "I need to configure this tag.",
+      "bangla": "'To' কে 'টু' না বলে সংক্ষেপে 'ত' বলা।",
+      "drill": "Drill: Go to work, ready to start."
+    },
+    {
+      "num": 42,
+      "mod": 3,
+      "title": "Weak 'For' (/fər/)",
+      "formula": "For you -> Fər-you",
+      "example": "This report is for your marketing team.",
+      "bangla": "'For' কে 'ফর' না বলে দ্রুত 'ফার' বলা।",
+      "drill": "Drill: Wait for me, good for you."
+    },
+    {
+      "num": 43,
+      "mod": 3,
+      "title": "Weak 'Can' (/kən/)",
+      "formula": "I can do it -> I kən do it",
+      "example": "I can verify your GA4 setup today.",
+      "bangla": "হ্যাঁ-বোধক can হবে দুর্বল (/kən/), না-বোধক can't হবে জোরদার (/kænt/).",
+      "drill": "Drill: I can do it, but I can't stay."
+    },
+    {
+      "num": 44,
+      "mod": 3,
+      "title": "Weak 'From' (/frəm/)",
+      "formula": "From -> Frəm",
+      "example": "Where is this traffic coming from?",
+      "bangla": "'From' কে 'ফ্রম' না বলে দ্রুত 'ফ্রাম' বলা।",
+      "drill": "Drill: Away from home, back from lunch."
+    },
+    {
+      "num": 45,
+      "mod": 3,
+      "title": "Weak 'At' (/ət/)",
+      "formula": "Look at that -> Loo-kət that",
+      "example": "Look at that event match score.",
+      "bangla": "'At' কে 'অ্যাট' না বলে সংক্ষেপে 'অত' বলা।",
+      "drill": "Drill: Meet at nine, stay at home."
+    },
+    {
+      "num": 46,
+      "mod": 3,
+      "title": "Weak 'That' (/ðət/)",
+      "formula": "The tag that fired",
+      "example": "The tag that fired had missing currency.",
+      "bangla": "রিলেটিভ 'that' হবে দুর্বল (/ðət/)।",
+      "drill": "Drill: The plan that worked."
+    },
+    {
+      "num": 47,
+      "mod": 3,
+      "title": "Weak 'Them' (/əm/)",
+      "formula": "Check them -> Che-kəm",
+      "example": "Open the logs and check them now.",
+      "bangla": "'Them' থেকে Th বাদ দিয়ে 'আম' বলা।",
+      "drill": "Drill: Send them, fix them, show them."
+    },
+    {
+      "num": 48,
+      "mod": 3,
+      "title": "Weak 'You' (/jə/)",
+      "formula": "See you -> See-yə",
+      "example": "See you on the call tomorrow.",
+      "bangla": "'You' কে দ্রুত ক্যাজুয়ালি 'ইয়া' বলা।",
+      "drill": "Drill: Love you, thank you, call you."
+    },
+    {
+      "num": 49,
+      "mod": 3,
+      "title": "Weak 'Your' (/jər/)",
+      "formula": "Your name -> Yər-name",
+      "example": "What's your preferred time for the sync?",
+      "bangla": "'Your' কে 'ইউর' না বলে 'ইয়ার' বলা।",
+      "drill": "Drill: Take your time, bring your laptop."
+    },
+    {
+      "num": 50,
+      "mod": 3,
+      "title": "Weak 'Him' (/ɪm/)",
+      "formula": "Help him -> Hel-pɪm",
+      "example": "I helped him set up the Stape container.",
+      "bangla": "H বাদ দিয়ে সোজা আগের কনসোনেন্টের সাথে জোড়া।",
+      "drill": "Drill: Call him, tell him, ask him."
+    },
+    {
+      "num": 51,
+      "mod": 3,
+      "title": "Weak 'Her' (/ər/)",
+      "formula": "Call her -> Cal-lər",
+      "example": "I sent her the completed proposal.",
+      "bangla": "H বাদ দিয়ে 'আর' হিসেবে মেলানো।",
+      "drill": "Drill: Message her, pay her, see her."
+    },
+    {
+      "num": 52,
+      "mod": 3,
+      "title": "Weak 'Have' (/əv/)",
+      "formula": "They have -> They-əv",
+      "example": "They have already approved the contract.",
+      "bangla": "'Have' কে সংক্ষেপে 'অভ' বা 'ভ' বলা।",
+      "drill": "Drill: We have done it, could have known."
+    },
+    {
+      "num": 53,
+      "mod": 3,
+      "title": "Weak 'Has' (/əz/)",
+      "formula": "It has -> It-əz",
+      "example": "It has been working flawlessly.",
+      "bangla": "'Has' কে সংক্ষেপে 'আজ' বলা।",
+      "drill": "Drill: Time has come, he has left."
+    },
+    {
+      "num": 54,
+      "mod": 3,
+      "title": "Weak 'Had' (/əd/)",
+      "formula": "We had -> We-əd",
+      "example": "We had tested the pixel earlier.",
+      "bangla": "'Had' কে সংক্ষেপে 'অ্যাড' বলা।",
+      "drill": "Drill: They had finished, I had seen."
+    },
+    {
+      "num": 55,
+      "mod": 3,
+      "title": "Weak 'Do' (/də/)",
+      "formula": "How do you -> How-də-you",
+      "example": "How do you calculate your blended CPA?",
+      "bangla": "'Do' কে 'ডু' না বলে সংক্ষেপে 'দা' বলা।",
+      "drill": "Drill: What do they do?"
+    },
+    {
+      "num": 56,
+      "mod": 3,
+      "title": "Weak 'Does' (/dəz/)",
+      "formula": "What does it -> What-dəz-it",
+      "example": "What does this error code mean?",
+      "bangla": "'Does' কে দ্রুত 'ডাজ' বলা।",
+      "drill": "Drill: How does it work?"
+    },
+    {
+      "num": 57,
+      "mod": 3,
+      "title": "Weak 'As' (/əz/)",
+      "formula": "As fast as -> Az-fast-əz",
+      "example": "We will resolve this as fast as possible.",
+      "bangla": "'As' কে 'অ্যাজ' না বলে দ্রুত 'আজ' বলা।",
+      "drill": "Drill: As good as new, as soon as possible."
+    },
+    {
+      "num": 58,
+      "mod": 3,
+      "title": "Weak 'Some' (/səm/)",
+      "formula": "Some -> Səm",
+      "example": "Could you share some details?",
+      "bangla": "'Some' কে 'সাম' না বলে সংক্ষেপে 'সাম' বলা।",
+      "drill": "Drill: Have some coffee."
+    },
+    {
+      "num": 59,
+      "mod": 3,
+      "title": "Weak 'Must' (/məs/)",
+      "formula": "You must -> You-məs",
+      "example": "You must be very proud of these results.",
+      "bangla": "কনসোনেন্টের আগে T বাদ দিয়ে 'মাস' বলা।",
+      "drill": "Drill: You must be joking."
+    },
+    {
+      "num": 60,
+      "mod": 3,
+      "title": "Weak 'Of' (/ə/)",
+      "formula": "Piece of cake -> Piece-ə-cake",
+      "example": "Fixing this tracking bug is a piece of cake.",
+      "bangla": "কনসোনেন্টের আগে F বাদ দিয়ে শুধু 'আ' বলা।",
+      "drill": "Drill: Cup of tea, out of time."
+    },
+    {
+      "num": 61,
+      "mod": 4,
+      "title": "I mean...",
+      "formula": "I mean...",
+      "example": "I mean, we could also route via Cloudflare.",
+      "bangla": "কথা বলার মাঝে আটকে না গিয়ে ন্যাচারালভাবে নতুন চিন্তা আনা।",
+      "drill": "Use when pivoting to a better idea."
+    },
+    {
+      "num": 62,
+      "mod": 4,
+      "title": "You know...",
+      "formula": "You know...",
+      "example": "It's all about privacy compliance, you know.",
+      "bangla": "বায়ারের মনোযোগ ধরে রাখা ও মত নেওয়া।",
+      "drill": "Use at the end of a point."
+    },
+    {
+      "num": 63,
+      "mod": 4,
+      "title": "To be honest...",
+      "formula": "To be honest...",
+      "example": "To be honest, the current pixel setup is fragile.",
+      "bangla": "সাহসী কিন্তু ভদ্রভাবে সত্য তুলে ধরা।",
+      "drill": "Use when giving honest technical audit."
+    },
+    {
+      "num": 64,
+      "mod": 4,
+      "title": "At the end of the day...",
+      "formula": "At the end of the day...",
+      "example": "At the end of the day, conversions drive profit.",
+      "bangla": "মূল সিদ্ধান্তে আসার জন্য।",
+      "drill": "Use when summarizing the bottom line."
+    },
+    {
+      "num": 65,
+      "mod": 4,
+      "title": "The thing is...",
+      "formula": "The thing is...",
+      "example": "The thing is, Shopify checkout is sandboxed.",
+      "bangla": "আসল বাধা বা জটিলতা বোঝাতে।",
+      "drill": "Use when introducing the core problem."
+    },
+    {
+      "num": 66,
+      "mod": 4,
+      "title": "As far as I'm concerned...",
+      "formula": "As far as I'm concerned...",
+      "example": "As far as I'm concerned, Stape is the easiest fix.",
+      "bangla": "দৃঢ় পেশাদার মতামত প্রকাশ করতে।",
+      "drill": "Use when giving a firm opinion."
+    },
+    {
+      "num": 67,
+      "mod": 4,
+      "title": "Basically...",
+      "formula": "Basically...",
+      "example": "Basically, we need to match the event_id tokens.",
+      "bangla": "কঠিন কথাকে এক বাক্যে সংক্ষেপ করতে।",
+      "drill": "Use when summarizing complex code."
+    },
+    {
+      "num": 68,
+      "mod": 4,
+      "title": "Literally...",
+      "formula": "Literally...",
+      "example": "The tag literally fired five times per click.",
+      "bangla": "কোনো বিষয়ের ওপর জোর দিতে।",
+      "drill": "Use to emphasize an exact occurrence."
+    },
+    {
+      "num": 69,
+      "mod": 4,
+      "title": "Pretty much...",
+      "formula": "Pretty much...",
+      "example": "The container setup is pretty much complete.",
+      "bangla": "প্রায় সম্পূর্ণ হয়েছে বোঝাতে।",
+      "drill": "Use when work is 95% done."
+    },
+    {
+      "num": 70,
+      "mod": 4,
+      "title": "In a nutshell...",
+      "formula": "In a nutshell...",
+      "example": "In a nutshell, we're fixing data attribution loss.",
+      "bangla": "এক নজরে সারাংশ প্রকাশ করতে।",
+      "drill": "Use for executive summaries."
+    },
+    {
+      "num": 71,
+      "mod": 4,
+      "title": "Off the top of my head...",
+      "formula": "Off the top of my head...",
+      "example": "Off the top of my head, it should take 4 hours.",
+      "bangla": "মুহূর্তেই আনুমানিক হিসাব দিতে।",
+      "drill": "Use for quick estimates."
+    },
+    {
+      "num": 72,
+      "mod": 4,
+      "title": "For the most part...",
+      "formula": "For the most part...",
+      "example": "For the most part, the tags are firing correctly.",
+      "bangla": "অধিকাংশ ক্ষেত্রেই কাজ করছে বোঝাতে।",
+      "drill": "Use to describe general performance."
+    },
+    {
+      "num": 73,
+      "mod": 4,
+      "title": "More or less...",
+      "formula": "More or less...",
+      "example": "The numbers match more or less with Shopify.",
+      "bangla": "মোটামুটি কাছাকাছি বোঝাতে।",
+      "drill": "Use when numbers are within 2-3%."
+    },
+    {
+      "num": 74,
+      "mod": 4,
+      "title": "If you ask me...",
+      "formula": "If you ask me...",
+      "example": "If you ask me, we should migrate to server GTM.",
+      "bangla": "পরামর্শ দেওয়ার প্রফেশনাল ভূমিকা।",
+      "drill": "Use before offering strategic advice."
+    },
+    {
+      "num": 75,
+      "mod": 4,
+      "title": "Long story short...",
+      "formula": "Long story short...",
+      "example": "Long story short, we recovered 25% lost sales.",
+      "bangla": "অপ্রয়োজনীয় বিস্তারিত বাদ দিয়ে সোজা রেজাল্ট বলা।",
+      "drill": "Use when skipping background details."
+    },
+    {
+      "num": 76,
+      "mod": 4,
+      "title": "All things considered...",
+      "formula": "All things considered...",
+      "example": "All things considered, the campaign was a success.",
+      "bangla": "সবকিছু বিবেচনা করে সারমর্ম টানা।",
+      "drill": "Use when concluding a project."
+    },
+    {
+      "num": 77,
+      "mod": 4,
+      "title": "To put it simply...",
+      "formula": "To put it simply...",
+      "example": "To put it simply, clean data saves ad spend.",
+      "bangla": "জটিল টেকনিক্যাল কথাকে সহজ বিজনেসের ভাষায় রূপান্তর।",
+      "drill": "Use when talking to non-tech founders."
+    },
+    {
+      "num": 78,
+      "mod": 4,
+      "title": "Truth be told...",
+      "formula": "Truth be told...",
+      "example": "Truth be told, third-party cookies are dying.",
+      "bangla": "স্বচ্ছ ও খাঁটি সত্য বোঝাতে।",
+      "drill": "Use to build deep client trust."
+    },
+    {
+      "num": 79,
+      "mod": 4,
+      "title": "Having said that...",
+      "formula": "Having said that...",
+      "example": "Having said that, we still need client-side backup.",
+      "bangla": "আগের কথার সাথে নতুন বিপরীত পয়েন্ট যোগ করতে।",
+      "drill": "Use as a smooth conversational pivot."
+    },
+    {
+      "num": 80,
+      "mod": 4,
+      "title": "By and large...",
+      "formula": "By and large...",
+      "example": "By and large, our ad tracking is solid now.",
+      "bangla": "সামগ্রিকভাবে সবকিছু ঠিকঠাক বোঝাতে।",
+      "drill": "Use for overall health status."
+    },
+    {
+      "num": 81,
+      "mod": 5,
+      "title": "Touch base",
+      "formula": "Touch base",
+      "example": "Let's touch base on Friday to review ROAS.",
+      "bangla": "সংক্ষেপে যোগাযোগ করা বা আপডেট নেওয়া।",
+      "drill": "Say: Let's touch base next week."
+    },
+    {
+      "num": 82,
+      "mod": 5,
+      "title": "Loop in",
+      "formula": "Loop in",
+      "example": "I'll loop in our lead developer on Slack.",
+      "bangla": "কারো সাথে পরিচয় করিয়ে দেওয়া বা চ্যাটে যুক্ত করা।",
+      "drill": "Say: Loop me in on that email."
+    },
+    {
+      "num": 83,
+      "mod": 5,
+      "title": "Circle back",
+      "formula": "Circle back",
+      "example": "Let's circle back once the tags populate data.",
+      "bangla": "পরে আবার এই বিষয়ে কথা বলা।",
+      "drill": "Say: We can circle back tomorrow."
+    },
+    {
+      "num": 84,
+      "mod": 5,
+      "title": "Wrap up",
+      "formula": "Wrap up",
+      "example": "Let's wrap up this meeting in 2 minutes.",
+      "bangla": "কাজ বা মিটিং সুন্দরভাবে শেষ করা।",
+      "drill": "Say: Time to wrap things up."
+    },
+    {
+      "num": 85,
+      "mod": 5,
+      "title": "Figure out",
+      "formula": "Figure out",
+      "example": "I'll figure out why the deduplication dropped.",
+      "bangla": "গবেষণা বা চিন্তা করে সমাধান বের করা।",
+      "drill": "Say: We gotta figure this out."
+    },
+    {
+      "num": 86,
+      "mod": 5,
+      "title": "Turn out",
+      "formula": "Turn out",
+      "example": "It turned out to be a simple caching issue.",
+      "bangla": "কোনো ঘটনার চূড়ান্ত ফলাফল এমন হওয়া।",
+      "drill": "Say: Everything turned out great."
+    },
+    {
+      "num": 87,
+      "mod": 5,
+      "title": "Drop off",
+      "formula": "Drop off",
+      "example": "Our checkout conversion rate dropped off.",
+      "bangla": "সংখ্যা বা হার হঠাৎ কমে যাওয়া।",
+      "drill": "Say: Traffic dropped off sharply."
+    },
+    {
+      "num": 88,
+      "mod": 5,
+      "title": "Catch up",
+      "formula": "Catch up",
+      "example": "Great catching up on Zoom today!",
+      "bangla": "কারো সাথে কথা বলে আগের সব খোঁজ নেওয়া।",
+      "drill": "Say: Let's catch up soon."
+    },
+    {
+      "num": 89,
+      "mod": 5,
+      "title": "Call off",
+      "formula": "Call off",
+      "example": "They decided to call off the meeting.",
+      "bangla": "কোনো কিছু বাতিল ঘোষণা করা।",
+      "drill": "Say: Don't call off the launch."
+    },
+    {
+      "num": 90,
+      "mod": 5,
+      "title": "Put off",
+      "formula": "Put off",
+      "example": "We shouldn't put off this tracking audit.",
+      "bangla": "কোনো কাজ ফেলে রাখা বা স্থগিত করা।",
+      "drill": "Say: Don't put it off till tomorrow."
+    },
+    {
+      "num": 91,
+      "mod": 5,
+      "title": "Kick off",
+      "formula": "Kick off",
+      "example": "We are kicking off the GTM container setup.",
+      "bangla": "উৎসাহের সাথে কোনো প্রজেক্ট শুরু করা।",
+      "drill": "Say: The project kicks off today."
+    },
+    {
+      "num": 92,
+      "mod": 5,
+      "title": "Wind down",
+      "formula": "Wind down",
+      "example": "I'm winding down my work for the day.",
+      "bangla": "সারাদিনের কাজ আস্তে আস্তে গুটিয়ে আনা।",
+      "drill": "Say: Winding down for the weekend."
+    },
+    {
+      "num": 93,
+      "mod": 5,
+      "title": "Sign off on",
+      "formula": "Sign off on",
+      "example": "The client signed off on the final milestone.",
+      "bangla": "অফিসিয়ালি অনুমোদন দেওয়া বা সই করা।",
+      "drill": "Say: Can you sign off on this?"
+    },
+    {
+      "num": 94,
+      "mod": 5,
+      "title": "Back out of",
+      "formula": "Back out of",
+      "example": "They backed out of the agreement at the last min.",
+      "bangla": "প্রতিশ্রুতি দিয়েও শেষ মুহূর্তে সরে যাওয়া।",
+      "drill": "Say: It's too late to back out."
+    },
+    {
+      "num": 95,
+      "mod": 5,
+      "title": "Blow away",
+      "formula": "Blow away",
+      "example": "The tracking accuracy completely blew them away.",
+      "bangla": "কাউকে দারুণ পারফরম্যান্সে মুগ্ধ করে ফেলা।",
+      "drill": "Say: Your work blew me away."
+    },
+    {
+      "num": 96,
+      "mod": 5,
+      "title": "Cut down on",
+      "formula": "Cut down on",
+      "example": "We need to cut down on redundant HTTP requests.",
+      "bangla": "খরচ বা অপচয় কমিয়ে আনা।",
+      "drill": "Say: Cut down on ad waste."
+    },
+    {
+      "num": 97,
+      "mod": 5,
+      "title": "Look forward to",
+      "formula": "Look forward to",
+      "example": "Looking forward to working with your team!",
+      "bangla": "ভবিষ্যতের কোনো কাজের জন্য অধীর আগ্রহে অপেক্ষা করা।",
+      "drill": "Say: Looking forward to the results."
+    },
+    {
+      "num": 98,
+      "mod": 5,
+      "title": "Run into",
+      "formula": "Run into",
+      "example": "We ran into an unexpected CSP header restriction.",
+      "bangla": "অপ্রত্যাশিত বাধার সম্মুখীন হওয়া।",
+      "drill": "Say: Ran into a quick issue."
+    },
+    {
+      "num": 99,
+      "mod": 5,
+      "title": "Give up on",
+      "formula": "Give up on",
+      "example": "Don't give up on client-side pixels just yet.",
+      "bangla": "কোনো কিছুর ওপর আশা ছেড়ে দেওয়া।",
+      "drill": "Say: Never give up on tracking."
+    },
+    {
+      "num": 100,
+      "mod": 5,
+      "title": "Pick up on",
+      "formula": "Pick up on",
+      "example": "I picked up on their hesitation regarding cost.",
+      "bangla": "কারো অব্যক্ত মনোভাব বা ইঙ্গিত চট করে ধরে ফেলা।",
+      "drill": "Say: Did you pick up on that?"
+    },
+    {
+      "num": 101,
+      "mod": 6,
+      "title": "I'm beat",
+      "formula": "I'm beat",
+      "example": "Man, after five hours of debugging, I'm beat!",
+      "bangla": "চরমভাবে ক্লান্ত হয়ে পড়া।",
+      "drill": "Say: I'm beat, going to bed."
+    },
+    {
+      "num": 102,
+      "mod": 6,
+      "title": "No sweat!",
+      "formula": "No sweat!",
+      "example": "Thanks for fixing the tag! — No sweat, anytime!",
+      "bangla": "কোনো ব্যাপারই না / স্বাগতম।",
+      "drill": "Say: No sweat man, glad to help!"
+    },
+    {
+      "num": 103,
+      "mod": 6,
+      "title": "Call it a day",
+      "formula": "Call it a day",
+      "example": "Let's call it a day and resume tomorrow morning.",
+      "bangla": "আজকের মতো কাজ সমাপ্ত ঘোষণা করা।",
+      "drill": "Say: Let's call it a day!"
+    },
+    {
+      "num": 104,
+      "mod": 6,
+      "title": "Ballpark figure",
+      "formula": "Ballpark figure",
+      "example": "A ballpark figure for this audit is around $500.",
+      "bangla": "আনুমানিক খরচের ধারণা দেওয়া।",
+      "drill": "Say: Give me a ballpark figure."
+    },
+    {
+      "num": 105,
+      "mod": 6,
+      "title": "Up in the air",
+      "formula": "Up in the air",
+      "example": "The holiday ad budget is still up in the air.",
+      "bangla": "এখনও চূড়ান্ত হয়নি বা ঝুলন্ত অবস্থায় আছে।",
+      "drill": "Say: Everything is up in the air."
+    },
+    {
+      "num": 106,
+      "mod": 6,
+      "title": "Cut corners",
+      "formula": "Cut corners",
+      "example": "Don't cut corners on your server infrastructure.",
+      "bangla": "সস্তা বা খারাপ উপায়ে কাজ করে বিপদ ডেকে আনা।",
+      "drill": "Say: Never cut corners on tracking."
+    },
+    {
+      "num": 107,
+      "mod": 6,
+      "title": "Hit the books",
+      "formula": "Hit the books",
+      "example": "Time to hit the books and master BigQuery SQL.",
+      "bangla": "মনোযোগ দিয়ে পড়ালেখা বা স্টাডি শুরু করা।",
+      "drill": "Say: Gotta hit the books tonight."
+    },
+    {
+      "num": 108,
+      "mod": 6,
+      "title": "Cost an arm and a leg",
+      "formula": "Cost an arm and a leg",
+      "example": "Some enterprise analytics platforms cost an arm and a leg.",
+      "bangla": "প্রচণ্ড চড়া দাম হওয়া।",
+      "drill": "Say: That tool costs an arm and a leg."
+    },
+    {
+      "num": 109,
+      "mod": 6,
+      "title": "Piece of cake",
+      "formula": "Piece of cake",
+      "example": "Configuring Google Ads enhanced conversions is a piece of cake.",
+      "bangla": "খুবই সহজ বা পানসে কাজ।",
+      "drill": "Say: It was a piece of cake!"
+    },
+    {
+      "num": 110,
+      "mod": 6,
+      "title": "Under the weather",
+      "formula": "Under the weather",
+      "example": "I was feeling a bit under the weather yesterday.",
+      "bangla": "হালকা অসুস্থ বা দুর্বল লাগা।",
+      "drill": "Say: Feeling under the weather today."
+    },
+    {
+      "num": 111,
+      "mod": 6,
+      "title": "Bite the bullet",
+      "formula": "Bite the bullet",
+      "example": "We had to bite the bullet and upgrade our servers.",
+      "bangla": "অনিচ্ছা সত্ত্বেও কঠিন সিদ্ধান্ত মেনে নেওয়া।",
+      "drill": "Say: Time to bite the bullet."
+    },
+    {
+      "num": 112,
+      "mod": 6,
+      "title": "Break the ice",
+      "formula": "Break the ice",
+      "example": "A quick joke breaks the ice before business talks.",
+      "bangla": "কথোপকথনের শুরুতে জড়তা কাটানো।",
+      "drill": "Say: Let's break the ice."
+    },
+    {
+      "num": 113,
+      "mod": 6,
+      "title": "Spill the tea",
+      "formula": "Spill the tea",
+      "example": "Come on, spill the tea on their new marketing campaign!",
+      "bangla": "ভেতরের গোপন বা আকর্ষণীয় খবর ফাঁস করা।",
+      "drill": "Say: Spill the tea!"
+    },
+    {
+      "num": 114,
+      "mod": 6,
+      "title": "Pull someone's leg",
+      "formula": "Pull someone's leg",
+      "example": "Don't worry, I'm just pulling your leg!",
+      "bangla": "কাউকে নিয়ে মজা বা কৌতুক করা।",
+      "drill": "Say: You're pulling my leg!"
+    },
+    {
+      "num": 115,
+      "mod": 6,
+      "title": "Pitch in",
+      "formula": "Pitch in",
+      "example": "Everyone pitched in to hit the project deadline.",
+      "bangla": "সবাই মিলে একযোগে সাহায্য করা।",
+      "drill": "Say: Let's all pitch in."
+    },
+    {
+      "num": 116,
+      "mod": 6,
+      "title": "On the fence",
+      "formula": "On the fence",
+      "example": "The client is on the fence between Stape and GCP.",
+      "bangla": "সিদ্ধান্তহীনতায় দ্বিধায় থাকা।",
+      "drill": "Say: I'm still on the fence."
+    },
+    {
+      "num": 117,
+      "mod": 6,
+      "title": "Ring a bell",
+      "formula": "Ring a bell",
+      "example": "Does that error message ring a bell?",
+      "bangla": "আগে শোনা বা চেনা চেনা লাগা।",
+      "drill": "Say: That name rings a bell."
+    },
+    {
+      "num": 118,
+      "mod": 6,
+      "title": "Rule of thumb",
+      "formula": "Rule of thumb",
+      "example": "As a rule of thumb, always test in preview mode.",
+      "bangla": "অভিজ্ঞতা থেকে পাওয়া সাধারণ সোনালী নিয়ম।",
+      "drill": "Say: Good rule of thumb."
+    },
+    {
+      "num": 119,
+      "mod": 6,
+      "title": "Play it by ear",
+      "formula": "Play it by ear",
+      "example": "Let's see how traffic flows and play it by ear.",
+      "bangla": "আগে থেকে প্ল্যান না করে পরিস্থিতি অনুযায়ী সিদ্ধান্ত নেওয়া।",
+      "drill": "Say: Let's play it by ear."
+    },
+    {
+      "num": 120,
+      "mod": 6,
+      "title": "See eye to eye",
+      "formula": "See eye to eye",
+      "example": "We see eye to eye on the tracking strategy.",
+      "bangla": "একে অপরের সাথে সম্পূর্ণ একমত হওয়া।",
+      "drill": "Say: We see eye to eye."
+    },
+    {
+      "num": 121,
+      "mod": 7,
+      "title": "The 30-Second Elevator Pitch",
+      "formula": "The Elevator Pitch",
+      "example": "I specialize in server-side attribution and signal recovery.",
+      "bangla": "৩০ সেকেন্ডে নিজের মূল যোগ্যতা বায়ারের সামনে তুলে ধরা।",
+      "drill": "Say: I help ecommerce brands recover 25% lost ad sales."
+    },
+    {
+      "num": 122,
+      "mod": 7,
+      "title": "Pricing Justification Architecture",
+      "formula": "Pricing Justification",
+      "example": "Our fee covers infrastructure setup that saves $5,000 in ad waste.",
+      "bangla": "রেটকে ক্লায়েন্টের আর্থিক লাভের সাথে তুলনা করে প্রমাণ করা।",
+      "drill": "Say: Clean data pays for itself in 30 days."
+    },
+    {
+      "num": 123,
+      "mod": 7,
+      "title": "Defending $60/hr Rate Jump",
+      "formula": "Defending Rate",
+      "example": "The reason for my updated rate is that I specialize strictly in server signal recovery.",
+      "bangla": "নিজের স্পেশালাইজেশন দেখিয়ে রেট বাড়ানো।",
+      "drill": "Say: I focus exclusively on high-ROI tracking infrastructure."
+    },
+    {
+      "num": 124,
+      "mod": 7,
+      "title": "Acknowledging Client Delays Without Blame",
+      "formula": "No-Blame Delay Script",
+      "example": "No worries at all on the delay, I know how busy product launches get.",
+      "bangla": "বায়ার দেরি করলে দোষ না দিয়ে সহানুভূতি প্রকাশ করা।",
+      "drill": "Say: Completely understand, let me know when you're ready."
+    },
+    {
+      "num": 125,
+      "mod": 7,
+      "title": "Clarifying Scope Creep Politely",
+      "formula": "Scope Creep Defense",
+      "example": "I'd love to help with the other 4 domains! Let's spin up an add-on milestone.",
+      "bangla": "অতিরিক্ত কাজ ভদ্রভাবে আলাদা পেইড মাইলস্টোনে রূপান্তর।",
+      "drill": "Say: That's outside our initial scope, but I can add a milestone."
+    },
+    {
+      "num": 126,
+      "mod": 7,
+      "title": "Explaining Tracking Bugs Without Fear",
+      "formula": "Calm Bug Explanation",
+      "example": "The drop is caused by an unmapped dataLayer event, which is an easy 15-minute fix.",
+      "bangla": "ভয় না পেয়ে শান্ত ভঙ্গিতে সমস্যার কারণ ও সহজ সমাধানের কথা বলা।",
+      "drill": "Say: Rest assured, this is very straightforward to resolve."
+    },
+    {
+      "num": 127,
+      "mod": 7,
+      "title": "Apologizing Without Losing Power",
+      "formula": "Action-First Apology",
+      "example": "Thanks for pointing that out! I'm pushing the corrected payload right now.",
+      "bangla": "'I am sorry' বারবার না বলে অ্যাকশন নেওয়া।",
+      "drill": "Say: Good catch, I'm already on it."
+    },
+    {
+      "num": 128,
+      "mod": 7,
+      "title": "Asking for 5-Star Reviews & Upwork Feedback",
+      "formula": "High-Response Feedback Script",
+      "example": "If you're happy with the tracking accuracy, a quick 5-star review would mean the world!",
+      "bangla": "কাজের প্রশংসা পাওয়ার পর ভদ্রভাবে রিভিউ চাওয়া।",
+      "drill": "Say: A short review helps my Upwork profile tremendously."
+    },
+    {
+      "num": 129,
+      "mod": 7,
+      "title": "Upselling Monthly Retainers",
+      "formula": "Monthly Retainer Pitch",
+      "example": "Since Shopify updates themes frequently, a 5-hour monthly retainer keeps your tags verified.",
+      "bangla": "এককালীন কাজকে মাসিক চুক্তিতে রূপান্তর করা।",
+      "drill": "Say: We can monitor your tracking health every single month."
+    },
+    {
+      "num": 130,
+      "mod": 7,
+      "title": "Scheduling Fast Follow-Ups",
+      "formula": "Low-Friction Scheduling",
+      "example": "Are you free for a quick 10-minute sync tomorrow afternoon?",
+      "bangla": "সহজে ক্যালেন্ডার বুকিং নিশ্চিত করা।",
+      "drill": "Say: Let's do a 10-minute sync on Thursday."
+    },
+    {
+      "num": 131,
+      "mod": 7,
+      "title": "Live Screen Share Walkthroughs",
+      "formula": "Screen Share Guide",
+      "example": "As you can see right here on line 14 of Tag Assistant, the purchase event is firing.",
+      "bangla": "স্ক্রিন শেয়ার করে ক্লায়েন্টকে পয়েন্ট বুঝিয়ে দেওয়া।",
+      "drill": "Say: Follow my cursor right here on the summary tab."
+    },
+    {
+      "num": 132,
+      "mod": 7,
+      "title": "Handling Deadline Crunches",
+      "formula": "Deadline Prioritization",
+      "example": "To hit tomorrow's launch, let's prioritize the purchase tag and finish leads later.",
+      "bangla": "চাপের মুখে সবচেয়ে গুরুত্বপূর্ণ কাজটি আগে ডেলিভারি দেওয়া।",
+      "drill": "Say: Let's lock in the purchase event first."
+    },
+    {
+      "num": 133,
+      "mod": 7,
+      "title": "Negotiating Milestone Release",
+      "formula": "Milestone Release Request",
+      "example": "All tags are tested and live! Whenever you're ready, please release the milestone.",
+      "bangla": "পেমেন্ট রিলিজের জন্য শালীন অনুরোধ।",
+      "drill": "Say: Feel free to approve the escrow milestone at your convenience."
+    },
+    {
+      "num": 134,
+      "mod": 7,
+      "title": "Communicating Holiday Schedules",
+      "formula": "Holiday Notice",
+      "example": "Just a heads-up that I will be traveling this weekend, but fully reachable by email.",
+      "bangla": "আগে থেকেই ছুটির বিষয়ে বায়ারকে নোটিশ দেওয়া।",
+      "drill": "Say: Giving you a quick heads-up about my availability."
+    },
+    {
+      "num": 135,
+      "mod": 7,
+      "title": "Resolving Payment & Invoicing Disputes",
+      "formula": "Neutral Diplomacy",
+      "example": "Let's review the original scope document together to ensure we're both aligned.",
+      "bangla": "রাগ না করে ডকুমেন্টে ফিরে গিয়ে বিরোধ মেটানো।",
+      "drill": "Say: Let's check our contract deliverables together."
+    },
+    {
+      "num": 136,
+      "mod": 7,
+      "title": "Setting Working Hours & Async Boundaries",
+      "formula": "Async Boundaries",
+      "example": "I work async between 9 AM and 6 PM EST and respond to all messages within 2 hours.",
+      "bangla": "সারারাত সজাগ না থেকে কাজের সময় বেঁধে দেওয়া।",
+      "drill": "Say: I do deep work in the morning and review tags in the afternoon."
+    },
+    {
+      "num": 137,
+      "mod": 7,
+      "title": "Explaining Deliverables in Plain English",
+      "formula": "Translating JSON",
+      "example": "This setup means Meta knows exactly which ad generated each dollar.",
+      "bangla": "কোড না দেখিয়ে সরাসরি ডলার বা সেলস দেখানো।",
+      "drill": "Say: You now have 100% visibility on your ad spend."
+    },
+    {
+      "num": 138,
+      "mod": 7,
+      "title": "Summarizing Next Steps on Zoom",
+      "formula": "Next Steps Recap",
+      "example": "Action items: I will deploy the container, and you will share viewer access to GA4.",
+      "bangla": "মিটিং শেষে কে কী করবে স্পষ্ট করা।",
+      "drill": "Say: Quick recap of our next steps."
+    },
+    {
+      "num": 139,
+      "mod": 7,
+      "title": "Delivering Post-Launch QA Reports",
+      "formula": "Loom QA Walkthrough",
+      "example": "I recorded a 2-minute Loom video walking through the live purchase test.",
+      "bangla": "লুম ভিডিও দিয়ে বিশ্বাসযোগ্য ডেলিভারি দেওয়া।",
+      "drill": "Say: Check this short video proof of the purchase event."
+    },
+    {
+      "num": 140,
+      "mod": 7,
+      "title": "Closing Deals with Indecisive Buyers",
+      "formula": "Ethical Urgency",
+      "example": "I have one availability slot left this week if we can kick off today.",
+      "bangla": "সিদ্ধান্তহীন বায়ারকে আজই শুরু করতে রাজি করানো।",
+      "drill": "Say: If you want this live before the weekend, let's start now."
+    },
+    {
+      "num": 141,
+      "mod": 8,
+      "title": "Explaining GTM Server-Side Containers",
+      "formula": "Server GTM Explanation",
+      "example": "Moving tags from the user's browser to an isolated cloud container.",
+      "bangla": "ক্লাউড কন্টেইনারের কার্যকারিতা মুখে বলা।",
+      "drill": "Say: Server GTM runs on your own domain."
+    },
+    {
+      "num": 142,
+      "mod": 8,
+      "title": "Meta CAPI Deduplication Mechanics",
+      "formula": "CAPI Deduplication",
+      "example": "Matching identical event_id hashes between browser and server.",
+      "bangla": "ডাবল কাউন্টিং বন্ধ করার মেকানিজম।",
+      "drill": "Say: When event_id tokens match, Meta deduplicates the sale."
+    },
+    {
+      "num": 143,
+      "mod": 8,
+      "title": "GA4 Attribution Windows (7-Day vs 1-Day)",
+      "formula": "Attribution Windows",
+      "example": "Comparing 7-day click vs 1-day view attribution models.",
+      "bangla": "অ্যাট্রিবিউশন উইন্ডোর পার্থক্য মুখে ব্যাখ্যা।",
+      "drill": "Say: Meta uses a 7-day click window by default."
+    },
+    {
+      "num": 144,
+      "mod": 8,
+      "title": "Safari ITP & Cookie Lifetime Restrictions",
+      "formula": "Safari ITP Capping",
+      "example": "Apple's WebKit restricts JavaScript cookies to 24 hours.",
+      "bangla": "আইটিপি ও কুকি মেয়াদের সমস্যা বোঝানো।",
+      "drill": "Say: Safari ITP wipes client cookies after 24 hours."
+    },
+    {
+      "num": 145,
+      "mod": 8,
+      "title": "First-Party vs Third-Party Cookies",
+      "formula": "Cookie Origin Scoping",
+      "example": "First-party cookies live on your custom domain, making them immune to blockers.",
+      "bangla": "ফার্স্ট পার্টি বনাম থার্ড পার্টির সুবিধা বোঝানো।",
+      "drill": "Say: First-party cookies are set by your server."
+    },
+    {
+      "num": 146,
+      "mod": 8,
+      "title": "Deploying on GCP vs Stape.io",
+      "formula": "GCP vs Stape Comparison",
+      "example": "Stape offers managed convenience; GCP provides complete enterprise ownership.",
+      "bangla": "ক্লাউড প্রোভাইডার তুলনা।",
+      "drill": "Say: Stape is faster to deploy, GCP scales indefinitely."
+    },
+    {
+      "num": 147,
+      "mod": 8,
+      "title": "Event Match Quality (EMQ 8.0+)",
+      "formula": "EMQ Optimization",
+      "example": "Passing normalized SHA-256 hashed customer parameters.",
+      "bangla": "ম্যাচ কোয়ালিটি স্কোর বাড়ানোর উপায়।",
+      "drill": "Say: Email, phone, and IP hashes give an 8.5 EMQ score."
+    },
+    {
+      "num": 148,
+      "mod": 8,
+      "title": "Consent Mode v2 Implementation",
+      "formula": "Consent Mode v2",
+      "example": "Adjusting Google tags dynamically based on user cookie banner consent.",
+      "bangla": "ইউরোপীয় আইন ও কনসেন্ট মোড ব্যাখ্যা।",
+      "drill": "Say: Consent Mode v2 regulates ad_storage signals."
+    },
+    {
+      "num": 149,
+      "mod": 8,
+      "title": "BigQuery Export & Blended ROAS",
+      "formula": "BigQuery Export",
+      "example": "Exporting raw GA4 events into BigQuery for true multi-touch attribution.",
+      "bangla": "বিগকোয়েরি ডাটা পাইপলাইন মুখে বলা।",
+      "drill": "Say: BigQuery gives un-sampled row-level event data."
+    },
+    {
+      "num": 150,
+      "mod": 8,
+      "title": "DebugView & Tag Assistant QA",
+      "formula": "DebugView Protocol",
+      "example": "Verifying live incoming event streams in real time.",
+      "bangla": "রিয়েলটাইম টেস্টিং প্রোটোকল।",
+      "drill": "Say: Let's verify the purchase parameters in DebugView."
+    },
+    {
+      "num": 151,
+      "mod": 8,
+      "title": "User-ID Cross-Device Stitching",
+      "formula": "User-ID Stitching",
+      "example": "Stitching mobile and desktop sessions to a single logged-in customer.",
+      "bangla": "ক্রস ডিভাইস ট্র্যাকিং বোঝানো।",
+      "drill": "Say: User-ID connects the user journey across devices."
+    },
+    {
+      "num": 152,
+      "mod": 8,
+      "title": "Data Redaction & GDPR Compliance",
+      "formula": "Data Redaction",
+      "example": "Stripping query parameter PII before hitting Google servers.",
+      "bangla": "ইউজার প্রাইভেসি ও পিআইআই ফিল্টারিং।",
+      "drill": "Say: We redact emails from URLs to stay GDPR-compliant."
+    },
+    {
+      "num": 153,
+      "mod": 8,
+      "title": "Shopify E-commerce dataLayer Pushes",
+      "formula": "dataLayer Pushes",
+      "example": "Pushing ecommerce items arrays with price, currency, and variant IDs.",
+      "bangla": "ডাটালেয়ার অবজেক্ট ব্যাখ্যা।",
+      "drill": "Say: The dataLayer carries the items array and order total."
+    },
+    {
+      "num": 154,
+      "mod": 8,
+      "title": "Offline Conversion Import via CallRail",
+      "formula": "Offline Conversion Import",
+      "example": "Matching dynamic number insertion phone calls back to Google Ads clicks.",
+      "bangla": "কল ট্র্যাকিং কনভার্সন ইমপোর্ট।",
+      "drill": "Say: CallRail matches telephone calls to the gclid."
+    },
+    {
+      "num": 155,
+      "mod": 8,
+      "title": "Cross-Domain Measurement Configuration",
+      "formula": "Cross-Domain Linking",
+      "example": "Preserving the _ga linker parameter across separate checkout domains.",
+      "bangla": "ক্রস ডোমেইন লিঙ্কার ব্যাখ্যা।",
+      "drill": "Say: Cross-domain prevents session splitting on checkout."
+    },
+    {
+      "num": 156,
+      "mod": 8,
+      "title": "Custom Dimension Scoping (Event vs User)",
+      "formula": "Dimension Scoping",
+      "example": "Assigning event-scoped parameters vs user-scoped properties.",
+      "bangla": "কাস্টম ডাইমেনশনের স্কোপিং মুখে বলা।",
+      "drill": "Say: Event scope applies to single actions, user scope persists."
+    },
+    {
+      "num": 157,
+      "mod": 8,
+      "title": "Enhanced Conversions for Google Ads",
+      "formula": "Enhanced Conversions",
+      "example": "Sending hashed customer data to Google Ads for post-cookie attribution.",
+      "bangla": "গুগল এনহ্যান্সড কনভার্সন।",
+      "drill": "Say: Enhanced conversions recover modeled conversion data."
+    },
+    {
+      "num": 158,
+      "mod": 8,
+      "title": "Server-Side Proxy & Custom Subdomain",
+      "formula": "Custom Subdomain Routing",
+      "example": "Routing server traffic through metrics.yourdomain.com.",
+      "bangla": "কাস্টম সাবডোমেন প্রক্সি।",
+      "drill": "Say: A custom subdomain gives first-party context."
+    },
+    {
+      "num": 159,
+      "mod": 8,
+      "title": "Campaign UTM Standardization Architecture",
+      "formula": "UTM Standardization",
+      "example": "Standardizing source, medium, campaign, and term naming conventions.",
+      "bangla": "ইউটিএম প্যারামিটার স্ট্যান্ডার্ডাইজেশন।",
+      "drill": "Say: Consistent UTMs prevent unassigned traffic in GA4."
+    },
+    {
+      "num": 160,
+      "mod": 8,
+      "title": "Blended ROAS vs Marketing Efficiency Ratio (MER)",
+      "formula": "Blended ROAS vs MER",
+      "example": "Comparing individual channel ROAS against total store revenue divided by ad spend.",
+      "bangla": "এমইআর বনাম ব্লেন্ডেড আরওএএস।",
+      "drill": "Say: MER measures overall top-line marketing efficiency."
+    },
+    {
+      "num": 161,
+      "mod": 9,
+      "title": "The 3-Second Hook",
+      "formula": "The 3-Second Hook",
+      "example": "You won't believe what broke their Shopify checkout yesterday.",
+      "bangla": "শুরুতেই চমকপ্রদ কথা বলে মনোযোগ কেড়ে নেওয়া।",
+      "drill": "Say: Check this out, this is crazy."
+    },
+    {
+      "num": 162,
+      "mod": 9,
+      "title": "Setting High-Stakes Narrative",
+      "formula": "High Stakes",
+      "example": "They were spending $10k a day with completely blind attribution.",
+      "bangla": "গল্পের ভেতরে আকর্ষণ ও উত্তেজনা তৈরি করা।",
+      "drill": "Say: The stakes were massive on Black Friday."
+    },
+    {
+      "num": 163,
+      "mod": 9,
+      "title": "Direct Dialogue Quotation",
+      "formula": "He was like... and I was like...",
+      "example": "He was like 'Our ads are failing!', and I was like 'Check your GTM.'",
+      "bangla": "নেটিভদের মতো সরাসরি উক্তি দিয়ে কথোপকথন বর্ণনা।",
+      "drill": "Say: And I was like, let me check the container."
+    },
+    {
+      "num": 164,
+      "mod": 9,
+      "title": "Past Continuous for Scene Setting",
+      "formula": "I was auditing when...",
+      "example": "I was auditing the checkout tags when the error popped up.",
+      "bangla": "দৃশ্যপট তৈরি করার জন্য পাস্ট কন্টিনিউয়াস টেন্স।",
+      "drill": "Say: I was testing the container when it fired."
+    },
+    {
+      "num": 165,
+      "mod": 9,
+      "title": "Acceleration on Climax",
+      "formula": "Speeding Up Speech",
+      "example": "And boom—the server tag caught the payload in milliseconds!",
+      "bangla": "উত্তেজনার মুহূর্তে দ্রুত কথা বলা।",
+      "drill": "Say: And boom, conversions started flowing!"
+    },
+    {
+      "num": 166,
+      "mod": 9,
+      "title": "Deceleration on Key Takeaways",
+      "formula": "Slowing Down Speech",
+      "example": "And that... is why first-party cookies... are non-negotiable.",
+      "bangla": "গুরুত্বপূর্ণ শিক্ষণীয় পয়েন্টে আস্তে স্পষ্ট করে বলা।",
+      "drill": "Say: And that... changed everything."
+    },
+    {
+      "num": 167,
+      "mod": 9,
+      "title": "Self-Deprecating Humor",
+      "formula": "Self-Deprecation",
+      "example": "I spent two hours debugging only to realize my ad blocker was on!",
+      "bangla": "নিজের ছোট ভুল নিয়ে হেসে বন্ধুত্ব তৈরি করা।",
+      "drill": "Say: Can you believe I forgot to turn off my VPN?"
+    },
+    {
+      "num": 168,
+      "mod": 9,
+      "title": "Empathetic Agreement",
+      "formula": "Totally / 100%",
+      "example": "Totally! That Shopify checkout update caught everyone off guard.",
+      "bangla": "বায়ারের কথার সাথে আন্তরিক সমর্থন দেওয়া।",
+      "drill": "Say: 100%, tell me about it!"
+    },
+    {
+      "num": 169,
+      "mod": 9,
+      "title": "Playful Disagreement",
+      "formula": "No way! / Are you serious?",
+      "example": "No way! Did Meta really reject that catalog feed?",
+      "bangla": "মজার ছলে অবাক হয়ে দ্বিমত বা বিস্ময় প্রকাশ।",
+      "drill": "Say: Are you serious right now?"
+    },
+    {
+      "num": 170,
+      "mod": 9,
+      "title": "Redirecting Awkward Topics",
+      "formula": "Smooth Topic Pivot",
+      "example": "Speaking of attribution, let me show you this new report.",
+      "bangla": "অস্বস্তিকর প্রসঙ্গ থেকে কৌশলে কাজের কথায় ফেরা।",
+      "drill": "Say: Speaking of which, let's look at the tags."
+    },
+    {
+      "num": 171,
+      "mod": 9,
+      "title": "Answering Without Over-Explaining",
+      "formula": "Concise Confidence",
+      "example": "Yes, that's already taken care of in the latest version.",
+      "bangla": "অতিরিক্ত কথা না বলে সংক্ষেপে আত্মবিশ্বাস দেখানো।",
+      "drill": "Say: Yes, consider it done."
+    },
+    {
+      "num": 172,
+      "mod": 9,
+      "title": "Echo Questions",
+      "formula": "Echo Questioning",
+      "example": "They dropped 40%? When did that start happening?",
+      "bangla": "অন্যের কথা পুনরাবৃত্তি করে কথা এগিয়ে নেওয়া।",
+      "drill": "Say: Stape is down? Since when?"
+    },
+    {
+      "num": 173,
+      "mod": 9,
+      "title": "Rhetorical Questions",
+      "formula": "Rhetorical Guiding",
+      "example": "Why burn money on blind ads when server tracking fixes it?",
+      "bangla": "উত্তর না চেয়ে নিজের পয়েন্টের গুরুত্ব বোঝানো।",
+      "drill": "Say: Who wouldn't want 25% more tracked sales?"
+    },
+    {
+      "num": 174,
+      "mod": 9,
+      "title": "Expressing Genuine Surprise",
+      "formula": "Get out of here!",
+      "example": "Get out of here! The client approved the contract in 10 minutes?",
+      "bangla": "খাঁটি বিস্ময় প্রকাশ।",
+      "drill": "Say: No kidding! That's awesome."
+    },
+    {
+      "num": 175,
+      "mod": 9,
+      "title": "Active Listening Interjections",
+      "formula": "Uh-huh / Gotcha / Right",
+      "example": "Uh-huh... right... absolutely makes sense.",
+      "bangla": "কথা শোনার সময় সায় দিয়ে এক্টিভ লিসেনিং বজায় রাখা।",
+      "drill": "Say: Right, gotcha, totally agree."
+    },
+    {
+      "num": 176,
+      "mod": 9,
+      "title": "Cooperative Sentence Completion",
+      "formula": "Finishing Sentences",
+      "example": "...and that's when the conversion value matches 100%.",
+      "bangla": "অন্যের কথার শেষাংশ ধরে সুন্দরভাবে সম্পূরক কথা বলা।",
+      "drill": "Say: Exactly, right on the money."
+    },
+    {
+      "num": 177,
+      "mod": 9,
+      "title": "Graceful Call Wrap-Up",
+      "formula": "Respecting Time",
+      "example": "I want to be respectful of your time, so let's wrap up here.",
+      "bangla": "ভদ্রভাবে ক্লায়েন্টের সময় বাঁচিয়ে কল শেষ করা।",
+      "drill": "Say: I know you have another call, so let's pause here."
+    },
+    {
+      "num": 178,
+      "mod": 9,
+      "title": "Spoken Asymmetry",
+      "formula": "Prompting Buyer Inquiries",
+      "example": "There are two ways to fix this—one takes 2 hours, one is permanent.",
+      "bangla": "সংক্ষিপ্ত কথা বলে বায়ারকে প্রশ্ন করতে বাধ্য করা।",
+      "drill": "Say: Which approach do you prefer?"
+    },
+    {
+      "num": 179,
+      "mod": 9,
+      "title": "Confidence Micro-Affirmations",
+      "formula": "Absolutely / Consider it done",
+      "example": "Consider it done. I'll have the QA report over by 3 PM.",
+      "bangla": "কাজের দায়িত্ব নিয়ে দৃঢ় নিশ্চয়তা দেওয়া।",
+      "drill": "Say: Absolutely, consider it done."
+    },
+    {
+      "num": 180,
+      "mod": 9,
+      "title": "Casual Voice-Note Signoffs",
+      "formula": "Catch you on the flip side",
+      "example": "Talk soon! Catch you on the flip side.",
+      "bangla": "বন্ধুসুলভ ও আধুনিক বিদায় নেওয়া।",
+      "drill": "Say: Catch you later, take care!"
+    },
+    {
+      "num": 181,
+      "mod": 10,
+      "title": "American Flap-T Speed Loops",
+      "formula": "Flap-T Speed Loop",
+      "example": "A better bottle of water is waiting at the city center.",
+      "bangla": "দ্রুত নরম D এর মতো T উচ্চারণ প্র্যাকটিস।",
+      "drill": "Repeat 5 times fast: Water bottle, better butter."
+    },
+    {
+      "num": 182,
+      "mod": 10,
+      "title": "Glottal Stop Speed Chains",
+      "formula": "Glottal Stop Chain",
+      "example": "The certain button on the mountain was written in Latin.",
+      "bangla": "গলা আটকে T না ছাড়ার দ্রুত ড্রিল।",
+      "drill": "Say: Certain button, written mountain."
+    },
+    {
+      "num": 183,
+      "mod": 10,
+      "title": "The Dark-L vs Light-L Agility",
+      "formula": "Dark-L Agility",
+      "example": "Will you fill the real container till the bell rings?",
+      "bangla": "জিহ্বার পেছনের অংশ উঁচিয়ে ডার্ক-এল প্র্যাকটিস।",
+      "drill": "Say: Real thrill, fill the bill."
+    },
+    {
+      "num": 184,
+      "mod": 10,
+      "title": "Complex Consonant Clusters (-sks, -sts)",
+      "formula": "Consonant Clusters",
+      "example": "He tests six tasks and asks for new requests.",
+      "bangla": "শব্দের শেষে কঠিন কনসোনেন্ট জোড়া না ফেলে পরিষ্কার বলা।",
+      "drill": "Say: Tasks, tests, asks, requests, lists."
+    },
+    {
+      "num": 185,
+      "mod": 10,
+      "title": "Vocal Fry & Low Chest Resonance",
+      "formula": "Chest Resonance",
+      "example": "Good morning team, let's look at the analytics report.",
+      "bangla": "বুকের গভীর থেকে রিল্যাক্সড ও ভারী আমেরিকান টোন আনা।",
+      "drill": "Take a deep breath and speak from the lower chest."
+    },
+    {
+      "num": 186,
+      "mod": 10,
+      "title": "Intonation Melody (Jump Up, Step Down)",
+      "formula": "Intonation Wave",
+      "example": "I checked the container, and everything is working properly.",
+      "bangla": "নতুন তথ্যে ভয়েস উপরে ওঠা এবং বাক্য শেষে নামা।",
+      "drill": "Follow the melodic wave: Up on 'container', down on 'properly'."
+    },
+    {
+      "num": 187,
+      "mod": 10,
+      "title": "Content Word Stress vs Grammar Compression",
+      "formula": "Rhythm Compression",
+      "example": "We DEPLOYED the TAGS on the SERVER CONTAINER.",
+      "bangla": "মূল শব্দে জোর দেওয়া এবং ব্যাকরণ শব্দ সংকুচিত করা।",
+      "drill": "Clap on the capitalized words only."
+    },
+    {
+      "num": 188,
+      "mod": 10,
+      "title": "Thought Group Breath Timing",
+      "formula": "Thought Groups",
+      "example": "When the pixel fires, [breath] Meta receives the hash [breath].",
+      "bangla": "বাক্যের স্বাভাবিক বিরতিতে সঠিক শ্বাস নেওয়া।",
+      "drill": "Breathe only at natural punctuation breaks."
+    },
+    {
+      "num": 189,
+      "mod": 10,
+      "title": "Tongue Agility Twisters",
+      "formula": "Tongue Twister",
+      "example": "Red lorry, yellow lorry, unique New York.",
+      "bangla": "জিহ্বার জড়তা কাটিয়ে গতি বাড়ানোর সুপার ড্রিল।",
+      "drill": "Say 3 times as fast as possible."
+    },
+    {
+      "num": 190,
+      "mod": 10,
+      "title": "180-WPM Native Shadowing Protocol",
+      "formula": "Native Shadowing",
+      "example": "Follow the native speaker's audio like an echo half a second behind.",
+      "bangla": "নেটিভ মানুষের কথার ঠিক ০.৫ সেকেন্ড পেছনে থেকে মুখে বলা।",
+      "drill": "Shadow the bot's voice audio note in real time."
+    },
+    {
+      "num": 191,
+      "mod": 10,
+      "title": "Lip Position Switching (/w/ to /v/)",
+      "formula": "W to V Switch",
+      "example": "Very well, William viewed the video with Walter.",
+      "bangla": "ঠোঁট গোল করা থেকে দাঁতে ছোঁয়ানোর বিদ্যুৎগতির সুইচ।",
+      "drill": "Say: Very well, William viewed."
+    },
+    {
+      "num": 192,
+      "mod": 10,
+      "title": "Eliminating Dental Stops",
+      "formula": "Alveolar T/D",
+      "example": "Today the data director delivered ten deliverables.",
+      "bangla": "দাঁতের পেছনে মাড়ির ওপরে জিহ্বা রেখে T/D বলা।",
+      "drill": "Tap the alveolar ridge behind your teeth."
+    },
+    {
+      "num": 193,
+      "mod": 10,
+      "title": "Perfecting American Retroflex /r/ Curl",
+      "formula": "Retroflex R",
+      "example": "Rarely are there rare records reported right.",
+      "bangla": "জিহ্বা উল্টে তালুর দিকে কার্ল করে আমেরিকান R বলা।",
+      "drill": "Curl the tongue back without touching the roof."
+    },
+    {
+      "num": 194,
+      "mod": 10,
+      "title": "Vowel Lengthening Before Voiced Consonants",
+      "formula": "Vowel Lengthening",
+      "example": "The bad bat had a sad sat in the red bed.",
+      "bangla": "ভয়েসড কনসোনেন্টের আগের ভাওয়েল দীর্ঘ করা।",
+      "drill": "Hold the vowel longer in 'bad' than 'bat'."
+    },
+    {
+      "num": 195,
+      "mod": 10,
+      "title": "Fast Contractive Questioning",
+      "formula": "Didn't you? / Haven't you?",
+      "example": "You saw the GTM tag, didn't you?",
+      "bangla": "দ্রুত সংকুচিত প্রশ্ন ছুড়ে দেওয়া।",
+      "drill": "Say: Didn't you? Wouldn't you? Couldn't you?"
+    },
+    {
+      "num": 196,
+      "mod": 10,
+      "title": "Rapid Tag Questions",
+      "formula": "Isn't it? / Won't they?",
+      "example": "The attribution looks clean, doesn't it?",
+      "bangla": "বাক্যের শেষে দ্রুত কনফার্মেশন প্রশ্ন জুড়ে দেওয়া।",
+      "drill": "Say: Isn't it? Doesn't it? Won't they?"
+    },
+    {
+      "num": 197,
+      "mod": 10,
+      "title": "Rhythm Clapping & Metronome Speaking",
+      "formula": "Metronome Rhythm",
+      "example": "ONE and TWO and THREE and FOUR, TRACK the DATA on the FLOOR.",
+      "bangla": "মেট্রোনোমের তালের সাথে ইংরেজি বলা।",
+      "drill": "Clap hands to keep a strict 120-BPM beat."
+    },
+    {
+      "num": 198,
+      "mod": 10,
+      "title": "Overcoming Speaking Anxiety (Vagus Nerve)",
+      "formula": "Vagus Reset",
+      "example": "Exhale slowly through the mouth before unmuting on Zoom.",
+      "bangla": "কথা বলার আগে বুক ফুলিয়ে শ্বাস নিয়ে নার্ভ শান্ত করা।",
+      "drill": "Take 1 long exhale before you speak on calls."
+    },
+    {
+      "num": 199,
+      "mod": 10,
+      "title": "Instant On-The-Fly Self-Correction",
+      "formula": "Smooth Self-Recovery",
+      "example": "...or rather, what I meant to say was the server payload.",
+      "bangla": "ভুল হলে লজ্জা না পেয়ে মসৃণভাবে সংশোধন করা।",
+      "drill": "Say: ...or rather, what I mean is..."
+    },
+    {
+      "num": 200,
+      "mod": 10,
+      "title": "The Fluid English Mental Monologue",
+      "formula": "Thinking in English 24/7",
+      "example": "Describe everything you see and do in English inside your head.",
+      "bangla": "বাংলা থেকে অনুবাদ না করে মনে মনে সবসময় ইংরেজিতে ভাবা।",
+      "drill": "Narrate your day inside your mind in fast English."
+    }
+  ]
+};
