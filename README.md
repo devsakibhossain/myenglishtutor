@@ -1,5 +1,8 @@
 # 🇬🇧 Antigravity Multimodal English Mentor (Telegram Connected)
 
+🌐 **Live Web Hub:** [https://tutor.sakibhossain.com](https://tutor.sakibhossain.com) (or [https://mytnglishtutor.vercel.app](https://mytnglishtutor.vercel.app))  
+🤖 **Telegram Bot:** [@sakib_english_tutor_bot](https://t.me/sakib_english_tutor_bot)
+
 আপনার ব্যক্তিগত ২৪/৭ মাল্টিমোডাল ইংলিশ টিউটর ও মেন্টর এজেন্ট, যা সরাসরি আপনার টেলিগ্রামের সাথে সংযুক্ত।
 এটি শুধু টেক্সট নয়—**ভয়েস অডিও (Voice), ছবি (Image), এবং ভিডিও (Video)** দেখে ও শুনে আপনার ইংরেজি শেখাবে!
 
