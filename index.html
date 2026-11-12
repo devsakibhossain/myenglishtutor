@@ -235,37 +235,228 @@
 
         <!-- TAB 2: WEB VOICE CALLER / AUDIO STUDIO -->
         <section id="tab-caller" class="hidden space-y-6">
-            <div class="glass rounded-3xl p-8 text-center max-w-2xl mx-auto glow">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-6">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Web Voice Studio Active
-                </div>
+            <!-- Studio Card Container -->
+            <div class="glass rounded-3xl p-6 sm:p-8 glow border border-indigo-500/20 bg-gradient-to-br from-indigo-950/30 via-slate-900/70 to-slate-950 max-w-4xl mx-auto space-y-6">
                 
-                <h3 class="text-2xl font-bold text-white mb-2">Speak Directly with Antigravity Mentor</h3>
-                <p class="text-slate-400 text-sm mb-8">
-                    মাইক্রোফোন বাটনে চাপ দিয়ে যেকোনো ইংরেজি বাক্য মুখে বলুন। ব্রাউজার সরাসরি আপনার উচ্চারণ শুনবে এবং নেটিভ ভয়েসে অডিও ফিডব্যাক দেবে।
-                </p>
-
-                <!-- Mic Circle Button -->
-                <div class="flex justify-center mb-6">
-                    <button id="mic-btn" onclick="toggleVoiceRecording()" class="w-28 h-28 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 flex items-center justify-center text-4xl text-white shadow-2xl shadow-indigo-500/50 hover:scale-105 active:scale-95 transition transform">
-                        🎙️
-                    </button>
-                </div>
-
-                <div id="mic-status" class="text-sm font-semibold text-slate-300 mb-6">
-                    Tap the microphone and start speaking...
-                </div>
-
-                <!-- Speech Display Card -->
-                <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-left space-y-3">
-                    <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Transcript:</div>
-                    <div id="spoken-transcript" class="text-sm text-slate-200 italic">
-                        "Say something like: 'Hey Sakib here, I wanted to discuss our GA4 server side tracking setup'..."
+                <!-- Call Top Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
+                    <div class="flex items-center gap-3.5">
+                        <div id="caller-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-indigo-500/30">
+                            🇺🇸
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 id="caller-name" class="font-extrabold text-white text-lg">Alex Vance</h3>
+                                <span id="call-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700">
+                                    <span id="call-status-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+                                    <span id="call-status-text">Ready to Call</span>
+                                </span>
+                            </div>
+                            <p id="caller-role" class="text-xs text-slate-400">VP of Marketing & Ecommerce (US Brand)</p>
+                        </div>
                     </div>
-                    <div id="ai-voice-response" class="text-xs text-indigo-400 pt-2 border-t border-slate-800 hidden">
-                        ⚡ AI Response: "Sounds great! Let's audit the container."
+
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <!-- Auto-Listen Toggle -->
+                        <button onclick="toggleAutoListen()" id="auto-listen-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
+                            <span id="auto-listen-icon" class="text-slate-500">⚪</span>
+                            <span>Hands-Free Auto-Listen: <b id="auto-listen-status" class="text-slate-400">OFF</b></span>
+                        </button>
+
+                        <!-- Speed selector -->
+                        <div class="flex items-center bg-slate-900 border border-slate-700 rounded-xl px-2 py-1 text-xs">
+                            <span class="text-slate-400 mr-1.5">Speed:</span>
+                            <select id="voice-speed-select" class="bg-transparent text-indigo-300 font-semibold focus:outline-none cursor-pointer">
+                                <option value="0.9">0.9x Slow</option>
+                                <option value="1.0" selected>1.0x Normal</option>
+                                <option value="1.2">1.2x Fast</option>
+                                <option value="1.4">1.4x Rapid Native</option>
+                            </select>
+                        </div>
+
+                        <!-- Call Timer -->
+                        <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">
+                            ⏱️ <span id="call-timer">00:00</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Persona Switcher Chips -->
+                <div class="space-y-2">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                        <span>Select Call Persona & Scenario:</span>
+                        <span class="text-indigo-400 text-xs">Click to switch anytime</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <button onclick="selectPersona('alex')" id="persona-btn-alex" class="p-3 rounded-2xl bg-indigo-600/30 border border-indigo-500 text-left transition transform hover:-translate-y-0.5">
+                            <div class="text-xl mb-1">🇺🇸</div>
+                            <div class="font-bold text-xs text-white">Alex Vance</div>
+                            <div class="text-[10px] text-indigo-300 truncate">US Tech Client (GA4/CAPI)</div>
+                        </button>
+
+                        <button onclick="selectPersona('sarah')" id="persona-btn-sarah" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
+                            <div class="text-xl mb-1">💼</div>
+                            <div class="font-bold text-xs text-white">Sarah Jenkins</div>
+                            <div class="text-[10px] text-slate-400 truncate">Upwork Agency Director</div>
+                        </button>
+
+                        <button onclick="selectPersona('emily')" id="persona-btn-emily" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
+                            <div class="text-xl mb-1">☕</div>
+                            <div class="font-bold text-xs text-white">Emily Clark</div>
+                            <div class="text-[10px] text-slate-400 truncate">Zoom Small Talk & Rapport</div>
+                        </button>
+
+                        <button onclick="selectPersona('coach')" id="persona-btn-coach" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-left hover:border-indigo-500/50 transition transform hover:-translate-y-0.5">
+                            <div class="text-xl mb-1">🏎️</div>
+                            <div class="font-bold text-xs text-white">Coach Marcus</div>
+                            <div class="text-[10px] text-slate-400 truncate">180-WPM Fast Speech Echo</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Call Studio Screen with Audio Visualizer -->
+                <div class="relative bg-slate-950/80 rounded-2xl border border-slate-800/80 p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-6 overflow-hidden">
+                    
+                    <!-- Dynamic Waveform Visualizer -->
+                    <div id="visualizer" class="flex items-center justify-center gap-1.5 h-16 w-full max-w-md">
+                        <div class="waveform-bar w-1.5 bg-indigo-500/40 rounded-full h-3"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/50 rounded-full h-6"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/60 rounded-full h-4"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/70 rounded-full h-8"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/80 rounded-full h-5"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-400 rounded-full h-10"></div>
+                        <div class="waveform-bar w-1.5 bg-violet-400 rounded-full h-14"></div>
+                        <div class="waveform-bar w-1.5 bg-violet-300 rounded-full h-8"></div>
+                        <div class="waveform-bar w-1.5 bg-violet-400 rounded-full h-12"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-400 rounded-full h-9"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/80 rounded-full h-5"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/70 rounded-full h-7"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/60 rounded-full h-3"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/50 rounded-full h-5"></div>
+                        <div class="waveform-bar w-1.5 bg-indigo-500/40 rounded-full h-2"></div>
+                    </div>
+
+                    <!-- Call Status Text -->
+                    <div class="space-y-1">
+                        <div id="mic-status" class="text-base font-bold text-white">
+                            Click "Start Call" to begin speaking with Alex
+                        </div>
+                        <p id="mic-subtext" class="text-xs text-slate-400">
+                            Microphone will pick up your speech and the AI will respond in native US accent.
+                        </p>
+                    </div>
+
+                    <!-- Main Call Controls -->
+                    <div class="flex items-center justify-center gap-4 pt-2">
+                        <!-- Call / End Call Toggle -->
+                        <button id="call-toggle-btn" onclick="toggleCall()" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-emerald-600/30 flex items-center gap-2 transition">
+                            <span id="call-icon" class="text-lg">📞</span>
+                            <span id="call-btn-text">Start Call</span>
+                        </button>
+
+                        <!-- Mic Speak Button (When in call) -->
+                        <button id="mic-btn" onclick="triggerMicManual()" class="w-14 h-14 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-xl text-white transition active:scale-90" title="Tap to Speak">
+                            🎙️
+                        </button>
+
+                        <!-- Repeat Voice Button -->
+                        <button onclick="repeatLastVoice()" class="w-14 h-14 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-xl text-slate-300 hover:text-white transition active:scale-90" title="Replay Last AI Voice">
+                            🔁
+                        </button>
+                    </div>
+
+                    <!-- Live Interim Transcript Bar -->
+                    <div class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-left">
+                        <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1 flex items-center justify-between">
+                            <span>You are saying (Live Audio Transcript):</span>
+                            <span id="speech-confidence-tag" class="text-emerald-400 text-[10px] hidden">● Recognized</span>
+                        </div>
+                        <div id="spoken-transcript" class="text-xs text-slate-200 italic min-h-[22px]">
+                            "Tap Start Call, then speak naturally..."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Speech Analytics HUD -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                        <div class="text-[11px] text-slate-400 font-medium">⚡ Speaking Speed (WPM)</div>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="metric-wpm" class="text-2xl font-black text-amber-400">--</span>
+                            <span id="metric-wpm-label" class="text-xs text-slate-400">Words / Min</span>
+                        </div>
+                        <div id="metric-wpm-badge" class="text-[11px] text-slate-500 mt-1">Target: 140–180 WPM</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                        <div class="text-[11px] text-slate-400 font-medium">🎯 Pronunciation Clarity</div>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="metric-clarity" class="text-2xl font-black text-emerald-400">--</span>
+                            <span class="text-xs text-slate-400">Accuracy</span>
+                        </div>
+                        <div id="metric-clarity-badge" class="text-[11px] text-slate-500 mt-1">AI Phonetic Match</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                        <div class="text-[11px] text-slate-400 font-medium">🔥 Native Reductions Detected</div>
+                        <div id="metric-reductions-list" class="flex flex-wrap gap-1 mt-2 min-h-[28px]">
+                            <span class="text-xs text-slate-500">None yet</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Native Upgrade Suggestion Box -->
+                <div id="upgrade-suggestion-box" class="glass-card p-5 rounded-2xl border border-indigo-500/30 bg-indigo-950/20 space-y-2 hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
+                            <span>✨</span> Live Native Speech Upgrade
+                        </span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-indigo-900/60 text-indigo-300">Fluency Boost</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-1">
+                        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                            <div class="text-slate-500 font-semibold mb-0.5">What you said:</div>
+                            <div id="upgrade-user-text" class="text-slate-300 italic">"..."</div>
+                        </div>
+                        <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/40">
+                            <div class="text-indigo-400 font-semibold mb-0.5">🌟 Native Spoken Upgrade:</div>
+                            <div id="upgrade-native-text" class="text-emerald-300 font-medium">"..."</div>
+                        </div>
+                    </div>
+                    <p id="upgrade-bangla-tip" class="text-xs text-slate-300 pt-1">
+                        💡 বাংলা টিপস: ...
+                    </p>
+                </div>
+
+                <!-- Clickable Conversation Starters (Prompt Chips) -->
+                <div class="space-y-2">
+                    <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        💡 Tap a Starter to Practice Immediately:
+                    </div>
+                    <div id="starter-chips" class="flex flex-wrap gap-2 text-xs">
+                        <!-- Injected dynamically by persona -->
+                    </div>
+                </div>
+
+                <!-- Call Dialogue Transcript History -->
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center justify-between text-xs text-slate-400 font-semibold">
+                        <span>💬 Live Call Transcript:</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="copyCallTranscript()" class="text-indigo-400 hover:text-indigo-300 transition">📋 Copy Transcript</button>
+                            <span>•</span>
+                            <button onclick="clearCallTranscript()" class="text-slate-500 hover:text-red-400 transition">🗑️ Clear</button>
+                        </div>
+                    </div>
+
+                    <div id="call-transcript-container" class="space-y-3 max-h-80 overflow-y-auto p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                        <!-- Dialogue bubbles rendered here -->
+                        <div class="text-center py-6 text-xs text-slate-500 italic">
+                            No call history yet. Select a persona and click "Start Call" to practice!
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -527,74 +718,699 @@
             alert("Script copied to clipboard!");
         }
 
-        // Web Voice Recognition
+        // ==========================================
+        // ADVANCED WEB VOICE CALLER & STUDIO ENGINE
+        // ==========================================
+        const PERSONAS = {
+            alex: {
+                id: 'alex',
+                name: 'Alex Vance',
+                role: 'VP of Marketing & Ecommerce (US Brand)',
+                avatar: '🇺🇸',
+                voiceLang: 'en-US',
+                defaultRate: 1.05,
+                greeting: "Hey Sakib! Thanks for hopping on the call. I was just reviewing our Meta Ads dashboard, and our purchase conversion tracking looks slightly off. What do you think is going on?",
+                starters: [
+                    "Hey Alex, I audited your GTM container and noticed CAPI deduplication is failing.",
+                    "We should move your tags to a Stape server-side container to bypass Safari ITP.",
+                    "I can set up Consent Mode v2 so you recover Google Ads modeling signals.",
+                    "Our Event Match Quality can jump to 8.5 once we pass normalized hashed user data."
+                ]
+            },
+            sarah: {
+                id: 'sarah',
+                name: 'Sarah Jenkins',
+                role: 'Upwork Agency Director (UK/US)',
+                avatar: '💼',
+                voiceLang: 'en-US',
+                defaultRate: 1.0,
+                greeting: "Hi Sakib, glad we could jump on Zoom! We manage about 15 ecommerce brands and we're looking for a dependable analytics partner. Can you tell me how you handle GA4 and CAPI setups?",
+                starters: [
+                    "I have over 5 years of experience setting up server-side GTM for seven-figure stores.",
+                    "My standard rate is $55 an hour, or we can structure this on a milestone basis.",
+                    "I always test tags thoroughly in GTM preview mode and Meta Test Events before deploying.",
+                    "I can deliver the full audit and implementation within 48 to 72 hours."
+                ]
+            },
+            emily: {
+                id: 'emily',
+                name: 'Emily Clark',
+                role: 'Zoom Small Talk & Rapport Guru',
+                avatar: '☕',
+                voiceLang: 'en-US',
+                defaultRate: 1.0,
+                greeting: "Hey Sakib! Happy Friday! Before we get into all the technical tracking numbers, how was your week? Did you get up to anything exciting?",
+                starters: [
+                    "Pretty busy week with client audits! Just looking forward to unwinding this weekend.",
+                    "The weather here has been pretty nice lately. How about where you are?",
+                    "I caught up on some tech videos and relaxed with family. How's your week been?",
+                    "Same old grind, but making good progress on a few tracking migrations!"
+                ]
+            },
+            coach: {
+                id: 'coach',
+                name: 'Coach Marcus',
+                role: '180-WPM Fast Speech Echo',
+                avatar: '🏎️',
+                voiceLang: 'en-US',
+                defaultRate: 1.25,
+                greeting: "Welcome to 180-WPM Fast Speech Echo! I'm gonna give you rapid native reduction drills. Repeat after me: 'Whaddya wanna do about the checkout tracking?' Speak fast!",
+                starters: [
+                    "Whaddya wanna do about the checkout tracking?",
+                    "Lemme take a quick look at the preview debugger.",
+                    "I betcha we shoulda enabled Consent Mode v2 earlier.",
+                    "Hold on, let me check it out real quick."
+                ]
+            }
+        };
+
+        let activePersona = 'alex';
+        let inCall = false;
+        let autoListen = false;
         let isRecording = false;
         let recognition = null;
+        let callTimerInterval = null;
+        let callSeconds = 0;
+        let speechStartTime = 0;
+        let lastAiUtterance = "";
+        let visualizerInterval = null;
+        let audioCtx = null;
 
-        function toggleVoiceRecording() {
-            const micBtn = document.getElementById('mic-btn');
-            const micStatus = document.getElementById('mic-status');
-            const transcriptEl = document.getElementById('spoken-transcript');
-            const aiRespEl = document.getElementById('ai-voice-response');
+        // Initialize Call Studio
+        function initCallStudio() {
+            renderPersonaStarters();
+            initVisualizerIdle();
+        }
 
+        function renderPersonaStarters() {
+            const container = document.getElementById('starter-chips');
+            if (!container) return;
+            const p = PERSONAS[activePersona];
+            container.innerHTML = p.starters.map(st => `
+                <button onclick="injectStarter('${escapeJs(st)}')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-indigo-600/40 text-slate-300 hover:text-white border border-slate-800 hover:border-indigo-500/50 transition text-left">
+                    💬 "${escapeHtml(st)}"
+                </button>
+            `).join('');
+        }
+
+        function selectPersona(pId) {
+            if (!PERSONAS[pId]) return;
+            activePersona = pId;
+            const p = PERSONAS[pId];
+
+            document.getElementById('caller-name').innerText = p.name;
+            document.getElementById('caller-role').innerText = p.role;
+            document.getElementById('caller-avatar').innerText = p.avatar;
+
+            // Highlight buttons
+            ['alex', 'sarah', 'emily', 'coach'].forEach(id => {
+                const btn = document.getElementById('persona-btn-' + id);
+                if (!btn) return;
+                if (id === pId) {
+                    btn.classList.add('bg-indigo-600/30', 'border-indigo-500');
+                    btn.classList.remove('bg-slate-900/60', 'border-slate-800');
+                } else {
+                    btn.classList.remove('bg-indigo-600/30', 'border-indigo-500');
+                    btn.classList.add('bg-slate-900/60', 'border-slate-800');
+                }
+            });
+
+            renderPersonaStarters();
+
+            if (inCall) {
+                appendTranscript('system', `Switched call partner to ${p.name} (${p.role}).`);
+                speakAi(p.greeting);
+            } else {
+                document.getElementById('mic-status').innerText = `Click "Start Call" to begin speaking with ${p.name}`;
+            }
+        }
+
+        function toggleAutoListen() {
+            autoListen = !autoListen;
+            const btn = document.getElementById('auto-listen-btn');
+            const status = document.getElementById('auto-listen-status');
+            const icon = document.getElementById('auto-listen-icon');
+            if (autoListen) {
+                status.innerText = "ON";
+                status.className = "text-emerald-400 font-bold";
+                icon.innerText = "🟢";
+                btn.classList.add('border-emerald-500/50', 'bg-emerald-950/20');
+            } else {
+                status.innerText = "OFF";
+                status.className = "text-slate-400 font-bold";
+                icon.innerText = "⚪";
+                btn.classList.remove('border-emerald-500/50', 'bg-emerald-950/20');
+            }
+        }
+
+        function toggleCall() {
+            if (!inCall) {
+                startCall();
+            } else {
+                endCall();
+            }
+        }
+
+        function startCall() {
+            inCall = true;
+            callSeconds = 0;
+            const toggleBtn = document.getElementById('call-toggle-btn');
+            const statusDot = document.getElementById('call-status-dot');
+            const statusText = document.getElementById('call-status-text');
+            const statusBadge = document.getElementById('call-status-badge');
+            
+            toggleBtn.className = "px-6 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 transition";
+            document.getElementById('call-icon').innerText = "🔴";
+            document.getElementById('call-btn-text').innerText = "End Call";
+
+            statusDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+            statusText.innerText = "Live Call Active";
+            statusBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+
+            // Start timer
+            clearInterval(callTimerInterval);
+            callTimerInterval = setInterval(() => {
+                callSeconds++;
+                const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                const secs = String(callSeconds % 60).padStart(2, '0');
+                const timerEl = document.getElementById('call-timer');
+                if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            const p = PERSONAS[activePersona];
+            appendTranscript('ai', p.greeting, p.name, p.avatar);
+            speakAi(p.greeting);
+        }
+
+        function endCall() {
+            inCall = false;
+            clearInterval(callTimerInterval);
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+
+            const toggleBtn = document.getElementById('call-toggle-btn');
+            const statusDot = document.getElementById('call-status-dot');
+            const statusText = document.getElementById('call-status-text');
+            const statusBadge = document.getElementById('call-status-badge');
+
+            toggleBtn.className = "px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm shadow-xl shadow-emerald-600/30 flex items-center gap-2 transition";
+            document.getElementById('call-icon').innerText = "📞";
+            document.getElementById('call-btn-text').innerText = "Start Call";
+
+            statusDot.className = "w-2 h-2 rounded-full bg-slate-500";
+            statusText.innerText = "Call Ended";
+            statusBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700";
+
+            document.getElementById('mic-status').innerText = "Call ended. Review your metrics & transcript below.";
+            setVisualizerState('idle');
+        }
+
+        function triggerMicManual() {
+            if (!inCall) {
+                startCall();
+                return;
+            }
+            if (isRecording) {
+                if (recognition) recognition.stop();
+            } else {
+                startRecognition();
+            }
+        }
+
+        function startRecognition() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Speech recognition is not supported in this browser. Please use Chrome or Safari.");
+                alert("Speech Recognition API is not supported in this browser. Please use Chrome, Safari or Edge.");
                 return;
             }
 
-            if (!isRecording) {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRecognition();
-                recognition.lang = 'en-US';
-                recognition.continuous = false;
-                recognition.interimResults = true;
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = true;
 
-                recognition.onstart = function() {
-                    isRecording = true;
-                    micBtn.classList.add('animate-pulse', 'ring-8', 'ring-indigo-500/40');
-                    micStatus.innerText = "Listening to your spoken English... Speak now!";
-                    micStatus.classList.add('text-emerald-400');
-                };
+            const micBtn = document.getElementById('mic-btn');
+            const micStatus = document.getElementById('mic-status');
+            const transcriptEl = document.getElementById('spoken-transcript');
 
-                recognition.onresult = function(event) {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        transcript += event.results[i][0].transcript;
+            recognition.onstart = function() {
+                isRecording = true;
+                speechStartTime = Date.now();
+                micBtn.classList.add('bg-emerald-600', 'text-white', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
+                micStatus.innerText = "🎙️ Listening... Speak naturally now!";
+                micStatus.className = "text-base font-bold text-emerald-400";
+                setVisualizerState('listening');
+            };
+
+            let finalTranscript = '';
+            recognition.onresult = function(event) {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
                     }
-                    transcriptEl.innerText = `"${transcript}"`;
-                };
+                }
+                transcriptEl.innerText = `"${finalTranscript || interim}"`;
+            };
 
-                recognition.onend = function() {
-                    isRecording = false;
-                    micBtn.classList.remove('animate-pulse', 'ring-8', 'ring-indigo-500/40');
-                    micStatus.innerText = "Analyzing speech clarity & generating response...";
-                    micStatus.classList.remove('text-emerald-400');
-                    
-                    setTimeout(() => {
-                        aiRespEl.classList.remove('hidden');
-                        aiRespEl.innerText = '⚡ AI Coach: "Sounds very natural! Your pronunciation clarity was 9/10."';
-                        micStatus.innerText = "Tap the microphone to speak again.";
+            recognition.onend = function() {
+                isRecording = false;
+                micBtn.classList.remove('bg-emerald-600', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
+                micStatus.innerText = "⚡ Analyzing your speech & generating response...";
+                micStatus.className = "text-base font-bold text-indigo-300";
+                setVisualizerState('thinking');
 
-                        // Speak back using browser SpeechSynthesis
-                        if ('speechSynthesis' in window) {
-                            const utterance = new SpeechSynthesisUtterance("Sounds very natural! Your pronunciation clarity was nine out of ten.");
-                            utterance.lang = 'en-US';
-                            window.speechSynthesis.speak(utterance);
-                        }
-                    }, 800);
-                };
+                const speechDuration = (Date.now() - speechStartTime) / 1000;
+                const text = (finalTranscript || transcriptEl.innerText.replace(/"/g, '')).trim();
 
-                recognition.onerror = function(event) {
-                    isRecording = false;
-                    micBtn.classList.remove('animate-pulse', 'ring-8', 'ring-indigo-500/40');
-                    micStatus.innerText = "Microphone error. Tap to try again.";
-                };
+                if (text && text.length > 2 && text !== "Tap Start Call, then speak naturally...") {
+                    handleUserSpokenTurn(text, speechDuration);
+                } else {
+                    micStatus.innerText = inCall ? "Didn't catch that. Tap mic to speak again." : "Ready.";
+                    setVisualizerState('idle');
+                }
+            };
 
+            recognition.onerror = function(event) {
+                isRecording = false;
+                micBtn.classList.remove('bg-emerald-600', 'ring-8', 'ring-emerald-500/30', 'animate-pulse');
+                micStatus.innerText = "Mic paused. Tap mic to speak.";
+                micStatus.className = "text-base font-bold text-slate-300";
+                setVisualizerState('idle');
+            };
+
+            try {
                 recognition.start();
-            } else {
-                if (recognition) recognition.stop();
+            } catch (e) {
+                console.error("Mic start error:", e);
             }
         }
+
+        function handleUserSpokenTurn(userText, durationSec) {
+            appendTranscript('user', userText, 'Sakib', '👤');
+            
+            // Analyze metrics
+            const metrics = calculateSpeechMetrics(userText, durationSec);
+            updateHudMetrics(metrics);
+            displayUpgradeSuggestion(userText);
+
+            // Generate AI response
+            setTimeout(() => {
+                const aiReply = generateAiResponse(userText, activePersona, metrics);
+                const p = PERSONAS[activePersona];
+                appendTranscript('ai', aiReply, p.name, p.avatar);
+                speakAi(aiReply);
+            }, 600);
+        }
+
+        function injectStarter(text) {
+            if (!inCall) {
+                startCall();
+                setTimeout(() => {
+                    handleUserSpokenTurn(text, 3.5);
+                }, 1000);
+            } else {
+                handleUserSpokenTurn(text, 3.5);
+            }
+        }
+
+        // AI Response Logic for simulated personas
+        function generateAiResponse(userText, pId, metrics) {
+            const lower = userText.toLowerCase();
+
+            // Coach Marcus Mode (Fast Speech Echo)
+            if (pId === 'coach') {
+                const wpm = metrics.wpm;
+                if (wpm >= 140) {
+                    return `Phenomenal speed! You clocked ${wpm} words per minute with solid rhythm! Let's level it up. Repeat this: "I gotta bounce in five minutes, but lemme double-check the server container first." Go!`;
+                } else {
+                    return `Good attempt! You hit ${wpm} WPM. To sound like a true native, don't separate each word. Blend them together! Let's retry: "Whaddya think about this attribution window?" Say it fast!`;
+                }
+            }
+
+            // Alex Vance (US Ecommerce Client)
+            if (pId === 'alex') {
+                if (lower.includes('capi') || lower.includes('dedup') || lower.includes('event_id')) {
+                    return "That makes total sense, Sakib. If the event_id isn't 100% identical between browser and server, Meta calculates double purchases and ruins our ROAS. How soon can we deploy this fix to GTM?";
+                }
+                if (lower.includes('stape') || lower.includes('safari') || lower.includes('itp') || lower.includes('cookie')) {
+                    return "Yeah, that 7-day Safari cookie expiration has been killing our retargeting efficiency. Setting up Stape with a custom loader and 1st-party domain mapping sounds like the best solution. What's the timeline?";
+                }
+                if (lower.includes('consent') || lower.includes('google ads') || lower.includes('v2')) {
+                    return "Got it. We definitely can't afford to lose Google Ads conversion modeling in Europe. Let's make sure ad_storage and analytics_storage are both respected in the GTM default state.";
+                }
+                if (lower.includes('rate') || lower.includes('hour') || lower.includes('price') || lower.includes('cost') || lower.includes('$')) {
+                    return "I appreciate you being direct about the investment, Sakib. Given the revenue on the line with our ad spend, your rate is fair. Let's do a 10-hour milestone first, and if EMQ hits 8.5+, we'll keep you on retainer.";
+                }
+                return "Interesting point! We want our tracking to be bulletproof for the upcoming Q4 sale. Could you walk me through the preview debug steps you'll take before we go live?";
+            }
+
+            // Sarah Jenkins (Upwork Agency Director)
+            if (pId === 'sarah') {
+                if (lower.includes('experience') || lower.includes('year') || lower.includes('client') || lower.includes('store')) {
+                    return "That's exactly the kind of hands-on experience we need. We've worked with freelancers who just followed YouTube tutorials and broke dataLayers. How do you QA events before handing over to the client?";
+                }
+                if (lower.includes('rate') || lower.includes('55') || lower.includes('hourly') || lower.includes('budget')) {
+                    return "Fifty-five an hour works for us, provided you can deliver fast turnarounds and clear Loom video explanations for our account managers. I'll send over the contract right after this call!";
+                }
+                if (lower.includes('stape') || lower.includes('server') || lower.includes('gtm')) {
+                    return "Great. Most of our clients are on Shopify Plus. Do you usually recommend the official Stape Shopify app, or do you build custom Web Pixels API events?";
+                }
+                return "I love that proactive approach. If you can help us standardize our tracking blueprint across our 15 brands, there's easily 20 to 30 hours of steady work for you every week.";
+            }
+
+            // Emily Clark (Small Talk & Rapport)
+            if (pId === 'emily') {
+                if (lower.includes('weekend') || lower.includes('relax') || lower.includes('busy') || lower.includes('fun')) {
+                    return "Oh, totally hear you on that! There's nothing better than unwinding after a busy sprint. I'm hoping to get outdoors if the weather holds up. Anyway, so glad we could catch up—how are your tracking projects going?";
+                }
+                if (lower.includes('weather') || lower.includes('nice') || lower.includes('rain') || lower.includes('hot')) {
+                    return "Haha, tell me about it! The weather has been crazy unpredictable here too. But hey, it makes for good coffee weather while staring at GTM debug screens, right?";
+                }
+                return "Haha, I love that! It's so nice getting to know the person behind the screen before jumping straight into business. Alright, show me what magic you worked on our dashboard!";
+            }
+
+            return "That sounds very promising! Let's make sure we test that in preview mode and verify the parameters in real time.";
+        }
+
+        // Metrics Calculation
+        function calculateSpeechMetrics(text, durationSec) {
+            const dur = Math.max(1.0, durationSec || 2.0);
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wpm = Math.min(240, Math.max(60, Math.round((words.length / dur) * 60)));
+
+            // Contractions detection
+            const reductionRegex = /\b(gonna|wanna|gotta|kinda|sorta|whaddya|lemme|gimme|dunno|shoulda|woulda|coulda|gotcha|hafta|asta|c'mon|touch base|wrap up|iron out|no-brainer|drill down|ballpark|circle back)\b/gi;
+            const matches = text.match(reductionRegex) || [];
+            const uniqueMatches = Array.from(new Set(matches.map(m => m.toLowerCase())));
+
+            // Clarity calculation (length + fluency formula)
+            let clarity = 92;
+            if (words.length > 8) clarity = 95;
+            if (uniqueMatches.length > 0) clarity = 97;
+
+            return {
+                wpm: wpm,
+                clarity: clarity,
+                reductions: uniqueMatches,
+                wordCount: words.length
+            };
+        }
+
+        function updateHudMetrics(m) {
+            const wpmEl = document.getElementById('metric-wpm');
+            const wpmBadge = document.getElementById('metric-wpm-badge');
+            const clarityEl = document.getElementById('metric-clarity');
+            const redList = document.getElementById('metric-reductions-list');
+
+            if (wpmEl) wpmEl.innerText = m.wpm;
+            if (wpmBadge) {
+                if (m.wpm < 110) {
+                    wpmBadge.innerText = "🐢 Slow / Textbook pace";
+                    wpmBadge.className = "text-[11px] text-amber-400 mt-1";
+                } else if (m.wpm <= 140) {
+                    wpmBadge.innerText = "🚶 Conversational Pace";
+                    wpmBadge.className = "text-[11px] text-blue-400 mt-1";
+                } else if (m.wpm <= 185) {
+                    wpmBadge.innerText = "🏎️ Native Fast (Target Achieved!)";
+                    wpmBadge.className = "text-[11px] text-emerald-400 font-bold mt-1";
+                } else {
+                    wpmBadge.innerText = "⚡ Rapid Street Speed";
+                    wpmBadge.className = "text-[11px] text-purple-400 font-bold mt-1";
+                }
+            }
+
+            if (clarityEl) clarityEl.innerText = `${m.clarity}%`;
+
+            if (redList) {
+                if (m.reductions.length === 0) {
+                    redList.innerHTML = `<span class="text-xs text-slate-500 italic">Try using "gonna", "wanna", or "lemme"</span>`;
+                } else {
+                    redList.innerHTML = m.reductions.map(r => `
+                        <span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">⚡ ${escapeHtml(r)}</span>
+                    `).join('');
+                }
+            }
+        }
+
+        // Live Phrasing Upgrade Engine
+        function displayUpgradeSuggestion(text) {
+            const box = document.getElementById('upgrade-suggestion-box');
+            const uText = document.getElementById('upgrade-user-text');
+            const nText = document.getElementById('upgrade-native-text');
+            const bTip = document.getElementById('upgrade-bangla-tip');
+
+            let upgrade = null;
+            const lower = text.toLowerCase();
+
+            if (lower.includes('i will fix') || lower.includes('i will do')) {
+                upgrade = {
+                    native: "I'm gonna tackle this first thing tomorrow morning and test it in preview mode.",
+                    tip: "নেটিভরা 'I will do' এর জায়গায় প্রায়শই 'I'm gonna tackle / take care of' ব্যবহার করে।"
+                };
+            } else if (lower.includes('i want to check') || lower.includes('i want to see')) {
+                upgrade = {
+                    native: "Lemme take a quick look at your GTM server container logs real quick.",
+                    tip: "'I want to' এর চেয়ে 'Lemme take a look' অনেক বেশি কনফিডেন্ট এবং ন্যাচারাল শোনায়।"
+                };
+            } else if (lower.includes('can you tell me')) {
+                upgrade = {
+                    native: "Could you walk me through how your purchase event is currently being pushed?",
+                    tip: "ইন্টারভিউ বা কলে 'Can you tell me' এর জায়গায় 'Could you walk me through' বলাটা হাইলি প্রফেশনাল।"
+                };
+            } else if (lower.includes('because of safari')) {
+                upgrade = {
+                    native: "Due to Safari's 7-day ITP cookie restrictions, client-side attribution drops off.",
+                    tip: "টেকনিক্যাল ক্লায়েন্টকে বোঝাতে 'due to Safari ITP restrictions' বলা অনেক বেশি অথরিটেটিভ।"
+                };
+            } else if (lower.includes('my rate is')) {
+                upgrade = {
+                    native: "My standard hourly rate is $55/hr for full-funnel CAPI and server-side tagging.",
+                    tip: "রেট জানানোর সময় কোনো দ্বিধা না রেখে 'My standard hourly rate is...' দিয়ে শুরু করবেন।"
+                };
+            }
+
+            if (upgrade && box) {
+                uText.innerText = `"${text}"`;
+                nText.innerText = `"${upgrade.native}"`;
+                bTip.innerText = `💡 বাংলা টিপস: ${upgrade.tip}`;
+                box.classList.remove('hidden');
+            }
+        }
+
+        // Speech Synthesis & Waveform
+        function speakAi(text) {
+            lastAiUtterance = text;
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const speedSelect = document.getElementById('voice-speed-select');
+            const rateVal = speedSelect ? parseFloat(speedSelect.value) : 1.0;
+            
+            utterance.rate = rateVal;
+            utterance.lang = PERSONAS[activePersona].voiceLang || 'en-US';
+
+            // Pick natural US voice if available
+            const voices = window.speechSynthesis.getVoices();
+            const bestVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Christopher')));
+            if (bestVoice) utterance.voice = bestVoice;
+
+            utterance.onstart = function() {
+                const micStatus = document.getElementById('mic-status');
+                if (micStatus) {
+                    micStatus.innerText = `🔊 ${PERSONAS[activePersona].name} is speaking...`;
+                    micStatus.className = "text-base font-bold text-violet-400";
+                }
+                setVisualizerState('speaking');
+            };
+
+            utterance.onend = function() {
+                setVisualizerState('idle');
+                const micStatus = document.getElementById('mic-status');
+                
+                if (inCall && autoListen) {
+                    if (micStatus) {
+                        micStatus.innerText = "⚡ Hands-free listening in 1 sec...";
+                        micStatus.className = "text-base font-bold text-emerald-400";
+                    }
+                    playGentleChime();
+                    setTimeout(() => {
+                        if (inCall && autoListen && !isRecording) {
+                            startRecognition();
+                        }
+                    }, 800);
+                } else if (inCall) {
+                    if (micStatus) {
+                        micStatus.innerText = "Tap mic or speak your response...";
+                        micStatus.className = "text-base font-bold text-white";
+                    }
+                }
+            };
+
+            utterance.onerror = function() {
+                setVisualizerState('idle');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function repeatLastVoice() {
+            if (lastAiUtterance) {
+                speakAi(lastAiUtterance);
+            } else {
+                speakAi(PERSONAS[activePersona].greeting);
+            }
+        }
+
+        function playGentleChime() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
+                // Ignore audio context autoplay restrictions
+            }
+        }
+
+        // Waveform Visualizer Animator
+        function setVisualizerState(state) {
+            const bars = document.querySelectorAll('#visualizer .waveform-bar');
+            clearInterval(visualizerInterval);
+
+            if (state === 'speaking') {
+                visualizerInterval = setInterval(() => {
+                    bars.forEach((b, i) => {
+                        const h = Math.floor(Math.random() * 40) + 10;
+                        b.style.height = `${h}px`;
+                        b.style.backgroundColor = '#a78bfa'; // violet
+                    });
+                }, 90);
+            } else if (state === 'listening') {
+                visualizerInterval = setInterval(() => {
+                    bars.forEach((b, i) => {
+                        const h = Math.floor(Math.random() * 45) + 12;
+                        b.style.height = `${h}px`;
+                        b.style.backgroundColor = '#34d399'; // emerald
+                    });
+                }, 80);
+            } else if (state === 'thinking') {
+                bars.forEach((b, i) => {
+                    b.style.height = '14px';
+                    b.style.backgroundColor = '#818cf8'; // indigo
+                });
+            } else {
+                initVisualizerIdle();
+            }
+        }
+
+        function initVisualizerIdle() {
+            const bars = document.querySelectorAll('#visualizer .waveform-bar');
+            const idleHeights = [6, 12, 8, 16, 10, 20, 28, 16, 24, 18, 10, 14, 6, 10, 4];
+            bars.forEach((b, i) => {
+                b.style.height = `${idleHeights[i % idleHeights.length]}px`;
+                b.style.backgroundColor = '#6366f1';
+            });
+        }
+
+        // Transcript Management
+        function appendTranscript(sender, text, name, avatar) {
+            const container = document.getElementById('call-transcript-container');
+            if (!container) return;
+
+            // Remove empty placeholder
+            if (container.children.length === 1 && container.children[0].innerText.includes('No call history')) {
+                container.innerHTML = '';
+            }
+
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            if (sender === 'system') {
+                const sysEl = document.createElement('div');
+                sysEl.className = "text-center my-2 text-[11px] text-slate-500 italic";
+                sysEl.innerText = text;
+                container.appendChild(sysEl);
+            } else if (sender === 'user') {
+                const uEl = document.createElement('div');
+                uEl.className = "flex justify-end gap-2.5 items-start";
+                uEl.innerHTML = `
+                    <div class="max-w-[80%] bg-indigo-600 text-white rounded-2xl rounded-tr-none p-3.5 shadow-md shadow-indigo-600/20 text-xs sm:text-sm">
+                        <div class="flex items-center justify-between gap-3 text-[10px] text-indigo-200 mb-1">
+                            <span class="font-bold">${escapeHtml(name)}</span>
+                            <span>${timeStr}</span>
+                        </div>
+                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm shrink-0">
+                        ${avatar}
+                    </div>
+                `;
+                container.appendChild(uEl);
+            } else {
+                const aEl = document.createElement('div');
+                aEl.className = "flex justify-start gap-2.5 items-start";
+                aEl.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm shrink-0 border border-slate-700">
+                        ${avatar}
+                    </div>
+                    <div class="max-w-[80%] bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl rounded-tl-none p-3.5 shadow-md text-xs sm:text-sm">
+                        <div class="flex items-center justify-between gap-3 text-[10px] text-slate-400 mb-1">
+                            <span class="font-bold text-indigo-300">${escapeHtml(name)}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span>${timeStr}</span>
+                                <button onclick="speakAi('${escapeJs(text)}')" class="hover:text-white" title="Replay voice">🔊</button>
+                            </div>
+                        </div>
+                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
+                    </div>
+                `;
+                container.appendChild(aEl);
+            }
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function copyCallTranscript() {
+            const container = document.getElementById('call-transcript-container');
+            if (!container) return;
+            const text = container.innerText;
+            navigator.clipboard.writeText(text);
+            alert("Call transcript copied to clipboard!");
+        }
+
+        function clearCallTranscript() {
+            const container = document.getElementById('call-transcript-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-xs text-slate-500 italic">
+                        No call history yet. Select a persona and click "Start Call" to practice!
+                    </div>
+                `;
+            }
+            const box = document.getElementById('upgrade-suggestion-box');
+            if (box) box.classList.add('hidden');
+        }
+
+        // Initialize Call Studio on Load
+        document.addEventListener('DOMContentLoaded', function() {
+            initCallStudio();
+        });
+        initCallStudio();
 
         // 200 Skills Explorer Logic
         function renderSkills(list) {
