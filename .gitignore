@@ -27,3 +27,4 @@ bot_error.log
 .DS_Store
 Thumbs.db
 /tmp/
+cache/

@@ -551,3 +551,72 @@ def get_user_learning_metrics(user_id: int) -> Dict[str, Any]:
         "recent_vocabs": recent_vocabs,
         "recent_mistakes": recent_mistakes
     }
+
+# --- 10,000 Master Vocabulary Engine ---
+
+def get_master_vocab_count() -> int:
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT COUNT(*) FROM master_vocab")
+        count = cursor.fetchone()[0]
+    except Exception:
+        count = 0
+    finally:
+        conn.close()
+    return count
+
+def get_master_vocab_word(word: str) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT word, part_of_speech, level, meaning_bn, ipa, definition, example
+        FROM master_vocab
+        WHERE LOWER(word) = LOWER(?)
+        LIMIT 1
+    """, (word.strip(),))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+def get_random_master_vocab(level: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    if level and level.lower() != "all":
+        cursor.execute("""
+            SELECT word, part_of_speech, level, meaning_bn, ipa, definition, example
+            FROM master_vocab
+            WHERE UPPER(level) = UPPER(?)
+            ORDER BY RANDOM()
+            LIMIT 1
+        """, (level.strip(),))
+    else:
+        cursor.execute("""
+            SELECT word, part_of_speech, level, meaning_bn, ipa, definition, example
+            FROM master_vocab
+            ORDER BY RANDOM()
+            LIMIT 1
+        """)
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+def search_master_vocab(term: str, limit: int = 10) -> List[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    term_pattern = f"%{term.strip()}%"
+    cursor.execute("""
+        SELECT word, part_of_speech, level, meaning_bn, ipa, definition, example
+        FROM master_vocab
+        WHERE word LIKE ? OR meaning_bn LIKE ? OR definition LIKE ?
+        ORDER BY 
+            CASE WHEN LOWER(word) = LOWER(?) THEN 0
+                 WHEN word LIKE ? THEN 1
+                 ELSE 2 END,
+            LENGTH(word) ASC
+        LIMIT ?
+    """, (term_pattern, term_pattern, term_pattern, term.strip(), f"{term.strip()}%", limit))
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+

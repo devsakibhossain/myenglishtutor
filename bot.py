@@ -439,14 +439,107 @@ async def lesson_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lesson = await asyncio.to_thread(mentor_ai.generate_daily_lesson, level)
     await update.message.reply_text(lesson, parse_mode=ParseMode.MARKDOWN)
 
+def format_master_vocab_card(item: dict) -> tuple[str, InlineKeyboardMarkup]:
+    w = item.get("word", "")
+    pos = item.get("part_of_speech", "")
+    level = item.get("level", "B1")
+    bn = item.get("meaning_bn", "")
+    ipa = item.get("ipa", f"/{w}/")
+    defn = item.get("definition", "")
+    ex = item.get("example", "")
+
+    level_emoji = {
+        "A1": "🟢", "A2": "🟡", "B1": "🔵", "B2": "🟣", "C1": "🔴", "Business": "💼", "Slang": "⚡"
+    }.get(level, "📚")
+
+    msg = (
+        f"📚 **10,000 Essential Vocabulary Hub**\n\n"
+        f"🔤 **{w.upper()}** `{ipa}`\n"
+        f"{level_emoji} **লেভেল:** `{level}` • **Part of Speech:** `{pos}`\n\n"
+        f"🇧🇩 **বাংলা অর্থ:**\n👉 **{bn}**\n\n"
+        f"📖 **Definition:**\n{defn}\n\n"
+        f"💬 **Real-World Spoken Example:**\n*\"{ex}\"*\n\n"
+        f"💡 **প্র্যাকটিস টিপ:** এই শব্দটি দিয়ে নিচে ইংরেজিতে একটি বাক্য লিখে পাঠান, আমি চেক করে ফিডব্যাক দেব!"
+    )
+
+    keyboard = [
+        [
+            InlineKeyboardButton("🔊 উচ্চারণ শুনুন", callback_data=f"mv_audio:{w}"),
+            InlineKeyboardButton("⭐ সেভ করুন", callback_data=f"mv_save:{w}")
+        ],
+        [
+            InlineKeyboardButton("🎲 আরেকটি শব্দ", callback_data=f"mv_next:{level}"),
+            InlineKeyboardButton("📝 কুইজ", callback_data=f"mv_quiz:{w}")
+        ]
+    ]
+    return msg, InlineKeyboardMarkup(keyboard)
+
 async def vocab_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
-    db_user = database.get_or_create_user(user_id=user_id, chat_id=update.effective_chat.id)
-    level = db_user.get("level", "Intermediate")
+    chat_id = update.effective_chat.id
+    db_user = database.get_or_create_user(user_id=user_id, chat_id=chat_id)
+    user_level = db_user.get("level", "Intermediate")
 
-    await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
-    vocab = await asyncio.to_thread(mentor_ai.generate_vocab_card, level)
-    await update.message.reply_text(vocab, parse_mode=ParseMode.MARKDOWN)
+    args = context.args if context.args else []
+
+    await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+
+    # 1. Search Query: /vocab search <term>
+    if len(args) >= 2 and args[0].lower() == "search":
+        term = " ".join(args[1:])
+        results = database.search_master_vocab(term, limit=8)
+        if not results:
+            await update.message.reply_text(f"🔍 '{term}' দিয়ে ১০,০০০ শব্দের ডেটাবেসে কোনো শব্দ পাওয়া যায়নি।")
+            return
+        
+        reply_lines = [f"🔍 **১০,০০০ শব্দ কোষে '{term}' এর অনুসন্ধান ফলাফল:**\n"]
+        for r in results:
+            reply_lines.append(f"• **{r['word']}** ({r['level']}): {r['meaning_bn']} ➔ `/vocab {r['word']}`")
+        reply_lines.append("\n👉 বিস্তারিত ও উচ্চারণ দেখতে যেকোনো শব্দের লিংকে ক্লিক করুন।")
+        await update.message.reply_text("\n".join(reply_lines), parse_mode=ParseMode.MARKDOWN)
+        return
+
+    # 2. Specific Word Lookup: /vocab <word>
+    if len(args) >= 1:
+        query_word = args[0].strip().lower()
+
+        # Check if tier requested (e.g. /vocab A1, /vocab Business, /vocab Slang)
+        valid_tiers = ["a1", "a2", "b1", "b2", "c1", "business", "slang"]
+        if query_word in valid_tiers:
+            item = database.get_random_master_vocab(query_word.upper())
+            if item:
+                msg, markup = format_master_vocab_card(item)
+                await update.message.reply_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+                return
+
+        # Word lookup in 10,000 master database
+        item = database.get_master_vocab_word(query_word)
+        if item:
+            msg, markup = format_master_vocab_card(item)
+            await update.message.reply_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+            return
+
+        # Fallback to AI for arbitrary English words
+        ai_card = await asyncio.to_thread(mentor_ai.generate_vocab_card, query_word)
+        await update.message.reply_text(ai_card, parse_mode=ParseMode.MARKDOWN)
+        return
+
+    # 3. Default: Random Curated Word from 10,000 Master Database
+    # Map user level to tier
+    level_tier_map = {
+        "Beginner": "A1",
+        "Intermediate": "B1",
+        "Advanced": "C1"
+    }
+    tier = level_tier_map.get(user_level, "B1")
+    item = database.get_random_master_vocab(tier) or database.get_random_master_vocab(None)
+
+    if item:
+        msg, markup = format_master_vocab_card(item)
+        await update.message.reply_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+    else:
+        vocab = await asyncio.to_thread(mentor_ai.generate_vocab_card, user_level)
+        await update.message.reply_text(vocab, parse_mode=ParseMode.MARKDOWN)
 
 async def quiz_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -926,6 +1019,76 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
             f"✅ আপনার পছন্দের অ্যাকসেন্ট **{accent_names.get(new_accent, new_accent)}** সফলভাবে সেট করা হয়েছে!\n\nএখন থেকে অডিও ভয়েস মেসেজ এই অ্যাকসেন্টে পাঠানো হবে।",
             parse_mode=ParseMode.MARKDOWN
         )
+
+    elif data.startswith("mv_audio:"):
+        word = data.replace("mv_audio:", "")
+        item = database.get_master_vocab_word(word)
+        if item:
+            accent = database.get_or_create_user(user_id=user_id, chat_id=chat_id).get("accent", "US")
+            voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+            audio_text = f"{item['word']}. ... {item['example']}"
+            audio_bytes = await tts_service.text_to_speech_bytes(audio_text, voice=voice)
+            if audio_bytes:
+                await context.bot.send_voice(
+                    chat_id=chat_id,
+                    voice=audio_bytes,
+                    caption=f"🗣️ **{item['word'].upper()}** `{item['ipa']}`\n🇧🇩 {item['meaning_bn']}",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            else:
+                await query.answer("উচ্চারণ অডিও প্রস্তুত করা যায়নি।", show_alert=True)
+        else:
+            await query.answer("শব্দটি পাওয়া যায়নি।", show_alert=True)
+
+    elif data.startswith("mv_save:"):
+        word = data.replace("mv_save:", "")
+        item = database.get_master_vocab_word(word)
+        if item:
+            database.save_vocabulary(
+                user_id=user_id,
+                word=item["word"],
+                meaning_bn=item["meaning_bn"],
+                part_of_speech=item.get("part_of_speech", ""),
+                example_sentence=item.get("example", "")
+            )
+            await query.answer(f"⭐ '{item['word']}' আপনার পার্সোনাল স্টাডি লিস্টে সংরক্ষিত হয়েছে!", show_alert=True)
+        else:
+            await query.answer("শব্দটি পাওয়া যায়নি।", show_alert=True)
+
+    elif data.startswith("mv_next:"):
+        level = data.replace("mv_next:", "")
+        item = database.get_random_master_vocab(None if level.lower() == "all" else level) or database.get_random_master_vocab(None)
+        if item:
+            msg, markup = format_master_vocab_card(item)
+            await query.edit_message_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("mv_quiz:"):
+        word = data.replace("mv_quiz:", "")
+        item = database.get_master_vocab_word(word)
+        if item:
+            wrong_items = [r["meaning_bn"] for r in database.search_master_vocab(" ", limit=20) if r["word"].lower() != word.lower() and r["meaning_bn"] != item["meaning_bn"]]
+            random.shuffle(wrong_items)
+            options = [item["meaning_bn"]] + wrong_items[:3]
+            random.shuffle(options)
+            correct_idx = options.index(item["meaning_bn"])
+
+            active_quizzes[chat_id] = {
+                "question": f"What is the correct meaning of '{word.upper()}'?",
+                "options": options,
+                "correct_index": correct_idx,
+                "explanation": f"**{word.upper()}** মানে '{item['meaning_bn']}'.\nExample: \"{item['example']}\""
+            }
+
+            keyboard = [
+                [InlineKeyboardButton(f"{chr(65+i)}. {opt}", callback_data=f"quiz_ans_{i}")]
+                for i, opt in enumerate(options)
+            ]
+            quiz_text = (
+                f"❓ **Quick Vocabulary Quiz:**\n\n"
+                f"What is the correct meaning of **{word.upper()}** `{item['ipa']}`?\n\n"
+                f"সঠিক অর্থ নির্বাচন করুন:"
+            )
+            await context.bot.send_message(chat_id=chat_id, text=quiz_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
 
     elif data.startswith("start_interview_"):
         scen_type = data.replace("start_interview_", "")
