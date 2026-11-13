@@ -316,12 +316,20 @@
 
                 <!-- Zoom Top Window Header -->
                 <div class="bg-[#141a29] px-5 py-3 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
                         <div class="flex items-center gap-1.5 text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                            <span>Zoom Verified • 256-Bit Encrypted Meeting</span>
+                            <span>Zoom Verified • 256-Bit Encrypted</span>
                         </div>
-                        <span class="text-slate-400 font-semibold hidden md:inline">Topic: <b class="text-white">Client Technical Interview (Meta CAPI & GA4 Server-Side)</b></span>
+                        <div class="text-slate-400 font-mono hidden lg:flex items-center gap-2 border-l border-slate-700/60 pl-3">
+                            <span>ID: <b class="text-slate-200">849 2819 4018</b></span>
+                            <span>•</span>
+                            <span>Passcode: <b class="text-slate-200">948102</b></span>
+                        </div>
+                        <div class="hidden sm:flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-full" title="QoS: 1080p HD, 30 FPS, Latency 24ms, Jitter 2ms, Packet Loss 0%">
+                            <span>📶</span>
+                            <span>HD 1080p (24ms)</span>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-2.5 flex-wrap">
@@ -348,6 +356,19 @@
                             ⊞ Gallery View
                         </button>
                     </div>
+                </div>
+
+                <!-- Webinar Practice Session & Live Broadcast Bar -->
+                <div id="zoom-webinar-banner" class="bg-amber-950/60 border-b border-amber-500/30 px-5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-200">
+                    <div class="flex items-center gap-2">
+                        <span id="webinar-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span id="webinar-status-label" class="font-bold text-amber-300">🟠 Practice Session:</span>
+                        <span id="webinar-status-desc" class="text-amber-200/90 text-[11px] sm:text-xs">Attendees cannot join or hear you until you broadcast. Rehearsal mode active.</span>
+                    </div>
+                    <button id="zoom-broadcast-btn" onclick="toggleWebinarBroadcast()" class="px-3.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 text-xs shrink-0">
+                        <span>📡</span>
+                        <span id="broadcast-btn-text">Broadcast Live</span>
+                    </button>
                 </div>
 
                 <!-- Client Selector & Interactive Dialogue Mode Switcher Bar -->
@@ -585,89 +606,187 @@
 
                         </div>
 
-                        <!-- Zoom Bottom Control Toolbar -->
-                        <div class="bg-[#141a29] rounded-2xl border border-slate-800 p-3 sm:px-6 flex flex-wrap items-center justify-between gap-3 shadow-xl">
-                            
-                            <!-- Left Controls: Mic & Webcam -->
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <!-- Mic Button -->
-                                <button id="mic-btn" onclick="triggerMicManual()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Mute/Unmute Mic">
-                                    <span id="mic-btn-icon" class="text-lg">🎙️</span>
-                                    <span id="mic-btn-label">Mute</span>
-                                </button>
+                        <!-- Zoom Bottom Control Toolbar Dock -->
+                        <div class="bg-[#141a29]/95 backdrop-blur-md rounded-2xl border border-slate-800 p-2 sm:px-4 shadow-2xl flex flex-col gap-2">
+                            <!-- Main Dock Controls Row -->
+                            <div class="flex items-center justify-between gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1">
+                                
+                                <!-- Group 1: Audio & Video -->
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <!-- Mute Button + Audio Settings Dropup -->
+                                    <div class="relative inline-flex items-center rounded-xl bg-slate-800/80 border border-slate-700/80 hover:bg-slate-700/80 transition shadow-sm">
+                                        <button id="mic-btn" onclick="triggerMicManual()" class="px-2.5 sm:px-3 py-2 flex flex-col items-center gap-0.5 text-[11px] font-semibold text-white active:scale-95" title="Mute/Unmute Mic">
+                                            <span id="mic-btn-icon" class="text-base sm:text-lg">🎙️</span>
+                                            <span id="mic-btn-label">Mute</span>
+                                        </button>
+                                        <button onclick="toggleAudioSettingsMenu()" class="px-1.5 py-3 text-slate-400 hover:text-white border-l border-slate-700/80 text-[10px]" title="Audio Settings & Mic Test">
+                                            ▴
+                                        </button>
+                                    </div>
 
-                                <!-- Webcam Toggle Button -->
-                                <button id="webcam-btn" onclick="toggleWebcam()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Start/Stop Video">
-                                    <span id="webcam-btn-icon" class="text-lg">📹</span>
-                                    <span id="webcam-btn-label">Start Video</span>
-                                </button>
-                            </div>
+                                    <!-- Video Button + Virtual BG Dropup -->
+                                    <div class="relative inline-flex items-center rounded-xl bg-slate-800/80 border border-slate-700/80 hover:bg-slate-700/80 transition shadow-sm">
+                                        <button id="webcam-btn" onclick="toggleWebcam()" class="px-2.5 sm:px-3 py-2 flex flex-col items-center gap-0.5 text-[11px] font-semibold text-white active:scale-95" title="Start/Stop Video">
+                                            <span id="webcam-btn-icon" class="text-base sm:text-lg">📹</span>
+                                            <span id="webcam-btn-label">Start Video</span>
+                                        </button>
+                                        <button onclick="toggleVirtualBgModal()" class="px-1.5 py-3 text-slate-400 hover:text-white border-l border-slate-700/80 text-[10px]" title="Virtual Backgrounds & Filters">
+                                            ▴
+                                        </button>
+                                    </div>
+                                </div>
 
-                            <!-- Center Controls: Screen Share, Record, Reactions, Lifeline -->
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <!-- Screen Share Button -->
-                                <button id="screenshare-btn" onclick="toggleScreenShare()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-emerald-400 flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Share your screen with Client">
-                                    <span class="text-lg">🖥️</span>
-                                    <span id="screenshare-label">Share Screen</span>
-                                </button>
+                                <!-- Group 2: Zoom Core Collaboration Tools -->
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <!-- Security -->
+                                    <button onclick="toggleZoomSecurityModal()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-emerald-400 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Security & Permissions">
+                                        <span class="text-base sm:text-lg">🛡️</span>
+                                        <span>Security</span>
+                                    </button>
 
-                                <!-- Record Meeting Button -->
-                                <button id="record-btn" onclick="toggleRecording()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-rose-400 flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Record Meeting">
-                                    <span id="record-btn-icon" class="text-lg">🔴</span>
-                                    <span id="record-btn-label">Record</span>
-                                </button>
+                                    <!-- Participants (2) -->
+                                    <button onclick="switchMeetingPanel('participants')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-200 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Manage Participants">
+                                        <span class="text-base sm:text-lg">👥</span>
+                                        <span>Participants <b class="text-indigo-400 text-[10px]">(2)</b></span>
+                                    </button>
 
-                                <!-- AI Hint / Lifeline Button -->
-                                <button onclick="triggerAiLifeline()" class="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 flex flex-col items-center gap-1 text-[11px] font-semibold border border-amber-500/40 transition" title="Get Instant Spoken Answer Hint">
-                                    <span class="text-lg">💡</span>
-                                    <span>AI Hint</span>
-                                </button>
+                                    <!-- Chat -->
+                                    <button onclick="switchMeetingPanel('chat')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-200 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Meeting Chat">
+                                        <span class="text-base sm:text-lg">💬</span>
+                                        <span>Chat</span>
+                                    </button>
 
-                                <!-- Reactions Button -->
-                                <button onclick="sendMeetingReaction('👍')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex flex-col items-center gap-1 text-[11px] font-semibold border border-slate-700 transition" title="Send Reaction">
-                                    <span class="text-lg">👏</span>
-                                    <span>React</span>
-                                </button>
-                            </div>
+                                    <!-- Share Screen -->
+                                    <button id="screenshare-btn" onclick="toggleScreenShare()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 active:scale-95 text-emerald-300 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-emerald-500/40 transition" title="Share Screen">
+                                        <span class="text-base sm:text-lg">🖥️</span>
+                                        <span id="screenshare-label">Share</span>
+                                    </button>
 
-                            <!-- Right Controls: Start/End Meeting -->
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <!-- Call Toggle Button -->
-                                <button id="call-toggle-btn" onclick="toggleCall()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition">
-                                    <span id="call-icon">📞</span>
-                                    <span id="call-btn-text">Start Call</span>
-                                </button>
+                                    <!-- Whiteboard -->
+                                    <button onclick="toggleZoomWhiteboard()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-amber-300 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Interactive Whiteboard">
+                                        <span class="text-base sm:text-lg">📝</span>
+                                        <span>Whiteboard</span>
+                                    </button>
 
-                                <!-- End Meeting Button (Red) -->
-                                <button onclick="endMeetingWithReport()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition">
-                                    <span>❌</span>
-                                    <span>End Meeting</span>
-                                </button>
+                                    <!-- Polls & Q&A -->
+                                    <button onclick="switchMeetingPanel('polls')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-sky-400 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Live Polls & Webinar Q&A">
+                                        <span class="text-base sm:text-lg">📊</span>
+                                        <span>Polls & Q&A</span>
+                                    </button>
+
+                                    <!-- AI Companion -->
+                                    <button onclick="switchMeetingPanel('ai')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-gradient-to-tr from-purple-900/60 to-indigo-900/60 hover:from-purple-800/80 hover:to-indigo-800/80 active:scale-95 text-purple-200 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-purple-500/40 transition shadow-sm shadow-purple-500/20" title="Zoom AI Companion">
+                                        <span class="text-base sm:text-lg">✨</span>
+                                        <span>AI Companion</span>
+                                    </button>
+
+                                    <!-- Record -->
+                                    <button id="record-btn" onclick="toggleRecording()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-rose-400 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Record Meeting">
+                                        <span id="record-btn-icon" class="text-base sm:text-lg">🔴</span>
+                                        <span id="record-btn-label">Record</span>
+                                    </button>
+
+                                    <!-- Breakout Rooms -->
+                                    <button onclick="openBreakoutRoomsModal()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-indigo-300 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Breakout Rooms">
+                                        <span class="text-base sm:text-lg">🎭</span>
+                                        <span>Breakouts</span>
+                                    </button>
+
+                                    <!-- CRM Lead Pop -->
+                                    <button onclick="switchMeetingPanel('crm')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-cyan-300 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Contact Center CRM Lead Screen Pop">
+                                        <span class="text-base sm:text-lg">👤</span>
+                                        <span>CRM Pop</span>
+                                    </button>
+
+                                    <!-- Telemetry -->
+                                    <button onclick="switchMeetingPanel('telemetry')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-emerald-400 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Live Tracking Telemetry Stream">
+                                        <span class="text-base sm:text-lg">📈</span>
+                                        <span>Telemetry</span>
+                                    </button>
+
+                                    <!-- Phone Dialpad -->
+                                    <button onclick="toggleZoomPhoneDialpad()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-blue-400 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Zoom Phone DTMF Dialpad">
+                                        <span class="text-base sm:text-lg">📞</span>
+                                        <span>Phone</span>
+                                    </button>
+
+                                    <!-- AI Hint -->
+                                    <button onclick="triggerAiLifeline()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-amber-500/40 transition" title="AI Whisper Hint">
+                                        <span class="text-base sm:text-lg">💡</span>
+                                        <span>Hint</span>
+                                    </button>
+
+                                    <!-- Reactions -->
+                                    <div class="relative">
+                                        <button onclick="toggleReactionsMenu()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-200 flex flex-col items-center gap-0.5 text-[11px] font-semibold border border-slate-700 transition" title="Send Reactions">
+                                            <span class="text-base sm:text-lg">👏</span>
+                                            <span>React</span>
+                                        </button>
+                                        <!-- Reactions Menu Flyout -->
+                                        <div id="reactions-flyout" class="hidden absolute bottom-14 left-1/2 -translate-x-1/2 bg-slate-900 border border-slate-700 rounded-2xl p-2 shadow-2xl flex items-center gap-1.5 z-30">
+                                            <button onclick="sendMeetingReaction('👍')" class="p-1 hover:scale-125 transition text-lg" title="Thumbs Up">👍</button>
+                                            <button onclick="sendMeetingReaction('👏')" class="p-1 hover:scale-125 transition text-lg" title="Clap">👏</button>
+                                            <button onclick="sendMeetingReaction('❤️')" class="p-1 hover:scale-125 transition text-lg" title="Heart">❤️</button>
+                                            <button onclick="sendMeetingReaction('🎉')" class="p-1 hover:scale-125 transition text-lg" title="Party">🎉</button>
+                                            <button onclick="sendMeetingReaction('💡')" class="p-1 hover:scale-125 transition text-lg" title="Idea">💡</button>
+                                            <button onclick="sendMeetingReaction('🔥')" class="p-1 hover:scale-125 transition text-lg" title="Fire">🔥</button>
+                                            <button onclick="raiseHand()" class="px-2 py-1 rounded-lg bg-indigo-600 text-white text-[10px] font-bold hover:bg-indigo-500">✋ Hand</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Group 3: Start/End Call -->
+                                <div class="flex items-center gap-1.5 shrink-0 ml-auto">
+                                    <button id="call-toggle-btn" onclick="toggleCall()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 transition">
+                                        <span id="call-icon">📞</span>
+                                        <span id="call-btn-text">Start Call</span>
+                                    </button>
+                                    <button onclick="endMeetingWithReport()" class="px-3 sm:px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition">
+                                        <span>❌</span>
+                                        <span>End</span>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- Right In-Meeting Side Panel (Chat, Interview Stages & Scorecard) -->
-                    <div class="lg:col-span-4 bg-[#141a29] rounded-2xl border border-slate-800 p-4 flex flex-col justify-between space-y-4">
+                    <!-- Right In-Meeting Side Panel (8 Multi-Tab Enterprise Suite) -->
+                    <div class="lg:col-span-4 bg-[#141a29] rounded-2xl border border-slate-800 p-3 sm:p-4 flex flex-col justify-between space-y-3">
                         
-                        <!-- Panel Tabs -->
                         <div>
-                            <div class="flex border-b border-slate-800 pb-2 mb-3 text-xs font-semibold gap-1">
-                                <button onclick="switchMeetingPanel('chat')" id="mp-tab-chat" class="flex-1 py-1.5 rounded-lg bg-indigo-600 text-white text-center transition">
+                            <!-- Horizontal Scrollable Multi-Tab Navigation Bar -->
+                            <div class="flex border-b border-slate-800 pb-2 mb-3 text-[11px] font-semibold gap-1 overflow-x-auto no-scrollbar">
+                                <button onclick="switchMeetingPanel('chat')" id="mp-tab-chat" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white shrink-0 transition">
                                     💬 Chat
                                 </button>
-                                <button onclick="switchMeetingPanel('stages')" id="mp-tab-stages" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
+                                <button onclick="switchMeetingPanel('participants')" id="mp-tab-participants" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
+                                    👥 Participants
+                                </button>
+                                <button onclick="switchMeetingPanel('ai')" id="mp-tab-ai" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
+                                    ✨ AI Companion
+                                </button>
+                                <button onclick="switchMeetingPanel('polls')" id="mp-tab-polls" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
+                                    📊 Polls & Q&A
+                                </button>
+                                <button onclick="switchMeetingPanel('crm')" id="mp-tab-crm" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
+                                    👤 CRM Lead
+                                </button>
+                                <button onclick="switchMeetingPanel('telemetry')" id="mp-tab-telemetry" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
+                                    📈 Telemetry
+                                </button>
+                                <button onclick="switchMeetingPanel('stages')" id="mp-tab-stages" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
                                     📋 Stages
                                 </button>
-                                <button onclick="switchMeetingPanel('scorecard')" id="mp-tab-scorecard" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
+                                <button onclick="switchMeetingPanel('scorecard')" id="mp-tab-scorecard" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
                                     ⚡ Scorecard
                                 </button>
                             </div>
 
-                            <!-- Sub-Panel 1: In-Meeting Live Chat -->
+                            <!-- 1. CHAT SUB-PANEL -->
                             <div id="mp-content-chat" class="space-y-3">
-                                <div id="call-transcript-container" class="h-64 sm:h-72 overflow-y-auto space-y-2.5 p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs">
+                                <div id="call-transcript-container" class="h-60 sm:h-64 overflow-y-auto space-y-2.5 p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs">
                                     <div class="text-center py-8 text-slate-500 italic">
                                         Click "Start Call" to begin the interview. Live meeting transcript will appear here.
                                     </div>
@@ -683,7 +802,267 @@
                                 </div>
                             </div>
 
-                            <!-- Sub-Panel 2: 5 Interview Stages Flow -->
+                            <!-- 2. PARTICIPANTS SUB-PANEL -->
+                            <div id="mp-content-participants" class="hidden space-y-3 text-xs">
+                                <div class="flex items-center justify-between text-slate-400 text-[11px] font-semibold border-b border-slate-800/80 pb-2">
+                                    <span>IN THE MEETING (2 PARTICIPANTS)</span>
+                                    <span class="text-emerald-400">● 100% Connected</span>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <!-- Participant 1: Host (Alex Vance) -->
+                                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm font-bold text-slate-200 border border-slate-700">
+                                                AV
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-white flex items-center gap-1.5">
+                                                    <span>Alex Vance</span>
+                                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Host</span>
+                                                </div>
+                                                <div class="text-[10px] text-slate-400">VP of Marketing & DTC Brand</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 text-slate-400">
+                                            <span class="text-emerald-400" title="Audio connected">🎙️</span>
+                                            <span class="text-emerald-400" title="Video 1080p">📹</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Participant 2: Candidate (Sakib Hossain) -->
+                                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-emerald-500/30">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-600/30">
+                                                SH
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-white flex items-center gap-1.5">
+                                                    <span>Sakib Hossain</span>
+                                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Co-Host (Me)</span>
+                                                </div>
+                                                <div class="text-[10px] text-slate-400">Tracking & Analytics Specialist</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 text-slate-400">
+                                            <span class="text-emerald-400" title="Mic active">🎙️</span>
+                                            <span class="text-slate-400" title="Webcam ready">📹</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Participant Action Buttons -->
+                                <div class="pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                                    <button onclick="muteAllParticipants()" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-[11px] border border-slate-700 transition flex items-center justify-center gap-1">
+                                        <span>🔇</span> Mute All
+                                    </button>
+                                    <button onclick="copyZoomInviteLink()" class="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] transition flex items-center justify-center gap-1 shadow-md shadow-indigo-600/20">
+                                        <span>🔗</span> Copy Invite Link
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 3. AI COMPANION SUB-PANEL -->
+                            <div id="mp-content-ai" class="hidden space-y-3 text-xs">
+                                <div class="p-3 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-500/30 space-y-1.5">
+                                    <div class="flex items-center justify-between text-purple-300 font-bold">
+                                        <span class="flex items-center gap-1.5">✨ AI Meeting Summary</span>
+                                        <span class="text-[10px] bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-500/30 text-purple-200">Realtime</span>
+                                    </div>
+                                    <ul id="ai-summary-bullets" class="space-y-1 text-slate-300 text-[11px] list-disc list-inside leading-relaxed">
+                                        <li>Client Alex Vance seeking server-side Meta CAPI & GA4 migration.</li>
+                                        <li>Current pain point: Shopify Plus Checkout Extensibility dropped purchase deduplication.</li>
+                                        <li>Candidate proposed Stape custom loader with 180-day cookie extension.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                                    <div class="font-bold text-slate-200 text-[11px] flex items-center justify-between">
+                                        <span>📋 Extracted Action Items:</span>
+                                        <span class="text-amber-400 font-mono text-[10px]">3 Tasks</span>
+                                    </div>
+                                    <div class="space-y-1.5 text-[11px] text-slate-300">
+                                        <label class="flex items-start gap-2 cursor-pointer">
+                                            <input type="checkbox" checked class="mt-0.5 rounded border-slate-700 text-indigo-600">
+                                            <span>Sakib: Audit GTM dataLayer pushes for transaction_id</span>
+                                        </label>
+                                        <label class="flex items-start gap-2 cursor-pointer">
+                                            <input type="checkbox" class="mt-0.5 rounded border-slate-700 text-indigo-600">
+                                            <span>Alex: Provide Shopify Collaborator code for Web Pixels</span>
+                                        </label>
+                                        <label class="flex items-start gap-2 cursor-pointer">
+                                            <input type="checkbox" class="mt-0.5 rounded border-slate-700 text-indigo-600">
+                                            <span>Sakib: Verify Meta Graph API CAPI response 200 on Stape</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- In-Meeting AI Q&A Input -->
+                                <div class="space-y-1.5">
+                                    <div class="text-[10px] text-purple-300 font-bold uppercase tracking-wider">Ask AI Companion in-meeting:</div>
+                                    <div class="flex items-center gap-1.5">
+                                        <input type="text" id="ai-companion-input" onkeydown="if(event.key==='Enter') askAiCompanion()" placeholder="e.g. What did Alex say about ad budget?" 
+                                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-purple-500">
+                                        <button onclick="askAiCompanion()" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
+                                            Ask
+                                        </button>
+                                    </div>
+                                    <div id="ai-companion-answer" class="text-[11px] text-slate-300 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 hidden leading-relaxed"></div>
+                                </div>
+                            </div>
+
+                            <!-- 4. POLLS & Q&A SUB-PANEL -->
+                            <div id="mp-content-polls" class="hidden space-y-3 text-xs">
+                                <!-- Active Poll Card -->
+                                <div class="p-3 rounded-xl bg-slate-900/90 border border-sky-500/40 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800">ACTIVE POLL (1/1)</span>
+                                        <span class="text-[10px] text-slate-400">14 Votes</span>
+                                    </div>
+                                    <div class="font-bold text-white text-[11px]">
+                                        "What is mandatory for Meta CAPI browser-to-server deduplication?"
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <button onclick="castPollVote('A')" id="poll-opt-A" class="w-full text-left p-2 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 transition">
+                                            <div class="flex justify-between text-[11px] mb-1">
+                                                <span class="text-slate-300">A. Identical event_id & event_name</span>
+                                                <span id="poll-pct-A" class="font-bold text-emerald-400">78%</span>
+                                            </div>
+                                            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                                <div id="poll-bar-A" class="h-full bg-emerald-500 rounded-full" style="width: 78%;"></div>
+                                            </div>
+                                        </button>
+                                        <button onclick="castPollVote('B')" id="poll-opt-B" class="w-full text-left p-2 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 transition">
+                                            <div class="flex justify-between text-[11px] mb-1">
+                                                <span class="text-slate-300">B. Safari 7-day cookie token</span>
+                                                <span id="poll-pct-B" class="font-bold text-slate-400">14%</span>
+                                            </div>
+                                            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                                <div id="poll-bar-B" class="h-full bg-slate-500 rounded-full" style="width: 14%;"></div>
+                                            </div>
+                                        </button>
+                                        <button onclick="castPollVote('C')" id="poll-opt-C" class="w-full text-left p-2 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 transition">
+                                            <div class="flex justify-between text-[11px] mb-1">
+                                                <span class="text-slate-300">C. Google Consent Mode v2 flag</span>
+                                                <span id="poll-pct-C" class="font-bold text-slate-400">8%</span>
+                                            </div>
+                                            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                                <div id="poll-bar-C" class="h-full bg-slate-500 rounded-full" style="width: 8%;"></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Webinar Live Q&A Stream -->
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        <span>Webinar Q&A Queue:</span>
+                                        <span class="text-sky-400">2 Open</span>
+                                    </div>
+                                    <div id="qa-questions-list" class="space-y-1.5 max-h-36 overflow-y-auto">
+                                        <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex items-start justify-between gap-2">
+                                            <div>
+                                                <div class="font-semibold text-slate-200 text-[11px]">"How do we handle iOS 14.5 attribution lag in Meta?"</div>
+                                                <div class="text-[9px] text-slate-400 mt-0.5">Asked by Marcus • 3 min ago</div>
+                                            </div>
+                                            <button onclick="upvoteQuestion(this)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 font-bold text-[10px] shrink-0">
+                                                👍 14
+                                            </button>
+                                        </div>
+                                        <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex items-start justify-between gap-2">
+                                            <div>
+                                                <div class="font-semibold text-slate-200 text-[11px]">"Can Stape custom domain bypass Brave Shield adblockers?"</div>
+                                                <div class="text-[9px] text-slate-400 mt-0.5">Asked by Sarah • 1 min ago</div>
+                                            </div>
+                                            <button onclick="upvoteQuestion(this)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 font-bold text-[10px] shrink-0">
+                                                👍 9
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Submit Q&A Box -->
+                                    <div class="flex items-center gap-1.5 pt-1">
+                                        <input type="text" id="qa-input" onkeydown="if(event.key==='Enter') submitWebinarQuestion()" placeholder="Ask a webinar question..." 
+                                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-sky-500">
+                                        <button onclick="submitWebinarQuestion()" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition">
+                                            Ask
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. CRM LEAD SCREEN POP SUB-PANEL (Contact Center CTI) -->
+                            <div id="mp-content-crm" class="hidden space-y-3 text-xs">
+                                <div class="p-3 rounded-xl bg-slate-900/90 border border-cyan-500/40 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">ZOOM CTI SCREEN POP</span>
+                                        <span class="text-emerald-400 font-bold font-mono text-[10px]">🔥 High Value Lead</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-black text-white">Alex Vance</div>
+                                        <div class="text-[11px] text-slate-400">Founder & VP Marketing @ Lumora Skin DTC</div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 text-center pt-1">
+                                        <div class="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                                            <div class="text-[9px] text-slate-400">Monthly Ad Spend</div>
+                                            <div class="text-sm font-bold text-amber-400">$45,000 / mo</div>
+                                        </div>
+                                        <div class="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                                            <div class="text-[9px] text-slate-400">Proposed Retainer</div>
+                                            <div class="text-sm font-bold text-emerald-400">$55/hr ($6,600/mo)</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Infrastructure Audit:</div>
+                                    <div class="space-y-1 text-[11px] text-slate-300">
+                                        <div class="flex justify-between"><span>E-Commerce Platform:</span> <b class="text-white">Shopify Plus</b></div>
+                                        <div class="flex justify-between"><span>Server Container:</span> <b class="text-indigo-400">Stape.io (EU / US)</b></div>
+                                        <div class="flex justify-between"><span>Meta CAPI EMQ:</span> <b class="text-rose-400">4.2 / 10 (Poor)</b></div>
+                                        <div class="flex justify-between"><span>Google Consent v2:</span> <b class="text-amber-400">Missing</b></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 pt-1">
+                                    <button onclick="alert('⚡ Contact synced to GoHighLevel CRM successfully!')" class="flex-1 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-[11px] transition shadow-md shadow-cyan-600/20">
+                                        Push to GHL
+                                    </button>
+                                    <button onclick="alert('📤 Deal registered in HubSpot CRM pipeline!')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[11px] border border-slate-700 transition">
+                                        Sync HubSpot
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 6. TRACKING TELEMETRY SUB-PANEL -->
+                            <div id="mp-content-telemetry" class="hidden space-y-3 text-xs">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-slate-400">
+                                    <span>LIVE GTM & CAPI TELEMETRY STREAM</span>
+                                    <span class="text-emerald-400 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                        Capturing Signals
+                                    </span>
+                                </div>
+
+                                <div id="telemetry-stream" class="h-56 sm:h-64 overflow-y-auto space-y-1.5 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[10px] text-emerald-400">
+                                    <div class="text-slate-500">// Zoom Live Tracking Telemetry Console</div>
+                                    <div class="text-indigo-300">[10:14:00] Webhook Handshake: 200 OK (CRC verified)</div>
+                                    <div class="text-slate-400">[10:14:01] dataLayer.push({ event: 'page_view', page_path: '/checkout' })</div>
+                                    <div class="text-amber-300">[10:14:02] Stape Proxy: Received client payload (custom domain)</div>
+                                    <div class="text-emerald-300">[10:14:03] Meta Graph API: Status 200 OK | event_id: evt_849201</div>
+                                    <div class="text-sky-300">[10:14:04] GA4 Measurement Protocol: HTTP 204 No Content</div>
+                                </div>
+
+                                <div class="flex items-center gap-2 pt-1">
+                                    <button onclick="fireTestTelemetryEvent()" class="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition shadow-md shadow-emerald-600/20">
+                                        🚀 Fire Test Purchase Event
+                                    </button>
+                                    <button onclick="document.getElementById('telemetry-stream').innerHTML = '<div class=\'text-slate-500\'>// Stream cleared</div>'" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] border border-slate-700 transition">
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 7. STAGES SUB-PANEL -->
                             <div id="mp-content-stages" class="hidden space-y-2 text-xs">
                                 <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-2">
                                     🎯 Client Interview Roadmap:
@@ -729,7 +1108,7 @@
                                 </div>
                             </div>
 
-                            <!-- Sub-Panel 3: Realtime Scorecard HUD -->
+                            <!-- 8. SCORECARD SUB-PANEL -->
                             <div id="mp-content-scorecard" class="hidden space-y-3 text-xs">
                                 <div class="grid grid-cols-2 gap-2">
                                     <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
@@ -757,6 +1136,7 @@
                                     <div id="upgrade-bangla-tip" class="text-slate-400 text-[10px]">💡 বাংলা টিপস: ...</div>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Quick Conversation Starters -->
@@ -764,7 +1144,7 @@
                             <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold flex items-center justify-between">
                                 <span>💡 Quick Spoken Starters:</span>
                             </div>
-                            <div id="starter-chips" class="flex flex-col gap-1.5 max-h-32 overflow-y-auto text-xs">
+                            <div id="starter-chips" class="flex flex-col gap-1.5 max-h-28 overflow-y-auto text-xs">
                                 <!-- Dynamic chips -->
                             </div>
                         </div>
@@ -824,6 +1204,362 @@
                     </div>
                 </div>
             </div>
+        
+            <!-- ======================================================== -->
+            <!-- ZOOM ENTERPRISE MODALS & INTERACTIVE OVERLAYS -->
+            <!-- ======================================================== -->
+
+            <!-- MODAL 1: ZOOM IN-MEETING SECURITY -->
+            <div id="zoom-security-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-emerald-500/30 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5 text-left text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 text-lg">🛡️</span>
+                            <h3 class="text-base font-bold text-white">Zoom In-Meeting Security</h3>
+                        </div>
+                        <button onclick="toggleZoomSecurityModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="font-bold text-slate-300 text-[11px] uppercase tracking-wider">Meeting Controls:</div>
+                        
+                        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer">
+                            <div>
+                                <div class="font-semibold text-white">Lock Meeting</div>
+                                <div class="text-[10px] text-slate-400">No new participants can join this session</div>
+                            </div>
+                            <input type="checkbox" onchange="alert(this.checked ? '🔒 Meeting has been locked.' : '🔓 Meeting unlocked.')" class="w-4 h-4 text-emerald-500 rounded border-slate-700 focus:ring-0">
+                        </label>
+
+                        <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer">
+                            <div>
+                                <div class="font-semibold text-white">Enable Waiting Room</div>
+                                <div class="text-[10px] text-slate-400">Admit guests individually from queue</div>
+                            </div>
+                            <input type="checkbox" checked onchange="alert(this.checked ? '🚪 Waiting Room enabled.' : '🚪 Waiting Room disabled.')" class="w-4 h-4 text-emerald-500 rounded border-slate-700 focus:ring-0">
+                        </label>
+
+                        <div class="font-bold text-slate-300 text-[11px] uppercase tracking-wider pt-2">Allow Participants to:</div>
+                        <div class="grid grid-cols-2 gap-2 text-slate-300">
+                            <label class="flex items-center gap-2 bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <input type="checkbox" checked class="text-emerald-500 rounded">
+                                <span>Share Screen</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <input type="checkbox" checked class="text-emerald-500 rounded">
+                                <span>Chat Message</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <input type="checkbox" checked class="text-emerald-500 rounded">
+                                <span>Rename Themselves</span>
+                            </label>
+                            <label class="flex items-center gap-2 bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <input type="checkbox" checked class="text-emerald-500 rounded">
+                                <span>Unmute Mic</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+                        <button onclick="alert('⚠️ Participant activities suspended.')" class="px-3 py-1.5 rounded-xl bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 text-[11px] font-bold transition">
+                            Suspend Participant Activities
+                        </button>
+                        <button onclick="toggleZoomSecurityModal()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL 2: INTERACTIVE WHITEBOARD CANVAS -->
+            <div id="zoom-whiteboard-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-6 hidden">
+                <div class="bg-[#121826] border border-amber-500/30 rounded-3xl p-4 sm:p-6 max-w-4xl w-full shadow-2xl space-y-4 text-left flex flex-col max-h-[90vh]">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-amber-400 text-lg">📝</span>
+                            <div>
+                                <h3 class="text-base font-bold text-white">Zoom Interactive Whiteboard</h3>
+                                <p class="text-[10px] text-slate-400">Collaborative canvas for explaining Tracking Architecture & dataLayer Flows</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleZoomWhiteboard()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <!-- Whiteboard Controls Toolbar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 p-2.5 rounded-2xl border border-slate-800 text-xs">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-slate-400 text-[11px] font-bold">Pen Color:</span>
+                            <button onclick="setWhiteboardColor('#ffffff')" class="w-6 h-6 rounded-full bg-white border-2 border-slate-600 active:scale-95" title="White"></button>
+                            <button onclick="setWhiteboardColor('#10b981')" class="w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-600 active:scale-95" title="Emerald"></button>
+                            <button onclick="setWhiteboardColor('#f59e0b')" class="w-6 h-6 rounded-full bg-amber-500 border-2 border-slate-600 active:scale-95" title="Amber"></button>
+                            <button onclick="setWhiteboardColor('#ef4444')" class="w-6 h-6 rounded-full bg-rose-500 border-2 border-slate-600 active:scale-95" title="Rose"></button>
+                            <button onclick="setWhiteboardColor('#38bdf8')" class="w-6 h-6 rounded-full bg-sky-400 border-2 border-slate-600 active:scale-95" title="Cyan"></button>
+                            <button onclick="setWhiteboardColor('#818cf8')" class="w-6 h-6 rounded-full bg-indigo-400 border-2 border-slate-600 active:scale-95" title="Indigo"></button>
+                            <span class="border-l border-slate-700 h-5 mx-1"></span>
+                            <span class="text-slate-400 text-[11px] font-bold">Size:</span>
+                            <button onclick="setWhiteboardBrush(2)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-[11px]">Thin</button>
+                            <button onclick="setWhiteboardBrush(5)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-[11px]">Med</button>
+                            <button onclick="setWhiteboardBrush(12)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white text-[11px]">Thick</button>
+                            <button onclick="setWhiteboardTool('eraser')" class="px-2.5 py-0.5 rounded bg-slate-800 text-rose-300 hover:bg-rose-900/40 text-[11px] font-bold">🧹 Eraser</button>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="drawTrackingArchitectureDiagram()" class="px-3 py-1 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 transition">
+                                <span>📐</span> Draw Tracking Architecture
+                            </button>
+                            <button onclick="clearWhiteboard()" class="px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition">
+                                Clear
+                            </button>
+                            <button onclick="downloadWhiteboard()" class="px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
+                                💾 Save PNG
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="flex-1 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden relative min-h-[360px]">
+                        <canvas id="zoom-whiteboard-canvas" width="840" height="420" class="w-full h-full cursor-crosshair block"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL 3: VIRTUAL BACKGROUNDS -->
+            <div id="zoom-virtual-bg-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-indigo-500/30 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-5 text-left text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-indigo-400 text-lg">🖼️</span>
+                            <h3 class="text-base font-bold text-white">Virtual Background & Video Filters</h3>
+                        </div>
+                        <button onclick="toggleVirtualBgModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <p class="text-slate-300 text-[11px]">Choose an executive studio background to present professionally on international client video calls:</p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <button onclick="selectVirtualBg('none')" class="p-3 rounded-2xl bg-slate-900 border-2 border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🚫</div>
+                            <div class="font-bold text-white text-[11px]">None</div>
+                            <div class="text-[9px] text-slate-400">Standard Camera</div>
+                        </button>
+
+                        <button onclick="selectVirtualBg('blur')" class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🌫️</div>
+                            <div class="font-bold text-white text-[11px]">Studio Blur</div>
+                            <div class="text-[9px] text-slate-400">Depth of field</div>
+                        </button>
+
+                        <button onclick="selectVirtualBg('office')" class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🏢</div>
+                            <div class="font-bold text-white text-[11px]">Executive Suite</div>
+                            <div class="text-[9px] text-slate-400">High-rise view</div>
+                        </button>
+
+                        <button onclick="selectVirtualBg('loft')" class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🏙️</div>
+                            <div class="font-bold text-white text-[11px]">Modern Tech Loft</div>
+                            <div class="text-[9px] text-slate-400">Brick & Greenery</div>
+                        </button>
+
+                        <button onclick="selectVirtualBg('sunset')" class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🌅</div>
+                            <div class="font-bold text-white text-[11px]">Silicon Valley Sunset</div>
+                            <div class="text-[9px] text-slate-400">Warm ambient glow</div>
+                        </button>
+
+                        <button onclick="selectVirtualBg('datacenter')" class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-center hover:bg-slate-800 transition">
+                            <div class="text-2xl mb-1">🌐</div>
+                            <div class="font-bold text-white text-[11px]">Cloud Data Center</div>
+                            <div class="text-[9px] text-slate-400">Server infrastructure</div>
+                        </button>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800 flex justify-end">
+                        <button onclick="toggleVirtualBgModal()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">
+                            Apply Background
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL 4: ZOOM PHONE DTMF DIALPAD -->
+            <div id="zoom-phone-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-blue-500/30 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-center text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-blue-400 text-lg">📞</span>
+                            <h3 class="text-base font-bold text-white">Zoom Phone & Cloud PBX</h3>
+                        </div>
+                        <button onclick="toggleZoomPhoneDialpad()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <!-- Caller ID line -->
+                    <div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px]">
+                        <span class="text-slate-400">Caller ID:</span>
+                        <span class="font-mono text-blue-300 font-bold">+1 (800) 928-1029 (HQ)</span>
+                    </div>
+
+                    <!-- Dialed Number Screen -->
+                    <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 flex items-center justify-between">
+                        <div id="phone-display" class="text-xl font-mono font-bold text-white tracking-widest overflow-hidden truncate">
+                            +1 (555) 
+                        </div>
+                        <button onclick="dialBackspace()" class="text-slate-400 hover:text-rose-400 px-2 py-1 text-sm">⌫</button>
+                    </div>
+
+                    <!-- 12 Key DTMF Keypad Grid -->
+                    <div class="grid grid-cols-3 gap-2.5 pt-1">
+                        <button onclick="dialDigit('1', 697, 1209)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">1</div>
+                            <div class="text-[9px] text-slate-500">---</div>
+                        </button>
+                        <button onclick="dialDigit('2', 697, 1336)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">2</div>
+                            <div class="text-[9px] text-slate-500">ABC</div>
+                        </button>
+                        <button onclick="dialDigit('3', 697, 1477)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">3</div>
+                            <div class="text-[9px] text-slate-500">DEF</div>
+                        </button>
+
+                        <button onclick="dialDigit('4', 770, 1209)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">4</div>
+                            <div class="text-[9px] text-slate-500">GHI</div>
+                        </button>
+                        <button onclick="dialDigit('5', 770, 1336)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">5</div>
+                            <div class="text-[9px] text-slate-500">JKL</div>
+                        </button>
+                        <button onclick="dialDigit('6', 770, 1477)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">6</div>
+                            <div class="text-[9px] text-slate-500">MNO</div>
+                        </button>
+
+                        <button onclick="dialDigit('7', 852, 1209)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">7</div>
+                            <div class="text-[9px] text-slate-500">PQRS</div>
+                        </button>
+                        <button onclick="dialDigit('8', 852, 1336)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">8</div>
+                            <div class="text-[9px] text-slate-500">TUV</div>
+                        </button>
+                        <button onclick="dialDigit('9', 852, 1477)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">9</div>
+                            <div class="text-[9px] text-slate-500">WXYZ</div>
+                        </button>
+
+                        <button onclick="dialDigit('*', 941, 1209)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">*</div>
+                        </button>
+                        <button onclick="dialDigit('0', 941, 1336)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">0</div>
+                            <div class="text-[9px] text-slate-500">+</div>
+                        </button>
+                        <button onclick="dialDigit('#', 941, 1477)" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 transition">
+                            <div class="text-lg font-bold text-white">#</div>
+                        </button>
+                    </div>
+
+                    <div class="pt-2 flex items-center gap-2">
+                        <button onclick="startPhoneCall()" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition">
+                            <span>📞</span> Call
+                        </button>
+                        <button onclick="clearDialer()" class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL 5: BREAKOUT ROOMS -->
+            <div id="zoom-breakouts-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-indigo-500/30 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 text-left text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-indigo-400 text-lg">🎭</span>
+                            <h3 class="text-base font-bold text-white">Zoom Breakout Rooms</h3>
+                        </div>
+                        <button onclick="closeBreakoutRoomsModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+                            <div>
+                                <div class="font-bold text-white">Room 1: Technical Architecture Deep-Dive</div>
+                                <div class="text-[10px] text-slate-400">Alex Vance, Sakib Hossain</div>
+                            </div>
+                            <button onclick="joinBreakoutRoom(1)" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs">
+                                Join
+                            </button>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+                            <div>
+                                <div class="font-bold text-white">Room 2: Budget & Retainer Discussion</div>
+                                <div class="text-[10px] text-slate-400">Sarah Jenkins, Finance Director</div>
+                            </div>
+                            <button onclick="joinBreakoutRoom(2)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs">
+                                Join
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Broadcast message to all breakout rooms -->
+                    <div class="pt-2 border-t border-slate-800 space-y-1.5">
+                        <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Broadcast to all rooms:</div>
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="breakout-broadcast-input" placeholder="e.g. 2 minutes remaining before reconvening..." 
+                                class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                            <button onclick="broadcastToBreakoutRooms()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs">
+                                Broadcast
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL 6: AUDIO SETTINGS & MIC TEST -->
+            <div id="zoom-audio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                <div class="bg-[#121826] border border-slate-700 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-left text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-indigo-400 text-lg">⚙️</span>
+                            <h3 class="text-base font-bold text-white">Audio Settings & Test</h3>
+                        </div>
+                        <button onclick="toggleAudioSettingsMenu()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                            <div class="font-bold text-slate-300 text-[11px] flex justify-between items-center">
+                                <span>Speaker Output:</span>
+                                <button onclick="testSpeaker()" class="px-2.5 py-1 rounded bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 text-[10px] font-bold hover:bg-indigo-600 hover:text-white">
+                                    🔊 Test Sound
+                                </button>
+                            </div>
+                            <div class="text-[10px] text-slate-400">Default - MacBook Pro Speakers / Headphones</div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                            <div class="font-bold text-slate-300 text-[11px] flex justify-between items-center">
+                                <span>Microphone Input:</span>
+                                <span class="text-emerald-400 font-mono text-[10px]">Active</span>
+                            </div>
+                            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full bg-emerald-500 w-3/4 rounded-full animate-pulse"></div>
+                            </div>
+                            <div class="text-[10px] text-slate-400">Automatically adjust microphone volume enabled</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button onclick="toggleAudioSettingsMenu()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
         <!-- TAB 3: FREELANCE & UPWORK CHEAT SHEET -->
@@ -2251,25 +2987,32 @@
             }
         }
 
-        // Panel Switching inside Zoom
+        // ==========================================
+        // ZOOM CALL ENTERPRISE FEATURES & CONTROLS
+        // ==========================================
+
+        // 1. Panel Switching inside Zoom (8 Multi-Tabs)
         function switchMeetingPanel(panelName) {
-            ['chat', 'stages', 'scorecard'].forEach(p => {
+            const panels = ['chat', 'participants', 'ai', 'polls', 'crm', 'telemetry', 'stages', 'scorecard'];
+            panels.forEach(p => {
                 const content = document.getElementById('mp-content-' + p);
                 const tab = document.getElementById('mp-tab-' + p);
                 if (!content || !tab) return;
                 if (p === panelName) {
                     content.classList.remove('hidden');
-                    tab.className = "flex-1 py-1.5 rounded-lg bg-indigo-600 text-white text-center transition";
+                    tab.className = "px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white shrink-0 transition font-semibold";
                 } else {
                     content.classList.add('hidden');
-                    tab.className = "flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white text-center transition";
+                    tab.className = "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition font-semibold";
                 }
             });
         }
 
+        // 2. Zoom View Switcher (Speaker vs Gallery)
         function toggleZoomLayout() {
             const grid = document.getElementById('video-grid');
             const btn = document.getElementById('layout-toggle-btn');
+            if (!grid) return;
             if (grid.classList.contains('md:grid-cols-2')) {
                 grid.classList.remove('md:grid-cols-2');
                 grid.classList.add('grid-cols-1');
@@ -2278,6 +3021,499 @@
                 grid.classList.remove('grid-cols-1');
                 grid.classList.add('md:grid-cols-2');
                 if (btn) btn.innerText = "⊞ Gallery View";
+            }
+        }
+
+        // 3. Webinar Practice Session & Live Broadcast Toggle
+        let isWebinarLive = false;
+        function toggleWebinarBroadcast() {
+            const banner = document.getElementById('zoom-webinar-banner');
+            const dot = document.getElementById('webinar-status-dot');
+            const label = document.getElementById('webinar-status-label');
+            const desc = document.getElementById('webinar-status-desc');
+            const btn = document.getElementById('zoom-broadcast-btn');
+            const btnText = document.getElementById('broadcast-btn-text');
+
+            isWebinarLive = !isWebinarLive;
+
+            if (isWebinarLive) {
+                banner.className = "bg-emerald-950/70 border-b border-emerald-500/40 px-5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-emerald-200 transition-all";
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                label.className = "font-bold text-emerald-300";
+                label.innerText = "🟢 Broadcasting Live:";
+                desc.innerText = "Meeting broadcast is live! 240 attendees joined. Audio and video streaming worldwide.";
+                btn.className = "px-3.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-rose-600/30 text-xs shrink-0";
+                btnText.innerText = "End Broadcast";
+                appendTranscript('system', "📡 Webinar is now BROADCASTING LIVE. Attendees can hear and view the presentation.");
+                sendMeetingReaction('🎉');
+            } else {
+                banner.className = "bg-amber-950/60 border-b border-amber-500/30 px-5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-200 transition-all";
+                dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
+                label.className = "font-bold text-amber-300";
+                label.innerText = "🟠 Practice Session:";
+                desc.innerText = "Attendees cannot join or hear you until you broadcast. Rehearsal mode active.";
+                btn.className = "px-3.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 text-xs shrink-0";
+                btnText.innerText = "Broadcast Live";
+                appendTranscript('system', "🟠 Webinar returned to Practice Session mode.");
+            }
+        }
+
+        // 4. In-Meeting Security Modal Controls
+        function toggleZoomSecurityModal() {
+            const m = document.getElementById('zoom-security-modal');
+            if (m) m.classList.toggle('hidden');
+        }
+
+        // 5. Interactive Whiteboard Canvas System
+        let wbCanvas = null;
+        let wbCtx = null;
+        let wbDrawing = false;
+        let wbColor = '#ffffff';
+        let wbBrushSize = 4;
+        let wbTool = 'pen';
+
+        function toggleZoomWhiteboard() {
+            const modal = document.getElementById('zoom-whiteboard-modal');
+            if (!modal) return;
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                setTimeout(initWhiteboard, 50);
+            }
+        }
+
+        function initWhiteboard() {
+            wbCanvas = document.getElementById('zoom-whiteboard-canvas');
+            if (!wbCanvas) return;
+            wbCtx = wbCanvas.getContext('2d');
+
+            // Responsive sizing
+            const rect = wbCanvas.parentElement.getBoundingClientRect();
+            wbCanvas.width = rect.width || 800;
+            wbCanvas.height = rect.height || 420;
+
+            wbCtx.lineCap = 'round';
+            wbCtx.lineJoin = 'round';
+            wbCtx.strokeStyle = wbColor;
+            wbCtx.lineWidth = wbBrushSize;
+
+            wbCanvas.onmousedown = (e) => {
+                wbDrawing = true;
+                wbCtx.beginPath();
+                const pos = getWbPos(e);
+                wbCtx.moveTo(pos.x, pos.y);
+            };
+
+            wbCanvas.onmousemove = (e) => {
+                if (!wbDrawing) return;
+                const pos = getWbPos(e);
+                if (wbTool === 'eraser') {
+                    wbCtx.clearRect(pos.x - wbBrushSize * 2, pos.y - wbBrushSize * 2, wbBrushSize * 4, wbBrushSize * 4);
+                } else {
+                    wbCtx.lineTo(pos.x, pos.y);
+                    wbCtx.stroke();
+                }
+            };
+
+            wbCanvas.onmouseup = () => { wbDrawing = false; };
+            wbCanvas.onmouseleave = () => { wbDrawing = false; };
+
+            // Touch events for mobile/tablet
+            wbCanvas.ontouchstart = (e) => {
+                e.preventDefault();
+                wbDrawing = true;
+                const touch = e.touches[0];
+                const rect = wbCanvas.getBoundingClientRect();
+                wbCtx.beginPath();
+                wbCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            };
+            wbCanvas.ontouchmove = (e) => {
+                if (!wbDrawing) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = wbCanvas.getBoundingClientRect();
+                wbCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                wbCtx.stroke();
+            };
+            wbCanvas.ontouchend = () => { wbDrawing = false; };
+        }
+
+        function getWbPos(e) {
+            const rect = wbCanvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function setWhiteboardColor(c) {
+            wbTool = 'pen';
+            wbColor = c;
+            if (wbCtx) wbCtx.strokeStyle = wbColor;
+        }
+
+        function setWhiteboardBrush(sz) {
+            wbBrushSize = sz;
+            if (wbCtx) wbCtx.lineWidth = wbBrushSize;
+        }
+
+        function setWhiteboardTool(t) {
+            wbTool = t;
+        }
+
+        function clearWhiteboard() {
+            if (wbCtx && wbCanvas) {
+                wbCtx.clearRect(0, 0, wbCanvas.width, wbCanvas.height);
+            }
+        }
+
+        function downloadWhiteboard() {
+            if (!wbCanvas) return;
+            const a = document.createElement('a');
+            a.download = `Zoom_Whiteboard_${Date.now()}.png`;
+            a.href = wbCanvas.toDataURL('image/png');
+            a.click();
+        }
+
+        // Draw Pre-Made Tracking Architecture Diagram on Canvas
+        function drawTrackingArchitectureDiagram() {
+            if (!wbCtx || !wbCanvas) initWhiteboard();
+            clearWhiteboard();
+
+            const ctx = wbCtx;
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, wbCanvas.width, wbCanvas.height);
+
+            // Title
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = 'bold 16px monospace';
+            ctx.fillText('SERVER-SIDE TRACKING & CAPI ARCHITECTURE (STAPE + GTM)', 30, 35);
+
+            // Helper for rounded box
+            function drawBox(x, y, w, h, title, subtitle, color) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, w, h);
+                ctx.fillStyle = color + '22';
+                ctx.fillRect(x, y, w, h);
+
+                ctx.fillStyle = color;
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText(title, x + 10, y + 22);
+
+                ctx.fillStyle = '#cbd5e1';
+                ctx.font = '10px sans-serif';
+                ctx.fillText(subtitle, x + 10, y + 40);
+            }
+
+            // Arrow helper
+            function drawArrow(x1, y1, x2, y2, label) {
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#10b981';
+                ctx.font = '9px monospace';
+                ctx.fillText(label, (x1 + x2) / 2 - 25, y1 - 8);
+            }
+
+            // 1. Browser Box
+            drawBox(30, 80, 160, 60, '1. User Browser / Safari', 'Shopify Plus Store', '#10b981');
+
+            // 2. Client GTM
+            drawBox(250, 80, 160, 60, '2. Web GTM Container', 'dataLayer.push (event_id)', '#f59e0b');
+            drawArrow(190, 110, 250, 110, 'event_id: SH94');
+
+            // 3. Stape Server Container
+            drawBox(470, 80, 180, 75, '3. Stape Server Container', 'cap.brand.com (180d cookie)', '#818cf8');
+            drawArrow(410, 110, 470, 110, 'HTTP POST (JSON)');
+
+            // 4. Meta CAPI Destination
+            drawBox(350, 210, 180, 60, 'Meta CAPI (Graph API)', 'Deduplication 1:1 (EMQ 8.7)', '#38bdf8');
+            drawArrow(540, 155, 460, 210, 'Hashed PII');
+
+            // 5. GA4 Measurement Protocol
+            drawBox(570, 210, 180, 60, 'GA4 Measurement Protocol', 'v=2 /collect endpoint', '#f43f5e');
+            drawArrow(580, 155, 640, 210, 'cookieless');
+
+            // Bottom note
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'italic 11px sans-serif';
+            ctx.fillText('💡 Note: Identical event_id deduplicates browser and server purchase events without double-counting.', 30, 310);
+            ctx.fillText('💡 Custom CNAME domain bypasses Safari 7-day ITP cookie expiration, retaining ad signals.', 30, 330);
+
+            sendMeetingReaction('📝');
+            appendTranscript('system', "📝 Whiteboard: Sakib sketched the Server-Side Tracking & CAPI Architecture diagram.");
+        }
+
+        // 6. Virtual Background & Filters
+        function toggleVirtualBgModal() {
+            const m = document.getElementById('zoom-virtual-bg-modal');
+            if (m) m.classList.toggle('hidden');
+        }
+
+        function selectVirtualBg(bgId) {
+            const tile = document.getElementById('tile-candidate');
+            const placeholder = document.getElementById('webcam-placeholder');
+            if (!tile) return;
+
+            if (bgId === 'none') {
+                if (placeholder) placeholder.style.backgroundImage = 'none';
+                appendTranscript('system', "🖼️ Virtual Background removed.");
+            } else if (bgId === 'blur') {
+                if (placeholder) placeholder.style.backgroundImage = 'linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95))';
+                appendTranscript('system', "🖼️ Virtual Background: Studio Depth Blur enabled.");
+            } else if (bgId === 'office') {
+                if (placeholder) placeholder.style.backgroundImage = 'radial-gradient(circle at top, #1e293b, #090d16)';
+                appendTranscript('system', "🖼️ Virtual Background: Executive Suite applied.");
+            } else if (bgId === 'loft') {
+                if (placeholder) placeholder.style.backgroundImage = 'linear-gradient(to bottom, #111827, #030712)';
+                appendTranscript('system', "🖼️ Virtual Background: Modern Tech Loft applied.");
+            } else {
+                appendTranscript('system', `🖼️ Virtual Background: ${bgId} applied.`);
+            }
+            toggleVirtualBgModal();
+            sendMeetingReaction('🖼️');
+        }
+
+        // 7. Zoom Phone DTMF Dialpad & Tone Synthesizer
+        let dialedNumber = '+1 (555) ';
+        function toggleZoomPhoneDialpad() {
+            const m = document.getElementById('zoom-phone-modal');
+            if (m) m.classList.toggle('hidden');
+        }
+
+        function dialDigit(digit, f1, f2) {
+            dialedNumber += digit;
+            const disp = document.getElementById('phone-display');
+            if (disp) disp.innerText = dialedNumber;
+
+            // Generate DTMF Dual-Tone Frequencies
+            playDtmfTone(f1 || 697, f2 || 1209);
+        }
+
+        function dialBackspace() {
+            if (dialedNumber.length > 9) {
+                dialedNumber = dialedNumber.slice(0, -1);
+                const disp = document.getElementById('phone-display');
+                if (disp) disp.innerText = dialedNumber;
+            }
+        }
+
+        function clearDialer() {
+            dialedNumber = '+1 (555) ';
+            const disp = document.getElementById('phone-display');
+            if (disp) disp.innerText = dialedNumber;
+        }
+
+        function playDtmfTone(freq1, freq2) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioCtx.currentTime;
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'sine';
+                osc1.frequency.setValueAtTime(freq1, now);
+                osc2.frequency.setValueAtTime(freq2, now);
+
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.14);
+                osc2.stop(now + 0.14);
+            } catch (e) {}
+        }
+
+        function startPhoneCall() {
+            playGentleChime();
+            appendTranscript('system', `📞 Zoom Phone calling ${dialedNumber} via Cloud PBX Gateway...`);
+            setTimeout(() => {
+                alert(`📞 Zoom Phone: Connected to ${dialedNumber}
+Audio codec: Opus HD Voice (24 kHz)`);
+                toggleZoomPhoneDialpad();
+            }, 800);
+        }
+
+        // 8. Breakout Rooms Manager
+        function openBreakoutRoomsModal() {
+            const m = document.getElementById('zoom-breakouts-modal');
+            if (m) m.classList.remove('hidden');
+        }
+
+        function closeBreakoutRoomsModal() {
+            const m = document.getElementById('zoom-breakouts-modal');
+            if (m) m.classList.add('hidden');
+        }
+
+        function joinBreakoutRoom(roomId) {
+            closeBreakoutRoomsModal();
+            appendTranscript('system', `🎭 Joined Breakout Room #${roomId}. Sub-session audio active.`);
+            sendMeetingReaction('🎭');
+        }
+
+        function broadcastToBreakoutRooms() {
+            const input = document.getElementById('breakout-broadcast-input');
+            if (!input || !input.value.trim()) return;
+            const msg = input.value.trim();
+            input.value = '';
+            alert(`📢 Broadcast sent to all breakout rooms:
+"${msg}"`);
+            appendTranscript('system', `📢 Host Broadcast: "${msg}"`);
+            closeBreakoutRoomsModal();
+        }
+
+        // 9. Audio Settings Menu & Speaker Test
+        function toggleAudioSettingsMenu() {
+            const m = document.getElementById('zoom-audio-modal');
+            if (m) m.classList.toggle('hidden');
+        }
+
+        function testSpeaker() {
+            playGentleChime();
+            setTimeout(playGentleChime, 300);
+        }
+
+        // 10. Participant Management Actions
+        function muteAllParticipants() {
+            alert("🔇 All participants have been muted. Participants are allowed to unmute themselves.");
+            appendTranscript('system', "🔇 Host muted all participants.");
+        }
+
+        function copyZoomInviteLink() {
+            const link = "https://zoom.us/j/84928194018?pwd=948102#topic=Technical-Analytics-Interview";
+            navigator.clipboard.writeText(link);
+            alert("🔗 Zoom Meeting Invite Link copied to clipboard!
+
+Meeting ID: 849 2819 4018
+Passcode: 948102
+URL: " + link);
+        }
+
+        // 11. Interactive Live Polling
+        let pollVoted = false;
+        function castPollVote(optId) {
+            pollVoted = true;
+            document.querySelectorAll('#mp-content-polls button[id^="poll-opt-"]').forEach(btn => {
+                btn.classList.remove('border-emerald-500', 'bg-emerald-950/40');
+            });
+            const chosen = document.getElementById('poll-opt-' + optId);
+            if (chosen) {
+                chosen.classList.add('border-emerald-500', 'bg-emerald-950/40');
+            }
+            sendMeetingReaction('📊');
+            appendTranscript('system', `📊 Live Poll: Voted for Option ${optId}. Percentage bars updated.`);
+        }
+
+        // 12. Webinar Q&A System
+        function submitWebinarQuestion() {
+            const input = document.getElementById('qa-input');
+            if (!input || !input.value.trim()) return;
+            const text = input.value.trim();
+            input.value = '';
+
+            const list = document.getElementById('qa-questions-list');
+            if (list) {
+                const el = document.createElement('div');
+                el.className = "p-2 rounded-xl bg-slate-900 border border-slate-800 flex items-start justify-between gap-2";
+                el.innerHTML = `
+                    <div>
+                        <div class="font-semibold text-slate-200 text-[11px]">"${escapeHtml(text)}"</div>
+                        <div class="text-[9px] text-slate-400 mt-0.5">Asked by Sakib • Just now</div>
+                    </div>
+                    <button onclick="upvoteQuestion(this)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 font-bold text-[10px] shrink-0">
+                        👍 1
+                    </button>
+                `;
+                list.prepend(el);
+            }
+            sendMeetingReaction('❓');
+            appendTranscript('system', `❓ New Webinar Question submitted: "${text}"`);
+        }
+
+        function upvoteQuestion(btn) {
+            let count = parseInt(btn.innerText.replace(/[^0-9]/g, '')) || 0;
+            count++;
+            btn.innerText = `👍 ${count}`;
+            btn.classList.add('text-emerald-400');
+        }
+
+        // 13. In-Meeting AI Companion Q&A
+        function askAiCompanion() {
+            const input = document.getElementById('ai-companion-input');
+            const ansBox = document.getElementById('ai-companion-answer');
+            if (!input || !input.value.trim()) return;
+            const q = input.value.trim();
+            input.value = '';
+
+            let answer = "";
+            const lower = q.toLowerCase();
+
+            if (lower.includes('budget') || lower.includes('spend')) {
+                answer = "📌 Alex confirmed their DTC brand spends $45,000 to $50,000 monthly across Meta Ads and Google Shopping. They need accurate CAPI deduplication to protect this investment.";
+            } else if (lower.includes('rate') || lower.includes('cost') || lower.includes('retainer')) {
+                answer = "📌 Proposed rate is $55/hr for tracking architecture. Sakib recommended a 10-hour audit milestone before transitioning to an ongoing monthly retainer.";
+            } else if (lower.includes('dedup') || lower.includes('capi') || lower.includes('event_id')) {
+                answer = "📌 Technical consensus: Web and server tags must share matching event_id tokens within a 48-hour window so Meta eliminates redundant purchase attribution.";
+            } else if (lower.includes('safari') || lower.includes('cookie') || lower.includes('itp')) {
+                answer = "📌 Safari ITP restricts client cookies to 7 days. Stape custom loader with CNAME domain sets server HTTP cookies lasting up to 180 days.";
+            } else {
+                answer = `📌 AI Companion Summary on "${q}": Meeting participants discussed server-side tagging, Shopify Web Pixels API migration, and Meta CAPI deduplication protocols.`;
+            }
+
+            if (ansBox) {
+                ansBox.innerText = answer;
+                ansBox.classList.remove('hidden');
+            }
+            sendMeetingReaction('✨');
+        }
+
+        // 14. Live Tracking Telemetry Stream Simulator
+        let telemetryCounter = 94821;
+        function fireTestTelemetryEvent() {
+            telemetryCounter++;
+            const stream = document.getElementById('telemetry-stream');
+            if (!stream) return;
+
+            const timeStr = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = "space-y-0.5 border-t border-slate-800/60 pt-1 mt-1";
+            logEntry.innerHTML = `
+                <div class="text-indigo-300">[${timeStr}] dataLayer.push({ event: 'purchase', transaction_id: 'TX-${telemetryCounter}', value: 249.00 })</div>
+                <div class="text-amber-300">[${timeStr}] Stape sGTM HTTP 200: Payload enriched with normalized hashed email (SHA-256)</div>
+                <div class="text-emerald-400">[${timeStr}] Meta Graph API: CAPI 200 OK | event_id: evt_${telemetryCounter} | EMQ: 8.8/10</div>
+                <div class="text-sky-300">[${timeStr}] GA4 Measurement Protocol: HTTP 204 No Content (Processed)</div>
+            `;
+            stream.appendChild(logEntry);
+            stream.scrollTop = stream.scrollHeight;
+            sendMeetingReaction('🚀');
+        }
+
+        // 15. Reactions Menu & Hand Raise
+        function toggleReactionsMenu() {
+            const flyout = document.getElementById('reactions-flyout');
+            if (flyout) flyout.classList.toggle('hidden');
+        }
+
+        let isHandRaised = false;
+        function raiseHand() {
+            isHandRaised = !isHandRaised;
+            toggleReactionsMenu();
+            if (isHandRaised) {
+                sendMeetingReaction('✋');
+                appendTranscript('system', "✋ Sakib Hossain raised hand.");
+            } else {
+                appendTranscript('system', "✋ Sakib Hossain lowered hand.");
             }
         }
 
@@ -2343,7 +3579,7 @@
 
             const toggleBtn = document.getElementById('call-toggle-btn');
             if (toggleBtn) {
-                toggleBtn.className = "px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition";
+                toggleBtn.className = "px-3.5 sm:px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 transition";
                 document.getElementById('call-icon').innerText = "📞";
                 document.getElementById('call-btn-text').innerText = "Start Call";
             }
@@ -2352,319 +3588,6 @@
         function closeInterviewModal() {
             const modal = document.getElementById('post-interview-modal');
             if (modal) modal.classList.add('hidden');
-        }
-
-        // Initialize Call Studio on Load
-        document.addEventListener('DOMContentLoaded', function() {
-            initCallStudio();
-        });
-        initCallStudio();
-
-        // Metrics Calculation
-        function calculateSpeechMetrics(text, durationSec) {
-            const dur = Math.max(1.0, durationSec || 2.0);
-            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
-            const wpm = Math.min(240, Math.max(60, Math.round((words.length / dur) * 60)));
-
-            // Contractions detection
-            const reductionRegex = /\b(gonna|wanna|gotta|kinda|sorta|whaddya|lemme|gimme|dunno|shoulda|woulda|coulda|gotcha|hafta|asta|c'mon|touch base|wrap up|iron out|no-brainer|drill down|ballpark|circle back)\b/gi;
-            const matches = text.match(reductionRegex) || [];
-            const uniqueMatches = Array.from(new Set(matches.map(m => m.toLowerCase())));
-
-            // Clarity calculation (length + fluency formula)
-            let clarity = 92;
-            if (words.length > 8) clarity = 95;
-            if (uniqueMatches.length > 0) clarity = 97;
-
-            return {
-                wpm: wpm,
-                clarity: clarity,
-                reductions: uniqueMatches,
-                wordCount: words.length
-            };
-        }
-
-        function updateHudMetrics(m) {
-            const wpmEl = document.getElementById('metric-wpm');
-            const wpmBadge = document.getElementById('metric-wpm-badge');
-            const clarityEl = document.getElementById('metric-clarity');
-            const redList = document.getElementById('metric-reductions-list');
-
-            if (wpmEl) wpmEl.innerText = m.wpm;
-            if (wpmBadge) {
-                if (m.wpm < 110) {
-                    wpmBadge.innerText = "🐢 Slow / Textbook pace";
-                    wpmBadge.className = "text-[11px] text-amber-400 mt-1";
-                } else if (m.wpm <= 140) {
-                    wpmBadge.innerText = "🚶 Conversational Pace";
-                    wpmBadge.className = "text-[11px] text-blue-400 mt-1";
-                } else if (m.wpm <= 185) {
-                    wpmBadge.innerText = "🏎️ Native Fast (Target Achieved!)";
-                    wpmBadge.className = "text-[11px] text-emerald-400 font-bold mt-1";
-                } else {
-                    wpmBadge.innerText = "⚡ Rapid Street Speed";
-                    wpmBadge.className = "text-[11px] text-purple-400 font-bold mt-1";
-                }
-            }
-
-            if (clarityEl) clarityEl.innerText = `${m.clarity}%`;
-
-            if (redList) {
-                if (m.reductions.length === 0) {
-                    redList.innerHTML = `<span class="text-xs text-slate-500 italic">Try using "gonna", "wanna", or "lemme"</span>`;
-                } else {
-                    redList.innerHTML = m.reductions.map(r => `
-                        <span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">⚡ ${escapeHtml(r)}</span>
-                    `).join('');
-                }
-            }
-        }
-
-        // Live Phrasing Upgrade Engine
-        function displayUpgradeSuggestion(text) {
-            const box = document.getElementById('upgrade-suggestion-box');
-            const uText = document.getElementById('upgrade-user-text');
-            const nText = document.getElementById('upgrade-native-text');
-            const bTip = document.getElementById('upgrade-bangla-tip');
-
-            let upgrade = null;
-            const lower = text.toLowerCase();
-
-            if (lower.includes('i will fix') || lower.includes('i will do')) {
-                upgrade = {
-                    native: "I'm gonna tackle this first thing tomorrow morning and test it in preview mode.",
-                    tip: "নেটিভরা 'I will do' এর জায়গায় প্রায়শই 'I'm gonna tackle / take care of' ব্যবহার করে।"
-                };
-            } else if (lower.includes('i want to check') || lower.includes('i want to see')) {
-                upgrade = {
-                    native: "Lemme take a quick look at your GTM server container logs real quick.",
-                    tip: "'I want to' এর চেয়ে 'Lemme take a look' অনেক বেশি কনফিডেন্ট এবং ন্যাচারাল শোনায়।"
-                };
-            } else if (lower.includes('can you tell me')) {
-                upgrade = {
-                    native: "Could you walk me through how your purchase event is currently being pushed?",
-                    tip: "ইন্টারভিউ বা কলে 'Can you tell me' এর জায়গায় 'Could you walk me through' বলাটা হাইলি প্রফেশনাল।"
-                };
-            } else if (lower.includes('because of safari')) {
-                upgrade = {
-                    native: "Due to Safari's 7-day ITP cookie restrictions, client-side attribution drops off.",
-                    tip: "টেকনিক্যাল ক্লায়েন্টকে বোঝাতে 'due to Safari ITP restrictions' বলা অনেক বেশি অথরিটেটিভ।"
-                };
-            } else if (lower.includes('my rate is')) {
-                upgrade = {
-                    native: "My standard hourly rate is $55/hr for full-funnel CAPI and server-side tagging.",
-                    tip: "রেট জানানোর সময় কোনো দ্বিধা না রেখে 'My standard hourly rate is...' দিয়ে শুরু করবেন।"
-                };
-            }
-
-            if (upgrade && box) {
-                uText.innerText = `"${text}"`;
-                nText.innerText = `"${upgrade.native}"`;
-                bTip.innerText = `💡 বাংলা টিপস: ${upgrade.tip}`;
-                box.classList.remove('hidden');
-            }
-        }
-
-        // Speech Synthesis & Waveform
-        function speakAi(text) {
-            lastAiUtterance = text;
-            if (!('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            const speedSelect = document.getElementById('voice-speed-select');
-            const rateVal = speedSelect ? parseFloat(speedSelect.value) : 1.0;
-            
-            utterance.rate = rateVal;
-            utterance.lang = PERSONAS[activePersona].voiceLang || 'en-US';
-
-            // Pick natural US voice if available
-            const voices = window.speechSynthesis.getVoices();
-            const bestVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Christopher')));
-            if (bestVoice) utterance.voice = bestVoice;
-
-            utterance.onstart = function() {
-                const micStatus = document.getElementById('mic-status');
-                if (micStatus) {
-                    micStatus.innerText = `🔊 ${PERSONAS[activePersona].name} is speaking...`;
-                    micStatus.className = "text-base font-bold text-violet-400";
-                }
-                setVisualizerState('speaking');
-            };
-
-            utterance.onend = function() {
-                setVisualizerState('idle');
-                const micStatus = document.getElementById('mic-status');
-                
-                if (inCall && autoListen) {
-                    if (micStatus) {
-                        micStatus.innerText = "⚡ Hands-free listening in 1 sec...";
-                        micStatus.className = "text-base font-bold text-emerald-400";
-                    }
-                    playGentleChime();
-                    setTimeout(() => {
-                        if (inCall && autoListen && !isRecording) {
-                            startRecognition();
-                        }
-                    }, 800);
-                } else if (inCall) {
-                    if (micStatus) {
-                        micStatus.innerText = "Tap mic or speak your response...";
-                        micStatus.className = "text-base font-bold text-white";
-                    }
-                }
-            };
-
-            utterance.onerror = function() {
-                setVisualizerState('idle');
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function repeatLastVoice() {
-            if (lastAiUtterance) {
-                speakAi(lastAiUtterance);
-            } else {
-                speakAi(PERSONAS[activePersona].greeting);
-            }
-        }
-
-        function playGentleChime() {
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.15);
-            } catch (e) {
-                // Ignore audio context autoplay restrictions
-            }
-        }
-
-        // Waveform Visualizer Animator
-        function setVisualizerState(state) {
-            const bars = document.querySelectorAll('#visualizer .waveform-bar');
-            clearInterval(visualizerInterval);
-
-            if (state === 'speaking') {
-                visualizerInterval = setInterval(() => {
-                    bars.forEach((b, i) => {
-                        const h = Math.floor(Math.random() * 40) + 10;
-                        b.style.height = `${h}px`;
-                        b.style.backgroundColor = '#a78bfa'; // violet
-                    });
-                }, 90);
-            } else if (state === 'listening') {
-                visualizerInterval = setInterval(() => {
-                    bars.forEach((b, i) => {
-                        const h = Math.floor(Math.random() * 45) + 12;
-                        b.style.height = `${h}px`;
-                        b.style.backgroundColor = '#34d399'; // emerald
-                    });
-                }, 80);
-            } else if (state === 'thinking') {
-                bars.forEach((b, i) => {
-                    b.style.height = '14px';
-                    b.style.backgroundColor = '#818cf8'; // indigo
-                });
-            } else {
-                initVisualizerIdle();
-            }
-        }
-
-        function initVisualizerIdle() {
-            const bars = document.querySelectorAll('#visualizer .waveform-bar');
-            const idleHeights = [6, 12, 8, 16, 10, 20, 28, 16, 24, 18, 10, 14, 6, 10, 4];
-            bars.forEach((b, i) => {
-                b.style.height = `${idleHeights[i % idleHeights.length]}px`;
-                b.style.backgroundColor = '#6366f1';
-            });
-        }
-
-        // Transcript Management
-        function appendTranscript(sender, text, name, avatar) {
-            const container = document.getElementById('call-transcript-container');
-            if (!container) return;
-
-            // Remove empty placeholder
-            if (container.children.length === 1 && container.children[0].innerText.includes('No call history')) {
-                container.innerHTML = '';
-            }
-
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            if (sender === 'system') {
-                const sysEl = document.createElement('div');
-                sysEl.className = "text-center my-2 text-[11px] text-slate-500 italic";
-                sysEl.innerText = text;
-                container.appendChild(sysEl);
-            } else if (sender === 'user') {
-                const uEl = document.createElement('div');
-                uEl.className = "flex justify-end gap-2.5 items-start";
-                uEl.innerHTML = `
-                    <div class="max-w-[80%] bg-indigo-600 text-white rounded-2xl rounded-tr-none p-3.5 shadow-md shadow-indigo-600/20 text-xs sm:text-sm">
-                        <div class="flex items-center justify-between gap-3 text-[10px] text-indigo-200 mb-1">
-                            <span class="font-bold">${escapeHtml(name)}</span>
-                            <span>${timeStr}</span>
-                        </div>
-                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
-                    </div>
-                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm shrink-0">
-                        ${avatar}
-                    </div>
-                `;
-                container.appendChild(uEl);
-            } else {
-                const aEl = document.createElement('div');
-                aEl.className = "flex justify-start gap-2.5 items-start";
-                aEl.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm shrink-0 border border-slate-700">
-                        ${avatar}
-                    </div>
-                    <div class="max-w-[80%] bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl rounded-tl-none p-3.5 shadow-md text-xs sm:text-sm">
-                        <div class="flex items-center justify-between gap-3 text-[10px] text-slate-400 mb-1">
-                            <span class="font-bold text-indigo-300">${escapeHtml(name)}</span>
-                            <div class="flex items-center gap-1.5">
-                                <span>${timeStr}</span>
-                                <button onclick="speakAi('${escapeJs(text)}')" class="hover:text-white" title="Replay voice">🔊</button>
-                            </div>
-                        </div>
-                        <p class="leading-relaxed">"${escapeHtml(text)}"</p>
-                    </div>
-                `;
-                container.appendChild(aEl);
-            }
-
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function copyCallTranscript() {
-            const container = document.getElementById('call-transcript-container');
-            if (!container) return;
-            const text = container.innerText;
-            navigator.clipboard.writeText(text);
-            alert("Call transcript copied to clipboard!");
-        }
-
-        function clearCallTranscript() {
-            const container = document.getElementById('call-transcript-container');
-            if (container) {
-                container.innerHTML = `
-                    <div class="text-center py-6 text-xs text-slate-500 italic">
-                        No call history yet. Select a persona and click "Start Call" to practice!
-                    </div>
-                `;
-            }
-            const box = document.getElementById('upgrade-suggestion-box');
-            if (box) box.classList.add('hidden');
         }
 
         // Initialize Call Studio on Load
