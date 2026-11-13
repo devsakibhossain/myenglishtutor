@@ -359,8 +359,11 @@
                 <!-- Client Selector & Interactive Dialogue Mode Switcher Bar -->
                 <div class="bg-[#101624] px-5 py-2.5 border-b border-slate-800/60 flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-2 shrink-0 flex-wrap">
-                        <span class="text-slate-400 font-medium">Client:</span>
-                        <button onclick="selectPersona('alex')" id="persona-btn-alex" class="px-3 py-1 rounded-xl bg-indigo-600/30 border border-indigo-500 text-white font-semibold flex items-center gap-1.5 transition">
+                        <span class="text-slate-400 font-medium">Speaker:</span>
+                        <button onclick="selectPersona('emma')" id="persona-btn-emma" class="px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition">
+                            <span>👩‍🏫</span> Prof. Emma (Live English Teacher)
+                        </button>
+                        <button onclick="selectPersona('alex')" id="persona-btn-alex" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition">
                             <span>🇺🇸</span> Alex Vance (VP Marketing, US)
                         </button>
                         <button onclick="selectPersona('sarah')" id="persona-btn-sarah" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center gap-1.5 transition">
@@ -374,16 +377,23 @@
                         </button>
                     </div>
 
-                    <!-- Client Ask Me Question + Mode Selector -->
+                    <!-- Live Lesson Button + Mode Selector -->
                     <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                        <button onclick="startLiveInteractiveLesson()" class="px-3.5 py-1 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/25 flex items-center gap-1.5 transition transform active:scale-95" title="Start Live Interactive English Lesson with AI Avatar">
+                            <span>🎓</span>
+                            <span>Start Live Lesson</span>
+                        </button>
+
                         <button onclick="clientAskMeToughQuestion()" class="px-3 py-1 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition" title="Client asks you a random interview challenge">
                             <span>🎲</span>
                             <span>Client Asks Me a Question</span>
                         </button>
 
                         <select id="meeting-dialogue-mode" onchange="changeDialogueMode()" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer">
+                            <option value="teacher">👩‍🏫 Mode: Live English Teacher (Prof. Emma)</option>
                             <option value="interview">🎯 Mode: Client Interviewing Me</option>
-                            <option value="qa">💬 Mode: Free Q&A (Ask Client Anything)</option>
+                            <option value="echo">🗣️ Mode: Listen & Repeat Pronunciation Drill</option>
+                            <option value="qa">💬 Mode: Free Q&A (Ask Anything)</option>
                             <option value="skills">⚡ Mode: 200 Fast-Speech Skill Drill</option>
                         </select>
                     </div>
@@ -738,7 +748,10 @@
                         <div>
                             <!-- Horizontal Scrollable Multi-Tab Navigation Bar -->
                             <div class="flex border-b border-slate-800 pb-2 mb-3 text-[11px] font-semibold gap-1 overflow-x-auto no-scrollbar">
-                                <button onclick="switchMeetingPanel('chat')" id="mp-tab-chat" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white shrink-0 transition">
+                                <button onclick="switchMeetingPanel('lesson')" id="mp-tab-lesson" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white shrink-0 transition font-bold flex items-center gap-1 shadow-md shadow-emerald-600/30">
+                                    <span>🎓</span> Live Lesson
+                                </button>
+                                <button onclick="switchMeetingPanel('chat')" id="mp-tab-chat" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
                                     💬 Chat
                                 </button>
                                 <button onclick="switchMeetingPanel('participants')" id="mp-tab-participants" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
@@ -762,6 +775,130 @@
                                 <button onclick="switchMeetingPanel('scorecard')" id="mp-tab-scorecard" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white shrink-0 transition">
                                     ⚡ Scorecard
                                 </button>
+                            </div>
+
+                            <!-- 0. LIVE LESSON SUB-PANEL (AI Live English Teacher & Coach) -->
+                            <div id="mp-content-lesson" class="space-y-3 text-xs">
+                                <!-- Teacher Bio Card -->
+                                <div class="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-teal-950/50 to-slate-900 border border-emerald-500/40 space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-2xl">👩‍🏫</span>
+                                            <div>
+                                                <div class="font-bold text-white text-xs flex items-center gap-1">
+                                                    <span>Professor Emma</span>
+                                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-700">Native Coach</span>
+                                                </div>
+                                                <div class="text-[10px] text-slate-400">American Phonetics & Spoken Fluency</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Live 1-on-1</span>
+                                    </div>
+                                    <p class="text-[11px] text-emerald-200/90 leading-relaxed pt-1">
+                                        "Hi Sakib! Select a live lesson below. I'll explain the formula, write notes on your Whiteboard, demonstrate slow vs fast pronunciation, and listen to your repetition!"
+                                    </p>
+                                </div>
+
+                                <!-- Current Lesson Roadmap / Quick Selectors -->
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        <span>7 Core Masterclass Lessons:</span>
+                                        <span class="text-emerald-400 font-mono">Select & Practice</span>
+                                    </div>
+
+                                    <div class="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+                                        <!-- Lesson 1 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">1. The Golden 5 Contractions</div>
+                                                <div class="text-[10px] text-slate-400">gonna, wanna, gotta, lemme, whaddya</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(1)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 2 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">2. The American Flap-T</div>
+                                                <div class="text-[10px] text-slate-400">water (wader), data (day-da), analytics</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(2)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 3 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">3. Connected Speech & Linking</div>
+                                                <div class="text-[10px] text-slate-400">check it out (che-ki-dout), pick it up</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(3)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 4 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">4. Defending $55-$60/hr Rate</div>
+                                                <div class="text-[10px] text-slate-400">Authoritative, value-focused pitch</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(4)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 5 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">5. Web Analytics & Tracking Fluency</div>
+                                                <div class="text-[10px] text-slate-400">CAPI, Stape custom loader, Safari ITP</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(5)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 6 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">6. De-escalating Angry Clients</div>
+                                                <div class="text-[10px] text-slate-400">"I hear you loud and clear", reassuring tone</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(6)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+
+                                        <!-- Lesson 7 -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition flex items-center justify-between gap-2">
+                                            <div>
+                                                <div class="font-bold text-white text-[11px]">7. 10 Essential Business Phrasal Verbs</div>
+                                                <div class="text-[10px] text-slate-400">touch base, circle back, iron out, wrap up</div>
+                                            </div>
+                                            <button onclick="startSpecificLesson(7)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] shrink-0 transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                                                <span>▶</span> Teach
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Free Ask Teacher Box -->
+                                <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                                    <div class="font-bold text-slate-300 text-[10px] uppercase tracking-wider flex items-center justify-between">
+                                        <span>🗣️ Ask Professor Emma to Teach Anything:</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <input type="text" id="teacher-ask-input" onkeydown="if(event.key==='Enter') askTeacherCustomTopic()" placeholder="e.g. How do I say 'আমি রাজি' professionally?" 
+                                            class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                                        <button onclick="askTeacherCustomTopic()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+                                            Teach Me
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- 1. CHAT SUB-PANEL -->
@@ -1821,6 +1958,21 @@
         // ADVANCED ZOOM AI INTERVIEW STUDIO ENGINE
         // ==========================================
         const PERSONAS = {
+            emma: {
+                id: 'emma',
+                name: 'Professor Emma',
+                role: 'Senior Native English Instructor & Phonetics Coach',
+                avatar: '👩‍🏫',
+                voiceLang: 'en-US',
+                defaultRate: 0.95,
+                greeting: "Hello Sakib! Welcome to your 1-on-1 Live English Masterclass! I'm here to coach your American pronunciation, reductions, and confident client communication. Pick a lesson from the menu, or ask me 'Emma, teach me how to...' and let's practice together!",
+                starters: [
+                    "Emma, teach me how to use 'gonna', 'wanna', and 'gotta' naturally.",
+                    "Teach me the American Flap-T in words like 'water' and 'analytics'.",
+                    "How do I explain Meta CAPI deduplication with confidence?",
+                    "Can you correct my grammar: 'I am agree with your proposal'?"
+                ]
+            },
             alex: {
                 id: 'alex',
                 name: 'Alex Vance',
@@ -2504,6 +2656,24 @@
         // AI Response Logic for simulated personas (200 Skills & Technical Knowledge Brain)
         function generateAiResponse(userText, pId, metrics) {
             const lower = userText.toLowerCase().trim();
+            // ==============================================================
+            // 0. PROFESSOR EMMA LIVE TEACHING & PHONETICS EVALUATION
+            // ==============================================================
+            if (pId === 'emma' || document.getElementById('meeting-dialogue-mode')?.value === 'teacher') {
+                const lesson = LIVE_LESSONS[currentLessonId];
+                if (lesson) {
+                    const matched = lesson.keywords.some(k => lower.includes(k));
+                    if (matched) {
+                        sendMeetingReaction('🌟');
+                        return `Brilliant pronunciation, Sakib! You nailed the native sound and your speech was smooth at ${metrics.wpm} words per minute! Let's level it up. Repeat this next variation with me: "${lesson.demoFast}"`;
+                    } else if (metrics.wpm >= 135) {
+                        sendMeetingReaction('👏');
+                        return `Good pacing at ${metrics.wpm} WPM, Sakib! To sound even more like a native speaker, make sure to blend "${lesson.focus}". Let's try it one more time: "${lesson.drillPhrase}" - Speak smoothly!`;
+                    } else {
+                        return `Nice attempt! Remember: don't pause between words. Connect them together as one unit: "${lesson.drillPhrase}". Give it another shot with me!`;
+                    }
+                }
+            }
 
             // ==============================================================
             // 1. SPECIFIC SKILL NUMBER LOOKUP (e.g. "Skill 142", "Skill 25")
@@ -2846,7 +3016,7 @@
 
         // 1. Panel Switching inside Zoom (8 Multi-Tabs)
         function switchMeetingPanel(panelName) {
-            const panels = ['chat', 'participants', 'ai', 'polls', 'crm', 'telemetry', 'stages', 'scorecard'];
+            const panels = ['lesson', 'chat', 'participants', 'ai', 'polls', 'crm', 'telemetry', 'stages', 'scorecard'];
             panels.forEach(p => {
                 const content = document.getElementById('mp-content-' + p);
                 const tab = document.getElementById('mp-tab-' + p);
@@ -3364,6 +3534,302 @@ Audio codec: Opus HD Voice (24 kHz)`);
             } else {
                 appendTranscript('system', "✋ Sakib Hossain lowered hand.");
             }
+        }
+
+        
+        // ==========================================
+        // AI LIVE ENGLISH TEACHER & MASTERCLASS ENGINE
+        // ==========================================
+        const LIVE_LESSONS = {
+            1: {
+                id: 1,
+                title: "The Golden 5 American Contractions",
+                focus: "gonna, wanna, gotta, lemme, whaddya",
+                formula: "Going to ➔ Gonna | Want to ➔ Wanna | What do you ➔ Whaddya",
+                bangla: "আমেরিকানরা দ্রুত কথা বলার সময় শব্দের জোড় ভেঙে সংক্ষিপ্ত রূপে উচ্চারণ করে।",
+                teacherIntro: "Welcome Sakib to Lesson 1: The Golden 5 American Contractions! Native speakers blend helper verbs together so speech flows without jerky pauses. Instead of 'What do you want to do?', natives say: 'Whaddya wanna do?'. I've written this formula on your Whiteboard! Listen closely to the reduction:",
+                demoSlow: "What do you want to do about the checkout tracking?",
+                demoFast: "Whaddya wanna do about the checkout tracking?",
+                drillPhrase: "Whaddya wanna do about the checkout tracking?",
+                keywords: ["whaddya", "wanna", "gonna", "gotta", "lemme"],
+                whiteboard: {
+                    heading: "LESSON 1: THE GOLDEN 5 CONTRACTIONS",
+                    rule1: "• What do you ➔ Whaddya  (/wʌdə/)",
+                    rule2: "• Want to     ➔ Wanna    (/wɑnə/)",
+                    rule3: "• Going to    ➔ Gonna    (/gʌnə/)",
+                    rule4: "• Got to      ➔ Gotta    (/gɑtə/)",
+                    rule5: "• Let me      ➔ Lemme    (/lɛmi/)",
+                    example: "Whaddya wanna do about the tracking?",
+                    bangla: "বাংলা: তুমি ট্র্যাকিং নিয়ে কী করতে চাও?"
+                }
+            },
+            2: {
+                id: 2,
+                title: "The American Flap-T Sound",
+                focus: "water (wader), data (day-da), analytics (analydics)",
+                formula: "/t/ between vowels ➔ soft /d/ tap [ɾ]",
+                bangla: "আমেরিকান উচ্চারণে দুটি ভাওয়েলের মাঝে 'T' থাকলে তা নরম 'D'-এর মতো ট্যাপ হয়।",
+                teacherIntro: "Lesson 2: The American Flap-T! When the letter T appears between two vowels, Americans don't pronounce a hard T. The tongue quickly flaps against the roof of your mouth, creating a smooth /d/ sound! Not 'wa-ter', but 'wader'. In our tech work, 'data' becomes 'day-da', and 'analytics' becomes 'an-a-ly-dics'! Listen to this drill:",
+                demoSlow: "I need to audit your web analytics data.",
+                demoFast: "I need to audit your web analydics day-da.",
+                drillPhrase: "I need to audit your web analytics data.",
+                keywords: ["analytics", "data", "audit", "water"],
+                whiteboard: {
+                    heading: "LESSON 2: THE AMERICAN FLAP-T [ɾ]",
+                    rule1: "• water     ➔ 'wa-der'    (/wɑtər/ ➔ /wɑdər/)",
+                    rule2: "• data      ➔ 'day-da'    (/deɪtə/ ➔ /deɪdə/)",
+                    rule3: "• analytics ➔ 'an-a-ly-dics'",
+                    rule4: "• better    ➔ 'bed-der'",
+                    example: "Audit your web analytics data.",
+                    bangla: "বাংলা: ভাওয়েলের মাঝে 'T' নরম 'D'-এর মতো ফ্ল্যাপ হবে।"
+                }
+            },
+            3: {
+                id: 3,
+                title: "Connected Speech & Word Linking",
+                focus: "check-it-out ➔ che-ki-dout | pick-it-up ➔ pi-ki-dup",
+                formula: "Final Consonant + Initial Vowel ➔ Single Connected Syllable",
+                bangla: "একটি শব্দের শেষ ব্যঞ্জনধ্বনি পরের শব্দের স্বরধ্বনির সাথে জোড়া লেগে যায়।",
+                teacherIntro: "Lesson 3: Connected Speech Linking! Fluent speech requires connecting words like links in a chain. When a word ends with a consonant and the next starts with a vowel, push the consonant into the next word! 'Check it out' becomes 'che-ki-dout'. Listen to how smooth it sounds:",
+                demoSlow: "Let me check it out in Google Tag Manager.",
+                demoFast: "Lemme che-ki-dout in Google Tag Manager.",
+                drillPhrase: "Lemme check it out in Google Tag Manager.",
+                keywords: ["check", "out", "tag", "manager", "lemme"],
+                whiteboard: {
+                    heading: "LESSON 3: WORD LINKING (CONNECTED SPEECH)",
+                    rule1: "• check it out ➔ [che] [ki] [dout]",
+                    rule2: "• pick it up   ➔ [pi] [ki] [dup]",
+                    rule3: "• hold on      ➔ [hol] [don]",
+                    rule4: "• wrap it up   ➔ [wra] [pi] [tup]",
+                    example: "Lemme che-ki-dout in GTM preview mode.",
+                    bangla: "বাংলা: কোনো থামাথামি ছাড়া শব্দ জোড়া দিয়ে বলা।"
+                }
+            },
+            4: {
+                id: 4,
+                title: "Confidently Defending Your $55-$60/hr Rate",
+                focus: "Value-based pitch & fearless rate statement",
+                formula: "Authority Opening + Business Reason + ROI Defense",
+                bangla: "রেট বলার সময় দ্বিধা না করে ক্লায়েন্টের বিজ্ঞাপনের অপচয় বাঁচানোর যুক্তি দেওয়া।",
+                teacherIntro: "Lesson 4: Defending Your Hourly Rate! Never sound hesitant or apologetic when stating your price to an American or European client. Confidently link your rate to signal recovery and ROI. Listen to how an authoritative specialist speaks:",
+                demoSlow: "My rate is fifty-five dollars an hour for server side tagging.",
+                demoFast: "My standard hourly rate is $55/hr for full-funnel server-side attribution.",
+                drillPhrase: "My standard hourly rate is $55 an hour for server-side attribution.",
+                keywords: ["standard", "hourly", "rate", "55", "attribution", "server"],
+                whiteboard: {
+                    heading: "LESSON 4: RATE DEFENSE ($55–$60/HR)",
+                    rule1: "• Opening: 'My standard hourly rate is $55/hr.'",
+                    rule2: "• Value: 'I specialize in server signal recovery.'",
+                    rule3: "• ROI: 'We recover 20-25% of lost ad conversions.'",
+                    example: "My standard hourly rate is $55 an hour.",
+                    bangla: "বাংলা: সংকোচ না রেখে সরাসরি রেট ও ভ্যালু তুলে ধরা।"
+                }
+            },
+            5: {
+                id: 5,
+                title: "Web Analytics & Tracking Fluency",
+                focus: "Meta CAPI, Stape custom loader, Safari ITP 180-day cookies",
+                formula: "Technical Precision + Problem/Solution Phrasing",
+                bangla: "টেকনিক্যাল ট্র্যাকিংয়ের ক্লায়েন্টদের সামনে ফ্লুয়েন্ট ও অথরিটেটিভ স্পিচ।",
+                teacherIntro: "Lesson 5: Web Analytics Fluency! When briefing a VP of Marketing, use clear technical vocabulary with natural cadence. Explain how server-side routing bypasses Safari's 7-day cookie limit. Listen to this high-impact sentence:",
+                demoSlow: "Due to Safari ITP, we need a custom domain on Stape.",
+                demoFast: "Due to Safari's 7-day ITP cookie restrictions, client attribution drops off.",
+                drillPhrase: "Due to Safari's 7-day ITP cookie restrictions, client attribution drops off.",
+                keywords: ["safari", "itp", "cookie", "restrictions", "attribution", "drops"],
+                whiteboard: {
+                    heading: "LESSON 5: WEB ANALYTICS FLUENCY",
+                    rule1: "• Safari ITP: 'Due to Safari's 7-day cookie restrictions...'",
+                    rule2: "• Solution: 'Stape custom CNAME extends cookies to 180 days.'",
+                    rule3: "• Dedup: 'Identical event_id ensures 1:1 deduplication.'",
+                    example: "Due to Safari's 7-day ITP cookie restrictions...",
+                    bangla: "বাংলা: টেকনিক্যাল বিষয় ক্লায়েন্টকে আত্মবিশ্বাসের সাথে বোঝানো।"
+                }
+            },
+            6: {
+                id: 6,
+                title: "De-escalating Angry Clients with Empathy",
+                focus: "Calm, reassuring tone under pressure",
+                formula: "Empathy Validation + Calm Reassurance + Immediate Action",
+                bangla: "ক্লায়েন্ট উত্তেজিত বা চিন্তিত হলে তাকে শান্ত করে আশ্বস্ত করার নেটিভ টেকনিক।",
+                teacherIntro: "Lesson 6: Calming Stressed Clients! When ROAS drops, clients get nervous. Never get defensive. Start with empathy, validate their concern, and state your immediate action plan. Listen to this calming script:",
+                demoSlow: "I understand your concern and I will check it right now.",
+                demoFast: "I hear you loud and clear, and I'm looking into your payload logs right now.",
+                drillPhrase: "I hear you loud and clear, and I'm looking into this right now.",
+                keywords: ["hear", "loud", "clear", "looking", "right", "now"],
+                whiteboard: {
+                    heading: "LESSON 6: DE-ESCALATION FRAMEWORK",
+                    rule1: "• Empathy: 'I hear you loud and clear.'",
+                    rule2: "• Validation: 'I understand how stressful campaign dips are.'",
+                    rule3: "• Action: 'Let me audit the raw server logs right now.'",
+                    example: "I hear you loud and clear, and I'm looking into this.",
+                    bangla: "বাংলা: বায়ারের রাগ বা উদ্বেগ শান্ত করার প্রফেশনাল ফ্রেমওয়ার্ক।"
+                }
+            },
+            7: {
+                id: 7,
+                title: "10 Essential Business Phrasal Verbs",
+                focus: "touch base, circle back, iron out, wrap up",
+                formula: "Action Verb + Preposition Particle (Idiomatic Workplace English)",
+                bangla: "আমেরিকান টিমদের দৈনন্দিন মিটিংয়ের বহুল ব্যবহৃত ফ্রেজাল ভার্বস।",
+                teacherIntro: "Lesson 7: Business Phrasal Verbs! In international companies, nobody says 'I will contact you later'. They say 'Let's circle back'. Instead of 'solve the problem', they say 'iron out the issues'. Listen to this natural workplace sentence:",
+                demoSlow: "Let us discuss on Monday and solve the tracking problems.",
+                demoFast: "Let's circle back on Monday and iron out the remaining CAPI tags.",
+                drillPhrase: "Let's circle back on Monday and iron out the remaining CAPI tags.",
+                keywords: ["circle", "back", "monday", "iron", "out", "remaining"],
+                whiteboard: {
+                    heading: "LESSON 7: BUSINESS PHRASAL VERBS",
+                    rule1: "• circle back ➔ follow up later (পরে যোগাযোগ করা)",
+                    rule2: "• touch base  ➔ connect briefly (সংক্ষেপে কথা বলা)",
+                    rule3: "• iron out    ➔ resolve complications (সমাধান করা)",
+                    rule4: "• wrap up     ➔ finish meeting (মিটিং শেষ করা)",
+                    example: "Let's circle back on Monday and iron out the details.",
+                    bangla: "বাংলা: টেক্সটবুক ইংরেজির বদলে ন্যাচারাল অফিসিয়াল ফ্রেজ।"
+                }
+            }
+        };
+
+        let currentLessonId = 1;
+
+        // Start Live Interactive Lesson
+        function startLiveInteractiveLesson() {
+            startSpecificLesson(1);
+        }
+
+        function startSpecificLesson(lessonId) {
+            currentLessonId = lessonId;
+            const lesson = LIVE_LESSONS[lessonId];
+            if (!lesson) return;
+
+            // 1. Switch persona to Professor Emma
+            selectPersona('emma');
+            switchMeetingPanel('lesson');
+
+            // 2. Set mode to teacher
+            const modeSelect = document.getElementById('meeting-dialogue-mode');
+            if (modeSelect) modeSelect.value = 'teacher';
+
+            // 3. Draw lesson notes on Whiteboard
+            drawLessonNotesOnWhiteboard(lessonId);
+
+            // 4. Start call if not in call
+            if (!inCall) {
+                startCall();
+            }
+
+            // 5. Speak Emma's teaching instruction
+            appendTranscript('ai', `🎓 Lesson ${lesson.id}: ${lesson.title}\nFormula: "${lesson.formula}"\n${lesson.bangla}\n\nDrill: "${lesson.drillPhrase}"`, 'Professor Emma', '👩‍🏫');
+            
+            const fullSpeech = `${lesson.teacherIntro} The target drill is: "${lesson.drillPhrase}". Repeat after me, Sakib!`;
+            speakAi(fullSpeech);
+            sendMeetingReaction('🎓');
+        }
+
+        // Draw Lesson Notes on Zoom Whiteboard Canvas
+        function drawLessonNotesOnWhiteboard(lessonId) {
+            const lesson = LIVE_LESSONS[lessonId];
+            if (!lesson) return;
+
+            wbCanvas = document.getElementById('zoom-whiteboard-canvas');
+            if (!wbCanvas) return;
+            wbCtx = wbCanvas.getContext('2d');
+            const rect = wbCanvas.parentElement.getBoundingClientRect();
+            wbCanvas.width = rect.width || 800;
+            wbCanvas.height = rect.height || 420;
+
+            const ctx = wbCtx;
+            ctx.fillStyle = '#0a0f1d';
+            ctx.fillRect(0, 0, wbCanvas.width, wbCanvas.height);
+
+            // Header Banner
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 18px monospace';
+            ctx.fillText(lesson.whiteboard.heading, 30, 40);
+
+            // Subtitle formula
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.fillText(lesson.formula, 30, 70);
+
+            // Rules Box
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(30, 95, wbCanvas.width - 60, 160);
+            ctx.strokeRect(30, 95, wbCanvas.width - 60, 160);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '14px monospace';
+            let yOffset = 125;
+            if (lesson.whiteboard.rule1) { ctx.fillText(lesson.whiteboard.rule1, 50, yOffset); yOffset += 26; }
+            if (lesson.whiteboard.rule2) { ctx.fillText(lesson.whiteboard.rule2, 50, yOffset); yOffset += 26; }
+            if (lesson.whiteboard.rule3) { ctx.fillText(lesson.whiteboard.rule3, 50, yOffset); yOffset += 26; }
+            if (lesson.whiteboard.rule4) { ctx.fillText(lesson.whiteboard.rule4, 50, yOffset); yOffset += 26; }
+            if (lesson.whiteboard.rule5) { ctx.fillText(lesson.whiteboard.rule5, 50, yOffset); yOffset += 26; }
+
+            // Target Spoken Example Box
+            ctx.fillStyle = '#1e1b4b';
+            ctx.fillRect(30, 275, wbCanvas.width - 60, 70);
+            ctx.strokeStyle = '#6366f1';
+            ctx.strokeRect(30, 275, wbCanvas.width - 60, 70);
+
+            ctx.fillStyle = '#a5b4fc';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText('🗣️ TARGET SPOKEN DRILL (REPEAT THIS):', 45, 298);
+
+            ctx.fillStyle = '#34d399';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText(`"${lesson.drillPhrase}"`, 45, 325);
+
+            // Bengali note at bottom
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px sans-serif';
+            ctx.fillText(`💡 ${lesson.bangla}`, 30, 375);
+        }
+
+        // Ask Teacher Custom Topic / Word Translation / Grammar Check
+        function askTeacherCustomTopic() {
+            const input = document.getElementById('teacher-ask-input');
+            if (!input || !input.value.trim()) return;
+            const text = input.value.trim();
+            input.value = '';
+
+            selectPersona('emma');
+            if (!inCall) startCall();
+
+            appendTranscript('user', text, 'Sakib Hossain', '👤');
+
+            setTimeout(() => {
+                const response = generateTeacherResponse(text);
+                appendTranscript('ai', response, 'Professor Emma', '👩‍🏫');
+                speakAi(response);
+            }, 600);
+        }
+
+        // Teacher Response Engine
+        function generateTeacherResponse(text) {
+            const lower = text.toLowerCase();
+
+            if (lower.includes('আমি রাজি') || lower.includes('agree') || lower.includes('i am agree')) {
+                return "Great question! In English, never say 'I am agree'. 'Agree' is a verb, not an adjective! Native speakers say: 'I completely agree with you', or in business negotiation: 'I'm with you on that'. Repeat after me: 'I'm completely on board with your proposal.' Go ahead!";
+            }
+
+            if (lower.includes('water') || lower.includes('flap') || lower.includes('bottle')) {
+                return "That's the American Flap-T! When T sits between two vowel sounds, pronounce it like a rapid soft 'd'. Not 'wa-ter', but 'wader'. Repeat after me: 'Could I get a glass of water?' Say 'wader'!";
+            }
+
+            if (lower.includes('gonna') || lower.includes('wanna') || lower.includes('gotta')) {
+                return "'Gonna' is 'going to', and 'wanna' is 'want to'. In casual and business spoken English, natives use them constantly. Repeat after me: 'I'm gonna tackle your checkout tracking first thing tomorrow.' Speak fast!";
+            }
+
+            if (lower.includes('rate') || lower.includes('charge') || lower.includes('55') || lower.includes('pricing')) {
+                return "When quoting your rate, lead with confidence. Say: 'My standard hourly rate is $55 an hour. We typically recover 20% of lost conversion data, which pays for itself.' Repeat after me: 'My standard hourly rate is $55 an hour.'";
+            }
+
+            if (lower.includes('touch base') || lower.includes('circle back')) {
+                return "'Touch base' means to have a brief conversation to update each other. 'Circle back' means to return to a topic or follow up later. Repeat after me: 'Let's circle back on Friday and wrap this up.'";
+            }
+
+            return `Here's how to master "${text}": In native American English, focus on blending your words and softening middle consonants. Repeat this natural phrasing with me: "I'm looking forward to collaborating on this project!"`;
         }
 
         // Transcript Management
