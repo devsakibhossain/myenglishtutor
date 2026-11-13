@@ -53,6 +53,33 @@
             box-shadow: 0 0 0 3px #10b981, 0 0 25px rgba(16, 185, 129, 0.4) !important;
             border-color: #10b981 !important;
         }
+
+        /* Fullscreen Zoom Mode Styles */
+        .zoom-fullscreen-active {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
+            z-index: 99999 !important;
+            margin: 0 !important;
+            background: #090d16 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            overflow: hidden !important;
+            border: none !important;
+        }
+        .zoom-fullscreen-active #video-stage-col {
+            height: calc(100vh - 120px) !important;
+        }
+        .zoom-fullscreen-active #video-grid {
+            height: 100% !important;
+        }
     </style>
 </head>
 <body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -273,8 +300,13 @@
         <!-- TAB 2: ZOOM AI INTERVIEW STUDIO -->
         <section id="tab-caller" class="hidden space-y-6">
             <!-- Zoom Window Container -->
-            <div class="bg-[#0f1422] rounded-3xl border border-slate-800 shadow-2xl overflow-hidden max-w-6xl mx-auto flex flex-col">
+            <div id="zoom-meeting-window" class="bg-[#0f1422] rounded-3xl border border-slate-800 shadow-2xl overflow-hidden max-w-6xl mx-auto flex flex-col transition-all duration-300">
                 
+                <!-- Floating Exit Fullscreen Button (Shown in Fullscreen mode) -->
+                <button id="exit-fullscreen-btn" onclick="toggleFullScreenMeeting()" class="hidden fixed top-4 right-4 z-[100000] px-4 py-2 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white font-bold text-xs shadow-2xl backdrop-blur-md transition flex items-center gap-2 border border-rose-400/40">
+                    <span>✕</span> Exit Full Screen (ESC)
+                </button>
+
                 <!-- Zoom Top Window Header -->
                 <div class="bg-[#141a29] px-5 py-3 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-3">
@@ -285,7 +317,7 @@
                         <span class="text-slate-400 font-semibold hidden md:inline">Topic: <b class="text-white">Client Technical Interview (Meta CAPI & GA4 Server-Side)</b></span>
                     </div>
 
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5 flex-wrap">
                         <!-- Recording Badge -->
                         <div id="zoom-rec-badge" class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold">
                             <span class="w-2 h-2 rounded-full bg-rose-500 rec-dot"></span>
@@ -298,6 +330,12 @@
                             ⏱️ <span id="call-timer">00:00</span>
                         </div>
 
+                        <!-- Full Screen Button -->
+                        <button onclick="toggleFullScreenMeeting()" id="fullscreen-btn" class="px-3 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/50 flex items-center gap-1.5 transition font-semibold" title="Toggle Fullscreen Zoom View">
+                            <span id="fullscreen-icon">⛶</span>
+                            <span id="fullscreen-label">Full Screen</span>
+                        </button>
+
                         <!-- Layout Switcher -->
                         <button onclick="toggleZoomLayout()" id="layout-toggle-btn" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
                             ⊞ Gallery View
@@ -305,10 +343,10 @@
                     </div>
                 </div>
 
-                <!-- Persona / Client Selector Bar -->
-                <div class="bg-[#101624] px-5 py-2.5 border-b border-slate-800/60 flex items-center justify-between overflow-x-auto gap-3 text-xs">
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span class="text-slate-400 font-medium">Select Client:</span>
+                <!-- Client Selector & Interactive Dialogue Mode Switcher Bar -->
+                <div class="bg-[#101624] px-5 py-2.5 border-b border-slate-800/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                        <span class="text-slate-400 font-medium">Client:</span>
                         <button onclick="selectPersona('alex')" id="persona-btn-alex" class="px-3 py-1 rounded-xl bg-indigo-600/30 border border-indigo-500 text-white font-semibold flex items-center gap-1.5 transition">
                             <span>🇺🇸</span> Alex Vance (VP Marketing, US)
                         </button>
@@ -323,13 +361,17 @@
                         </button>
                     </div>
 
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span class="text-slate-400">Speed:</span>
-                        <select id="voice-speed-select" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-lg px-2 py-0.5 text-xs font-semibold focus:outline-none cursor-pointer">
-                            <option value="0.9">0.9x Slow</option>
-                            <option value="1.0" selected>1.0x Normal</option>
-                            <option value="1.2">1.2x Fast</option>
-                            <option value="1.4">1.4x Rapid Native</option>
+                    <!-- Client Ask Me Question + Mode Selector -->
+                    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                        <button onclick="clientAskMeToughQuestion()" class="px-3 py-1 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition" title="Client asks you a random interview challenge">
+                            <span>🎲</span>
+                            <span>Client Asks Me a Question</span>
+                        </button>
+
+                        <select id="meeting-dialogue-mode" onchange="changeDialogueMode()" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer">
+                            <option value="interview">🎯 Mode: Client Interviewing Me</option>
+                            <option value="qa">💬 Mode: Free Q&A (Ask Client Anything)</option>
+                            <option value="skills">⚡ Mode: 200 Fast-Speech Skill Drill</option>
                         </select>
                     </div>
                 </div>
@@ -341,10 +383,10 @@
                     <div id="video-stage-col" class="lg:col-span-8 flex flex-col gap-4">
                         
                         <!-- Video Tiles Grid Container -->
-                        <div id="video-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[360px]">
+                        <div id="video-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[380px]">
                             
                             <!-- TILE 1: AI CLIENT INTERVIEWER AVATAR -->
-                            <div id="tile-client" class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden shadow-xl flex flex-col justify-between transition-all duration-300 min-h-[220px]">
+                            <div id="tile-client" class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden shadow-xl flex flex-col justify-between transition-all duration-300 min-h-[240px]">
                                 
                                 <!-- Top client tags -->
                                 <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
@@ -357,59 +399,102 @@
                                     </div>
                                 </div>
 
-                                <!-- Realistic Animated Client Avatar Canvas / SVG -->
-                                <div class="relative w-full h-full flex items-center justify-center p-4 pt-10 pb-12 bg-gradient-to-b from-[#1c2438] via-[#111728] to-[#0c101d] overflow-hidden">
+                                <!-- Ultra-Realistic Executive Animated Client Avatar Canvas / SVG -->
+                                <div class="relative w-full h-full flex items-center justify-center p-4 pt-10 pb-12 bg-gradient-to-b from-[#182033] via-[#0f172a] to-[#070b14] overflow-hidden">
                                     
-                                    <!-- Background Office Decor Elements -->
-                                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                                    <div class="absolute -top-12 -left-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                                    <div class="absolute -bottom-12 -right-12 w-48 h-48 bg-violet-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                                    <!-- Warm Executive Studio Office Bokeh Lighting -->
+                                    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:18px_18px]"></div>
+                                    <div class="absolute -top-16 -left-16 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                                    <div class="absolute -bottom-16 -right-16 w-56 h-56 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-                                    <!-- Animated Vector Avatar SVG -->
-                                    <svg id="client-avatar-svg" class="w-36 h-36 sm:w-44 sm:h-44 head-nodding drop-shadow-2xl transition transform" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <!-- Soft Glow -->
-                                        <circle cx="100" cy="100" r="90" fill="url(#avatarGlow)" opacity="0.4"/>
-                                        <!-- Body / Suit -->
-                                        <path d="M40 195 C40 150, 70 140, 100 140 C130 140, 160 150, 160 195 Z" fill="#1e293b"/>
-                                        <!-- Shirt / Collar -->
-                                        <path d="M85 140 L100 165 L115 140 Z" fill="#f8fafc"/>
-                                        <path d="M96 155 L104 155 L102 185 L98 185 Z" fill="#3b82f6"/> <!-- Tie -->
-                                        <!-- Neck -->
-                                        <rect x="90" y="115" width="20" height="30" rx="4" fill="#fbcfe8"/>
-                                        <!-- Head -->
-                                        <ellipse cx="100" cy="85" rx="36" ry="42" fill="#fde047" opacity="0.15"/>
-                                        <ellipse cx="100" cy="85" rx="34" ry="40" fill="#fcd34d" opacity="0.3"/>
-                                        <ellipse cx="100" cy="85" rx="32" ry="38" fill="#fef08a" opacity="0.15"/>
-                                        <!-- Real Face -->
-                                        <ellipse cx="100" cy="85" rx="32" ry="38" fill="#fde68a"/>
-                                        <!-- Hair -->
-                                        <path d="M66 80 C65 50, 90 40, 100 40 C120 40, 135 50, 134 80 C130 65, 120 55, 100 55 C80 55, 70 65, 66 80 Z" fill="#475569"/>
-                                        <!-- Eyebrows -->
-                                        <path d="M78 72 Q86 68 94 72" stroke="#334155" stroke-width="2.5" stroke-linecap="round"/>
-                                        <path d="M106 72 Q114 68 122 72" stroke="#334155" stroke-width="2.5" stroke-linecap="round"/>
-                                        <!-- Eyes (Blinking) -->
-                                        <g class="eye-blinking">
-                                            <circle cx="86" cy="80" r="4.5" fill="#1e293b"/>
-                                            <circle cx="87.5" cy="78.5" r="1.5" fill="#ffffff"/>
-                                            <circle cx="114" cy="80" r="4.5" fill="#1e293b"/>
-                                            <circle cx="115.5" cy="78.5" r="1.5" fill="#ffffff"/>
-                                        </g>
-                                        <!-- Glasses (Tech Executive look) -->
-                                        <rect x="75" y="73" width="22" height="14" rx="4" stroke="#64748b" stroke-width="2" fill="none" opacity="0.8"/>
-                                        <rect x="103" y="73" width="22" height="14" rx="4" stroke="#64748b" stroke-width="2" fill="none" opacity="0.8"/>
-                                        <line x1="97" y1="80" x2="103" y2="80" stroke="#64748b" stroke-width="2"/>
-                                        <!-- Nose -->
-                                        <path d="M100 82 L98 94 L104 94" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-                                        <!-- Animated Mouth -->
-                                        <g id="avatar-mouth-group">
-                                            <path id="avatar-mouth" d="M91 106 Q100 112 109 106" stroke="#b45309" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                        </g>
+                                    <!-- Photorealistic Animated Vector Avatar SVG -->
+                                    <svg id="client-avatar-svg" class="w-40 h-40 sm:w-52 sm:h-52 head-nodding drop-shadow-2xl transition transform" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <defs>
-                                            <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
-                                                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.8"/>
+                                            <radialGradient id="haloGlow" cx="50%" cy="50%" r="50%">
+                                                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
                                                 <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
                                             </radialGradient>
+                                            <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#fad6be"/>
+                                                <stop offset="100%" stop-color="#e8af90"/>
+                                            </linearGradient>
+                                            <linearGradient id="suitGrad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#1e293b"/>
+                                                <stop offset="100%" stop-color="#0f172a"/>
+                                            </linearGradient>
+                                            <linearGradient id="hairGrad" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="#334155"/>
+                                                <stop offset="100%" stop-color="#1e293b"/>
+                                            </linearGradient>
+                                            <linearGradient id="tieGrad" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#2563eb"/>
+                                                <stop offset="100%" stop-color="#1d4ed8"/>
+                                            </linearGradient>
                                         </defs>
+
+                                        <!-- Background Halo Glow -->
+                                        <circle cx="120" cy="110" r="105" fill="url(#haloGlow)"/>
+                                        
+                                        <!-- Shoulders & Tailored Navy Blazer -->
+                                        <path d="M30 235 C30 175, 75 160, 120 160 C165 160, 210 175, 210 235 Z" fill="url(#suitGrad)"/>
+                                        <!-- Suit Lapels -->
+                                        <path d="M75 162 L105 235 L90 235 L65 175 Z" fill="#0f172a" opacity="0.6"/>
+                                        <path d="M165 162 L135 235 L150 235 L175 175 Z" fill="#0f172a" opacity="0.6"/>
+                                        
+                                        <!-- White Collared Dress Shirt -->
+                                        <path d="M102 160 L120 190 L138 160 Z" fill="#ffffff"/>
+                                        <path d="M102 160 L120 172 L110 160 Z" fill="#e2e8f0"/>
+                                        <path d="M138 160 L120 172 L130 160 Z" fill="#e2e8f0"/>
+                                        <!-- Royal Blue Silk Tie -->
+                                        <path d="M116 172 L124 172 L127 235 L113 235 Z" fill="url(#tieGrad)"/>
+                                        <polygon points="116,172 124,172 126,182 120,186 114,182" fill="#1e40af"/>
+                                        
+                                        <!-- Neck -->
+                                        <rect x="108" y="130" width="24" height="34" rx="4" fill="#df9f80"/>
+                                        <!-- Chin Shadow -->
+                                        <ellipse cx="120" cy="140" rx="16" ry="6" fill="#c47d5e" opacity="0.3"/>
+
+                                        <!-- Head / Face -->
+                                        <ellipse cx="120" cy="95" rx="38" ry="46" fill="url(#skinGrad)"/>
+                                        
+                                        <!-- Ears -->
+                                        <ellipse cx="80" cy="98" rx="6" ry="11" fill="#e8af90"/>
+                                        <ellipse cx="160" cy="98" rx="6" ry="11" fill="#e8af90"/>
+                                        
+                                        <!-- Executive Styled Hair with Volume -->
+                                        <path d="M80 88 C78 50, 105 38, 120 38 C145 38, 162 50, 160 88 C155 68, 142 54, 120 54 C98 54, 85 68, 80 88 Z" fill="url(#hairGrad)"/>
+                                        <path d="M80 88 C85 65, 110 52, 140 56 C155 58, 158 65, 160 75" stroke="#475569" stroke-width="2" fill="none" opacity="0.5"/>
+                                        
+                                        <!-- Eyebrows -->
+                                        <path d="M92 78 Q102 73 112 77" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+                                        <path d="M128 77 Q138 73 148 78" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+                                        
+                                        <!-- Realistic Eyes (Natural Blinking) -->
+                                        <g class="eye-blinking">
+                                            <!-- Left Eye -->
+                                            <ellipse cx="102" cy="88" rx="7" ry="5" fill="#ffffff"/>
+                                            <circle cx="102" cy="88" r="3.5" fill="#1e293b"/>
+                                            <circle cx="103" cy="86.5" r="1.2" fill="#ffffff"/>
+                                            <!-- Right Eye -->
+                                            <ellipse cx="138" cy="88" rx="7" ry="5" fill="#ffffff"/>
+                                            <circle cx="138" cy="88" r="3.5" fill="#1e293b"/>
+                                            <circle cx="139" cy="86.5" r="1.2" fill="#ffffff"/>
+                                        </g>
+                                        
+                                        <!-- Stylish Executive Glasses -->
+                                        <rect x="90" y="80" width="24" height="16" rx="4" stroke="#475569" stroke-width="2.2" fill="none" opacity="0.9"/>
+                                        <rect x="126" y="80" width="24" height="16" rx="4" stroke="#475569" stroke-width="2.2" fill="none" opacity="0.9"/>
+                                        <line x1="114" y1="88" x2="126" y2="88" stroke="#475569" stroke-width="2.2"/>
+                                        <line x1="82" y1="86" x2="90" y2="86" stroke="#475569" stroke-width="2"/>
+                                        <line x1="150" y1="86" x2="158" y2="86" stroke="#475569" stroke-width="2"/>
+
+                                        <!-- Nose -->
+                                        <path d="M120 90 L117 106 L123 106" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                        
+                                        <!-- Lip-Sync Animated Mouth -->
+                                        <g id="avatar-mouth-group">
+                                            <path id="avatar-mouth" d="M108 120 Q120 128 132 120 Q120 124 108 120 Z" fill="#991b1b" stroke="#7f1d1d" stroke-width="1.5" stroke-linejoin="round"/>
+                                        </g>
                                     </svg>
 
                                     <!-- Floating Reactions Layer -->
@@ -1160,6 +1245,80 @@
         }
 
         // ==========================================
+        // ZOOM FULLSCREEN & TWO-WAY Q&A CONTROLS
+        // ==========================================
+        let isMeetingFullscreen = false;
+
+        function toggleFullScreenMeeting() {
+            const win = document.getElementById('zoom-meeting-window');
+            const exitBtn = document.getElementById('exit-fullscreen-btn');
+            const fsLabel = document.getElementById('fullscreen-label');
+            const fsIcon = document.getElementById('fullscreen-icon');
+
+            isMeetingFullscreen = !isMeetingFullscreen;
+
+            if (isMeetingFullscreen) {
+                win.classList.add('zoom-fullscreen-active');
+                if (exitBtn) exitBtn.classList.remove('hidden');
+                if (fsLabel) fsLabel.innerText = "Exit Full";
+                if (fsIcon) fsIcon.innerText = "✖";
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                }
+            } else {
+                win.classList.remove('zoom-fullscreen-active');
+                if (exitBtn) exitBtn.classList.add('hidden');
+                if (fsLabel) fsLabel.innerText = "Full Screen";
+                if (fsIcon) fsIcon.innerText = "⛶";
+                if (document.exitFullscreen && document.fullscreenElement) {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMeetingFullscreen) {
+                toggleFullScreenMeeting();
+            }
+        });
+
+        const TOUGH_INTERVIEW_QUESTIONS = [
+            "Sakib, can you explain what happens when client-side and server-side CAPI events fire without identical event_id tokens?",
+            "How does Safari's 7-day ITP cookie cap impact Google Ads and Meta conversion tracking, and how does Stape custom domain loader solve it?",
+            "We recently upgraded to Shopify Checkout Extensibility and our old purchase scripts stopped firing. How would you migrate our tracking to Shopify Web Pixels API?",
+            "Our Meta Event Match Quality is currently at 4.2 out of 10. Walk me through the exact customer parameters you will hash and pass to reach 8.5+.",
+            "We run campaigns in Germany and France. How do you implement Google Consent Mode v2 so we don't violate GDPR while retaining AI conversion modeling?",
+            "Why should we pay you $55/hr when there are other freelancers on Upwork offering to set up server-side CAPI for $25 flat?",
+            "How do you use 'shoulda' or 'woulda' when explaining a missed tracking deadline to an anxious marketing director?",
+            "If a client is angry because ROAS dropped after Apple iOS 14.5 updates, what would you say to calm them down and explain attribution lag?",
+            "Walk me through the exact dataLayer push structure for a standard GA4 purchase event with the items array and transaction_id.",
+            "What's the difference between 'touch base' and 'circle back' when communicating with American team leads?"
+        ];
+
+        let currentQuestionIdx = 0;
+
+        function clientAskMeToughQuestion() {
+            if (!inCall) startCall();
+            const q = TOUGH_INTERVIEW_QUESTIONS[currentQuestionIdx % TOUGH_INTERVIEW_QUESTIONS.length];
+            currentQuestionIdx++;
+
+            const p = PERSONAS[activePersona];
+            appendTranscript('ai', `🎯 Client Question: "${q}"`, p.name, p.avatar);
+            speakAi(q);
+        }
+
+        function changeDialogueMode() {
+            const mode = document.getElementById('meeting-dialogue-mode')?.value;
+            if (mode === 'interview') {
+                appendTranscript('system', "🎯 Mode set: Client Interviewing Me. Alex will ask tough technical questions.");
+            } else if (mode === 'qa') {
+                appendTranscript('system', "💬 Mode set: Free Q&A. You can ask Alex anything about his store, ad budget, or tracking architecture!");
+            } else {
+                appendTranscript('system', "⚡ Mode set: 200 Fast-Speech Skill Drill. Ask about any skill number (e.g. 'Skill 142') or reduction formula!");
+            }
+        }
+
+        // ==========================================
         // WEBCAM & SCREEN SHARING HARDWARE CONTROLS
         // ==========================================
         async function toggleWebcam() {
@@ -1566,11 +1725,86 @@
             }, 2500);
         }
 
-        // AI Response Logic for simulated personas
+        // AI Response Logic for simulated personas (200 Skills & Technical Knowledge Brain)
         function generateAiResponse(userText, pId, metrics) {
-            const lower = userText.toLowerCase();
+            const lower = userText.toLowerCase().trim();
 
-            // Coach Marcus Mode (Fast Speech Echo)
+            // ==============================================================
+            // 1. SPECIFIC SKILL NUMBER LOOKUP (e.g. "Skill 142", "Skill 25")
+            // ==============================================================
+            const skillMatch = lower.match(/(?:skill|skill\s*#?)\s*(\d{1,3})/i);
+            if (skillMatch && window.SKILLS_DATA && window.SKILLS_DATA.skills) {
+                const sNum = parseInt(skillMatch[1]);
+                const sObj = window.SKILLS_DATA.skills.find(s => s.num === sNum);
+                if (sObj) {
+                    sendMeetingReaction('⚡');
+                    return `Skill #${sObj.num} is "${sObj.title}". The fast-speed formula is: "${sObj.formula}". Real spoken example: "${sObj.example}". In Bengali: ${sObj.bangla} Speed drill: "${sObj.drill}". Would you like to repeat it with me?`;
+                }
+            }
+
+            // ==============================================================
+            // 2. SLANG, IDIOM OR CONTRACTION INQUIRIES FROM SKILLS_DATA
+            // ==============================================================
+            if (lower.startsWith('what is') || lower.startsWith('what does') || lower.startsWith('how to use') || lower.startsWith('tell me about') || lower.includes('meaning of')) {
+                if (window.SKILLS_DATA && window.SKILLS_DATA.skills) {
+                    const matchedSkill = window.SKILLS_DATA.skills.find(s => {
+                        const form = s.formula.toLowerCase();
+                        const title = s.title.toLowerCase();
+                        return (form.length > 3 && lower.includes(form)) || 
+                               (lower.includes(title.split(' ')[0].toLowerCase()) && form.length > 2);
+                    });
+                    if (matchedSkill) {
+                        sendMeetingReaction('💡');
+                        return `Great question! That's covered in Skill #${matchedSkill.num}: "${matchedSkill.title}". The fast reduction is "${matchedSkill.formula}". For instance: "${matchedSkill.example}". ${matchedSkill.bangla} Let's do the drill: "${matchedSkill.drill}"`;
+                    }
+                }
+            }
+
+            // ==============================================================
+            // 3. CLIENT BUSINESS & AD SPEND INQUIRIES (Sakib asking Alex)
+            // ==============================================================
+            if (lower.includes('how much') && (lower.includes('spend') || lower.includes('budget') || lower.includes('ad'))) {
+                return "We're currently investing around $45,000 to $50,000 a month on Meta Ads and Google Shopping for our DTC brand. With that kind of ad spend, attribution accuracy directly affects our profitability and scaling decisions.";
+            }
+
+            if (lower.includes('shopify') || lower.includes('platform') || lower.includes('cms') || lower.includes('store') || lower.includes('woocommerce')) {
+                return "We're on Shopify Plus. We recently migrated to Checkout Extensibility, which broke some of our custom liquid scripts. That's why we urgently need an expert to migrate us to Shopify's Web Pixels API and Stape.";
+            }
+
+            // ==============================================================
+            // 4. DEEP WEB ANALYTICS & ATTRIBUTION MECHANICS
+            // ==============================================================
+            if (lower.includes('how does capi') || (lower.includes('what is') && lower.includes('capi')) || lower.includes('deduplication work')) {
+                sendMeetingReaction('👏');
+                return "CAPI deduplication matches identical event_id and event_name parameters sent from both the browser pixel and Stape server container. When Meta receives both payloads within 48 hours, it keeps the first one and uses the second for customer parameter enrichment without double-counting purchases.";
+            }
+
+            if (lower.includes('safari') || lower.includes('itp') || lower.includes('7 day') || lower.includes('cookie lifetime')) {
+                sendMeetingReaction('💡');
+                return "Apple's Safari ITP caps JavaScript client-side cookies to 7 days, or only 24 hours if traffic comes from click IDs like fbclid. By hosting Stape on our custom CNAME subdomain, cookies are written directly by the HTTP response header, restoring 180 to 365-day tracking!";
+            }
+
+            if (lower.includes('consent mode') || lower.includes('como') || lower.includes('gdpr') || lower.includes('v2')) {
+                return "Google Consent Mode v2 introduces ad_user_data and ad_personalization signals. When a visitor in the EEA declines cookies, Google tags send cookieless pings instead of storing identifiers, allowing Google's AI to model conversions.";
+            }
+
+            if (lower.includes('stape') && (lower.includes('loader') || lower.includes('adblock') || lower.includes('custom loader'))) {
+                sendMeetingReaction('🛡️');
+                return "Stape's custom loader renames gtm.js to a randomized filename and proxies through our custom domain, which completely bypasses 99% of ad blockers like uBlock Origin and Brave Shields. That alone typically recovers 12 to 18 percent of lost conversions!";
+            }
+
+            if (lower.includes('rate') || lower.includes('55') || lower.includes('cost') || lower.includes('pricing') || lower.includes('charge')) {
+                return "Fifty-five an hour is completely reasonable for an enterprise tracking specialist who protects tens of thousands in monthly ad spend. I propose starting with a 10-hour audit milestone to prove the value before locking in a monthly retainer.";
+            }
+
+            if (lower.includes('weekend') || lower.includes('weather') || lower.includes('coffee') || lower.includes('how are you')) {
+                sendMeetingReaction('☕');
+                return "Haha, doing fantastic! Just wrapped up our weekly marketing sprint. It's so refreshing to connect with people who actually understand analytics. How's your week been treating you?";
+            }
+
+            // ==============================================================
+            // 5. PERSONA-SPECIFIC CONVERSATIONAL TURNS
+            // ==============================================================
             if (pId === 'coach') {
                 const wpm = metrics.wpm;
                 if (wpm >= 140) {
@@ -1581,7 +1815,6 @@
                 }
             }
 
-            // Alex Vance (US Ecommerce Client)
             if (pId === 'alex') {
                 if (lower.includes('capi') || lower.includes('dedup') || lower.includes('event_id')) {
                     sendMeetingReaction('👏');
@@ -1594,36 +1827,18 @@
                 if (lower.includes('consent') || lower.includes('google ads') || lower.includes('v2')) {
                     return "Got it. We definitely can't afford to lose Google Ads conversion modeling in Europe. Let's make sure ad_storage and analytics_storage are both respected in the GTM default state.";
                 }
-                if (lower.includes('rate') || lower.includes('hour') || lower.includes('price') || lower.includes('cost') || lower.includes('$')) {
-                    return "I appreciate you being direct about the investment, Sakib. Given the revenue on the line with our ad spend, your rate is fair. Let's do a 10-hour milestone first, and if EMQ hits 8.5+, we'll keep you on retainer.";
-                }
-                return "Interesting point! We want our tracking to be bulletproof for the upcoming Q4 sale. Could you walk me through the preview debug steps you'll take before we go live?";
+                return "Interesting point! We want our tracking to be bulletproof for the upcoming campaign. Could you walk me through the preview debug steps you'll take before we go live?";
             }
 
-            // Sarah Jenkins (Upwork Agency Director)
             if (pId === 'sarah') {
                 if (lower.includes('experience') || lower.includes('year') || lower.includes('client') || lower.includes('store')) {
                     sendMeetingReaction('👍');
                     return "That's exactly the kind of hands-on experience we need. We've worked with freelancers who just followed YouTube tutorials and broke dataLayers. How do you QA events before handing over to the client?";
                 }
-                if (lower.includes('rate') || lower.includes('55') || lower.includes('hourly') || lower.includes('budget')) {
-                    return "Fifty-five an hour works for us, provided you can deliver fast turnarounds and clear Loom video explanations for our account managers. I'll send over the contract right after this call!";
-                }
-                if (lower.includes('stape') || lower.includes('server') || lower.includes('gtm')) {
-                    return "Great. Most of our clients are on Shopify Plus. Do you usually recommend the official Stape Shopify app, or do you build custom Web Pixels API events?";
-                }
                 return "I love that proactive approach. If you can help us standardize our tracking blueprint across our 15 brands, there's easily 20 to 30 hours of steady work for you every week.";
             }
 
-            // Emily Clark (Small Talk & Rapport)
             if (pId === 'emily') {
-                if (lower.includes('weekend') || lower.includes('relax') || lower.includes('busy') || lower.includes('fun')) {
-                    sendMeetingReaction('☕');
-                    return "Oh, totally hear you on that! There's nothing better than unwinding after a busy sprint. I'm hoping to get outdoors if the weather holds up. Anyway, so glad we could catch up—how are your tracking projects going?";
-                }
-                if (lower.includes('weather') || lower.includes('nice') || lower.includes('rain') || lower.includes('hot')) {
-                    return "Haha, tell me about it! The weather has been crazy unpredictable here too. But hey, it makes for good coffee weather while staring at GTM debug screens, right?";
-                }
                 return "Haha, I love that! It's so nice getting to know the person behind the screen before jumping straight into business. Alright, show me what magic you worked on our dashboard!";
             }
 
