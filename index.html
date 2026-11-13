@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="skills200.js"></script>
     <script src="vocab10k.js"></script>
+    <script src="zoom_skills.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -121,6 +122,10 @@
             <button onclick="switchTab('skills200')" id="tab-btn-skills200" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-indigo-500/20 bg-indigo-950/20">
                 <span class="text-amber-400">⚡</span>
                 <span class="font-semibold text-indigo-300">200 Fast-Speech Skills</span>
+            </button>
+            <button onclick="switchTab('zoom80')" id="tab-btn-zoom80" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-cyan-500/20 bg-cyan-950/20">
+                <span class="text-cyan-400">🎯</span>
+                <span class="font-bold text-cyan-300">80 Zoom Skills</span>
             </button>
             <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-rose-500/20 bg-rose-950/10">
                 <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
@@ -372,8 +377,13 @@
 
                         <select id="meeting-dialogue-mode" onchange="changeDialogueMode()" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer">
                             <option value="interview">🎯 Mode: Client Interviewing Me</option>
+                            <option value="zoom80">🎯 Mode: 80 Zoom Enterprise Skills</option>
                             <option value="qa">💬 Mode: Free Q&A (Ask Client Anything)</option>
                             <option value="skills">⚡ Mode: 200 Fast-Speech Skill Drill</option>
+                        </select>
+
+                        <select id="meeting-zoom-skill-select" onchange="onZoomSkillSelectChange(this.value)" class="bg-slate-900 border border-cyan-500/40 text-cyan-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[220px] truncate" title="Select specific Zoom Technical Skill to be interviewed on">
+                            <option value="all">🎯 Zoom Focus: All 80 Skills</option>
                         </select>
                     </div>
                 </div>
@@ -1009,6 +1019,82 @@
             </div>
         </section>
 
+        <!-- TAB: 80 ZOOM ENTERPRISE & DEVELOPER SKILLS -->
+        <section id="tab-zoom80" class="hidden space-y-6">
+            <!-- Header card -->
+            <div class="glass p-6 sm:p-8 rounded-3xl glow border border-cyan-500/20 bg-gradient-to-br from-cyan-950/40 via-slate-900/60 to-slate-950">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
+                            <span>🎯 80 Zoom Enterprise & Developer Skills</span>
+                            <span>•</span>
+                            <span>Core, API, Webhooks, GA4/GTM, Automation & SDK</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                            <span>Zoom Technical Skills Hub</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono">80 Skills</span>
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                            জুম অ্যাডমিনিস্ট্রেশন, ওয়েবিনার অটোমেশন, সার্ভার-টু-সার্ভার OAuth API, GA4 ও GTM ট্র্যাকিং, GoHighLevel/HubSpot সিঙ্ক, এবং মিটিং ও ভিডিও SDK-এর প্রফেশনাল টেকনিক্যাল গাইড ও ক্লায়েন্ট ইন্টারভিউ স্ক্রিপ্ট।
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <button onclick="launchZoomSkillInterviewRandom()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition">
+                            <span>📹 Practice in Zoom Studio</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8 Category Filter Pills Bar -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin text-xs">
+                    <button onclick="filterZoomCategory(0)" id="zcat-btn-0" class="zcat-btn px-3 py-1.5 rounded-xl bg-cyan-600 text-white font-bold transition shrink-0">
+                        🌟 All 80 Skills
+                    </button>
+                    <button onclick="filterZoomCategory(1)" id="zcat-btn-1" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        ⚙️ 1. Core (1-10)
+                    </button>
+                    <button onclick="filterZoomCategory(2)" id="zcat-btn-2" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        🎥 2. Webinar & Events (11-20)
+                    </button>
+                    <button onclick="filterZoomCategory(3)" id="zcat-btn-3" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        🔌 3. API & Webhooks (21-30)
+                    </button>
+                    <button onclick="filterZoomCategory(4)" id="zcat-btn-4" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        ⚡ 4. Marketing Automation (31-40)
+                    </button>
+                    <button onclick="filterZoomCategory(5)" id="zcat-btn-5" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        📈 5. Analytics & Tracking (41-50)
+                    </button>
+                    <button onclick="filterZoomCategory(6)" id="zcat-btn-6" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        🤖 6. AI & Automation (51-60)
+                    </button>
+                    <button onclick="filterZoomCategory(7)" id="zcat-btn-7" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        📞 7. Contact Center & Phone (61-70)
+                    </button>
+                    <button onclick="filterZoomCategory(8)" id="zcat-btn-8" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
+                        💻 8. Advanced SDK & Code (71-80)
+                    </button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="mt-4 relative">
+                    <input type="text" id="zoom-skill-search" oninput="filterZoomSkillsSearch()" placeholder="🔍 Search Zoom skills (e.g. OAuth, Google Tag Manager, GoHighLevel, SDK, Webhooks...)" class="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-500">
+                    <span class="absolute left-4 top-3.5 text-slate-400">🔍</span>
+                    <button onclick="clearZoomSearch()" class="absolute right-3.5 top-3 text-slate-400 hover:text-white text-sm">✕</button>
+                </div>
+
+                <div class="mt-3 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800/80 pt-3">
+                    <span id="zoom-skills-count">Showing 80 of 80 Zoom Skills</span>
+                    <span class="text-cyan-400 font-mono text-[11px]">Upwork & Client Technical Ready</span>
+                </div>
+            </div>
+
+            <!-- Skills Cards Grid -->
+            <div id="zoom-skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamically populated by renderZoomSkills() -->
+            </div>
+        </section>
+
         <!-- TAB 5: 200 FAST-SPEECH SKILLS EXPLORER -->
         <section id="tab-skills200" class="hidden space-y-6">
             <!-- Header card -->
@@ -1112,7 +1198,7 @@
 
         // Tab Switching
         function switchTab(tabName) {
-            const tabs = ['dashboard', 'skills200', 'caller', 'freelance', 'wordbank'];
+            const tabs = ['dashboard', 'skills200', 'zoom80', 'caller', 'freelance', 'wordbank'];
             tabs.forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 const btn = document.getElementById('tab-btn-' + t);
@@ -1129,6 +1215,9 @@
             });
             if (tabName === 'wordbank') {
                 initVocab10k();
+            }
+            if (tabName === 'zoom80') {
+                initZoomSkills();
             }
         }
 
@@ -1366,8 +1455,27 @@
 
         function clientAskMeToughQuestion() {
             if (!inCall) startCall();
-            const q = TOUGH_INTERVIEW_QUESTIONS[currentQuestionIdx % TOUGH_INTERVIEW_QUESTIONS.length];
-            currentQuestionIdx++;
+            const mode = document.getElementById('meeting-dialogue-mode')?.value;
+            const zoomSelect = document.getElementById('meeting-zoom-skill-select')?.value;
+
+            let q = "";
+
+            if ((mode === 'zoom80' || (zoomSelect && zoomSelect !== 'all')) && window.ZOOM_SKILLS_DATA && window.ZOOM_SKILLS_DATA.skills) {
+                if (zoomSelect && zoomSelect !== 'all') {
+                    const sid = parseInt(zoomSelect);
+                    const targetSkill = window.ZOOM_SKILLS_DATA.skills.find(s => s.id === sid);
+                    if (targetSkill) q = targetSkill.interview_q;
+                }
+                if (!q) {
+                    const randSkill = window.ZOOM_SKILLS_DATA.skills[Math.floor(Math.random() * window.ZOOM_SKILLS_DATA.skills.length)];
+                    q = randSkill.interview_q;
+                }
+            }
+
+            if (!q) {
+                q = TOUGH_INTERVIEW_QUESTIONS[currentQuestionIdx % TOUGH_INTERVIEW_QUESTIONS.length];
+                currentQuestionIdx++;
+            }
 
             const p = PERSONAS[activePersona];
             appendTranscript('ai', `🎯 Client Question: "${q}"`, p.name, p.avatar);
@@ -1377,11 +1485,23 @@
         function changeDialogueMode() {
             const mode = document.getElementById('meeting-dialogue-mode')?.value;
             if (mode === 'interview') {
-                appendTranscript('system', "🎯 Mode set: Client Interviewing Me. Alex will ask tough technical questions.");
+                appendTranscript('system', "🎯 Mode set: Client Technical Interview. Alex will ask tough analytics challenges.");
+            } else if (mode === 'zoom80') {
+                appendTranscript('system', "🎯 Mode set: 80 Zoom Enterprise & Developer Skills. Select a focus topic or click 'Client Asks Me' for real client Q&A!");
             } else if (mode === 'qa') {
                 appendTranscript('system', "💬 Mode set: Free Q&A. You can ask Alex anything about his store, ad budget, or tracking architecture!");
             } else {
                 appendTranscript('system', "⚡ Mode set: 200 Fast-Speech Skill Drill. Ask about any skill number (e.g. 'Skill 142') or reduction formula!");
+            }
+        }
+
+        function onZoomSkillSelectChange(val) {
+            if (val !== 'all' && window.ZOOM_SKILLS_DATA) {
+                const sid = parseInt(val);
+                const s = window.ZOOM_SKILLS_DATA.skills.find(x => x.id === sid);
+                if (s) {
+                    appendTranscript('system', `🎯 Zoom Skill Focus loaded: #${s.id} ${s.title} (${s.category}). Click 'Client Asks Me a Question' to practice!`);
+                }
             }
         }
 
@@ -1807,6 +1927,39 @@
                     sendMeetingReaction('⚡');
                     return `Skill #${sObj.num} is "${sObj.title}". The fast-speed formula is: "${sObj.formula}". Real spoken example: "${sObj.example}". In Bengali: ${sObj.bangla} Speed drill: "${sObj.drill}". Would you like to repeat it with me?`;
                 }
+            }
+
+            // ==============================================================
+            // 1.1 ZOOM 80 SKILLS LOOKUP (e.g. "Zoom Skill 45", "Zoom #23", "Zoom SDK")
+            // ==============================================================
+            const zoomMatch = lower.match(/zoom\s*(?:skill\s*#?|#)?\s*(\d{1,2})/i);
+            if (zoomMatch && window.ZOOM_SKILLS_DATA && window.ZOOM_SKILLS_DATA.skills) {
+                const zId = parseInt(zoomMatch[1]);
+                const zObj = window.ZOOM_SKILLS_DATA.skills.find(s => s.id === zId);
+                if (zObj) {
+                    sendMeetingReaction('🎯');
+                    return `Zoom Skill #${zObj.id} is "${zObj.title}" (${zObj.category}). Tech: ${zObj.tech}. Summary: ${zObj.summary}. In Bengali: ${zObj.bangla}. Client Spoken Script: "${zObj.spoken}". A tough client interview question on this is: "${zObj.interview_q}" - How would you answer that?`;
+                }
+            }
+
+            if (lower.includes('server to server oauth') || lower.includes('zoom oauth') || (lower.includes('zoom') && lower.includes('api'))) {
+                sendMeetingReaction('🔌');
+                return "Zoom deprecated JWT in favor of Server-to-Server OAuth. To authenticate backend services, we POST Account ID, Client ID, and Secret to zoom.us/oauth/token with grant_type=account_credentials, obtaining a bearer token for headless automation.";
+            }
+
+            if (lower.includes('zoom webhook') || lower.includes('crc check') || lower.includes('challenge response')) {
+                sendMeetingReaction('🛡️');
+                return "For Zoom webhooks, Zoom sends a verification event containing plainToken. Our endpoint calculates an HMAC-SHA256 hash using the Webhook Secret Token and returns encryptedToken in JSON to complete the verification handshake!";
+            }
+
+            if (lower.includes('meeting sdk') || lower.includes('video sdk')) {
+                sendMeetingReaction('💻');
+                return "The core distinction: Zoom Meeting SDK embeds the standardized Zoom UI and ecosystem into your web app, while Zoom Video SDK provides raw, headless audio/video canvas streams for completely custom, white-label video experiences.";
+            }
+
+            if (lower.includes('zoom ghl') || lower.includes('zoom gohighlevel') || (lower.includes('zoom') && lower.includes('hubspot'))) {
+                sendMeetingReaction('⚡');
+                return "We capture Zoom registrant and attendance webhooks to automatically tag CRM contacts, update opportunity pipelines, and trigger multi-channel SMS and email reminders that boost show-up rates past 45%!";
             }
 
             // ==============================================================
@@ -2993,17 +3146,234 @@
             }
         }
 
+        // ==========================================
+        // 80 ZOOM ENTERPRISE & DEVELOPER SKILLS ENGINE
+        // ==========================================
+        let zoomActiveCategory = 0;
+        let zoomSearchTerm = '';
+        let zoomFilteredList = [];
+
+        function initZoomSkills() {
+            if (!window.ZOOM_SKILLS_DATA || !window.ZOOM_SKILLS_DATA.skills) return;
+            zoomFilteredList = window.ZOOM_SKILLS_DATA.skills;
+
+            // Populate meeting topic selector in Zoom AI Studio if not populated
+            const zoomSelect = document.getElementById('meeting-zoom-skill-select');
+            if (zoomSelect && zoomSelect.options.length <= 1) {
+                window.ZOOM_SKILLS_DATA.skills.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.innerText = `#${s.id} ${s.title}`;
+                    zoomSelect.appendChild(opt);
+                });
+            }
+
+            renderZoomSkills();
+        }
+
+        function filterZoomCategory(catId) {
+            zoomActiveCategory = catId;
+            document.querySelectorAll('.zcat-btn').forEach(btn => {
+                if (btn.id === `zcat-btn-${catId}`) {
+                    btn.classList.add('bg-cyan-600', 'text-white');
+                    btn.classList.remove('bg-slate-800', 'text-slate-300');
+                } else {
+                    btn.classList.remove('bg-cyan-600', 'text-white');
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                }
+            });
+            applyZoomFilters();
+        }
+
+        function filterZoomSkillsSearch() {
+            zoomSearchTerm = (document.getElementById('zoom-skill-search')?.value || '').toLowerCase().trim();
+            applyZoomFilters();
+        }
+
+        function clearZoomSearch() {
+            const input = document.getElementById('zoom-skill-search');
+            if (input) input.value = '';
+            zoomSearchTerm = '';
+            applyZoomFilters();
+        }
+
+        function applyZoomFilters() {
+            if (!window.ZOOM_SKILLS_DATA || !window.ZOOM_SKILLS_DATA.skills) return;
+            let list = window.ZOOM_SKILLS_DATA.skills;
+
+            if (zoomActiveCategory !== 0) {
+                list = list.filter(s => s.catId === zoomActiveCategory);
+            }
+
+            if (zoomSearchTerm) {
+                list = list.filter(s => 
+                    s.title.toLowerCase().includes(zoomSearchTerm) ||
+                    s.category.toLowerCase().includes(zoomSearchTerm) ||
+                    s.tech.toLowerCase().includes(zoomSearchTerm) ||
+                    s.bangla.toLowerCase().includes(zoomSearchTerm) ||
+                    s.summary.toLowerCase().includes(zoomSearchTerm) ||
+                    s.id.toString() === zoomSearchTerm
+                );
+            }
+
+            zoomFilteredList = list;
+            renderZoomSkills();
+        }
+
+        function renderZoomSkills() {
+            const grid = document.getElementById('zoom-skills-grid');
+            if (!grid) return;
+
+            const total = zoomFilteredList.length;
+            const countEl = document.getElementById('zoom-skills-count');
+            if (countEl) countEl.innerText = `Showing ${total} of 80 Zoom Skills`;
+
+            if (total === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass rounded-3xl p-8 border border-slate-800">
+                        <div class="text-4xl mb-3">🎯</div>
+                        <h4 class="text-white font-bold text-lg">কোনো জুম স্কিল পাওয়া যায়নি!</h4>
+                        <p class="text-xs text-slate-400 mt-1">অন্য কি-ওয়ার্ড লিখে সার্চ করুন অথবা অল ফিল্টার সিলেক্ট করুন।</p>
+                        <button onclick="clearZoomSearch(); filterZoomCategory(0);" class="mt-4 px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-500 transition">Reset Zoom Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const catColors = {
+                1: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+                2: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                3: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                4: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+                5: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+                6: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
+                7: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+                8: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
+            };
+
+            grid.innerHTML = zoomFilteredList.map(s => {
+                const badgeColor = catColors[s.catId] || 'bg-slate-800 text-slate-300';
+                return `
+                    <div class="bg-slate-900/80 p-5 sm:p-6 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between shadow-lg group">
+                        <div>
+                            <!-- Header -->
+                            <div class="flex items-start justify-between gap-3 mb-2">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-xs font-mono font-black text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-md">#${s.id}</span>
+                                        <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full border ${badgeColor}">${escapeHtml(s.category)}</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition">${escapeHtml(s.title)}</h3>
+                                </div>
+                                <button onclick="launchZoomSkillInterview(${s.id})" class="px-2.5 py-1 rounded-lg bg-cyan-600/30 hover:bg-cyan-600 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-semibold flex items-center gap-1 transition shrink-0" title="Practice this topic in Zoom AI Studio">
+                                    <span>📹 Practice</span>
+                                </button>
+                            </div>
+
+                            <!-- Summary & Bengali -->
+                            <p class="text-xs text-slate-300 leading-relaxed mb-2">${escapeHtml(s.summary)}</p>
+                            <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80 text-xs text-emerald-300 mb-3">
+                                🇧🇩 <strong>বাস্তব প্রয়োগ:</strong> ${escapeHtml(s.bangla)}
+                            </div>
+
+                            <!-- Tech Stack -->
+                            <div class="text-[11px] font-mono text-slate-400 mb-3">
+                                <span class="text-cyan-400 font-bold">Tech:</span> ${escapeHtml(s.tech)}
+                            </div>
+
+                            <!-- Spoken English Pitch Script -->
+                            <div class="bg-cyan-950/20 border border-cyan-500/30 p-3 rounded-xl mb-3">
+                                <div class="flex items-center justify-between text-[11px] font-bold text-cyan-300 mb-1">
+                                    <span>🗣️ Client Spoken Pitch:</span>
+                                    <button onclick="playZoomSkillAudio('${escapeJs(s.spoken)}')" class="hover:text-white transition flex items-center gap-1 text-[10px] bg-cyan-500/20 px-2 py-0.5 rounded">
+                                        <span>🔊 Listen</span>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-slate-200 italic leading-relaxed">"${escapeHtml(s.spoken)}"</p>
+                            </div>
+
+                            <!-- Client Interview Challenge Box -->
+                            <details class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-xs">
+                                <summary class="font-bold text-amber-400 cursor-pointer flex items-center justify-between">
+                                    <span>🎙️ Client Interview Q&A Challenge</span>
+                                    <span class="text-[10px] text-slate-400">Click to reveal</span>
+                                </summary>
+                                <div class="mt-2.5 space-y-2 border-t border-slate-800/80 pt-2">
+                                    <div>
+                                        <div class="text-[10px] font-bold text-rose-400 uppercase">Client Asks:</div>
+                                        <p class="text-slate-200 font-medium italic mt-0.5">"${escapeHtml(s.interview_q)}"</p>
+                                    </div>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-emerald-400 uppercase">Your Winning Answer:</div>
+                                        <p class="text-slate-300 text-[11px] mt-0.5">${escapeHtml(s.interview_a)}</p>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- Footer actions -->
+                        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                            <button onclick="copyToClip('${escapeJs(s.title)}\\nTech: ${escapeJs(s.tech)}\\nPitch: ${escapeJs(s.spoken)}')" class="hover:text-white transition flex items-center gap-1">
+                                📋 Copy Pitch
+                            </button>
+                            <button onclick="launchZoomSkillInterview(${s.id})" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+                                <span>Simulate Call with Alex →</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function playZoomSkillAudio(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function launchZoomSkillInterview(skillId) {
+            switchTab('caller');
+            const select = document.getElementById('meeting-zoom-skill-select');
+            if (select) select.value = skillId;
+            const modeSelect = document.getElementById('meeting-dialogue-mode');
+            if (modeSelect) modeSelect.value = 'zoom80';
+
+            const s = window.ZOOM_SKILLS_DATA?.skills.find(x => x.id === skillId);
+            if (s) {
+                appendTranscript('system', `🎯 Zoom Skill Loaded: #${s.id} ${s.title}. Starting Technical Client Interview...`);
+                if (!inCall) startCall();
+                setTimeout(() => {
+                    const p = PERSONAS[activePersona];
+                    const q = s.interview_q;
+                    appendTranscript('ai', `🎯 Client Interview Question: "${q}"`, p.name, p.avatar);
+                    speakAi(q);
+                }, 1000);
+            }
+        }
+
+        function launchZoomSkillInterviewRandom() {
+            if (!window.ZOOM_SKILLS_DATA || !window.ZOOM_SKILLS_DATA.skills) return;
+            const rand = window.ZOOM_SKILLS_DATA.skills[Math.floor(Math.random() * window.ZOOM_SKILLS_DATA.skills.length)];
+            launchZoomSkillInterview(rand.id);
+        }
+
         // Initialize Skills & Vocab Grid on Page Load
         document.addEventListener('DOMContentLoaded', function() {
             if (window.SKILLS_DATA && window.SKILLS_DATA.skills) {
                 renderSkills(window.SKILLS_DATA.skills);
             }
             initVocab10k();
+            initZoomSkills();
         });
         if (window.SKILLS_DATA && window.SKILLS_DATA.skills) {
             renderSkills(window.SKILLS_DATA.skills);
         }
         initVocab10k();
+        initZoomSkills();
     </script>
 </body>
 </html>

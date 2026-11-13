@@ -17,6 +17,7 @@ import mentor_ai
 import scheduler
 import tts_service
 import skills_data
+import zoom_skills_data
 import random
 
 # Configure logging
@@ -81,6 +82,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• `/endscenario` - রানিং সিনারিও সিমুলেশন বন্ধ করা\n"
         "• `/client <মেসেজ>` - রাফ টেক্সটকে বায়ারের মন জয় করার মতো নেটিভ মেসেজে রূপান্তর\n"
         "• `/interview` - লাইভ বায়ার কল ও জব ইন্টারভিউ সিমুলেটর (শেষে `/endinterview`)\n\n"
+        "🎯 **৮০ জুম এন্টারপ্রাইজ ও ডেভেলপার স্কিলস (New!):**\n"
+        "• `/zoom` - ৮০টি জুম টেকনিক্যাল স্কিলস ব্রাউজার ও ইন্টারভিউ চ্যালেঞ্জ (Core, API, OAuth, GTM, GA4, SDK)\n"
+        "• `/zoom <১-৮০>` - নির্দিষ্ট জুম স্কিলের আর্কিটেকচার, স্পোকেন স্ক্রিপ্ট ও ইন্টারভিউ Q&A\n"
+        "• `/zoom search <টার্ম>` - ৮০টি জুম স্কিলের মধ্যে দ্রুত অনুসন্ধান\n\n"
         "🎧 **নেটিভ স্পিচ, অ্যাকসেন্ট ও ফোনেটিক্স:**\n"
         "• `/phonetics` - অ্যাকসেন্ট অডিট গাইড ও ৫টি প্রধান উচ্চারণ ত্রুটি সমাধান\n"
         "• `/listen` - কানেক্টেড স্পিচ ও ফাস্ট নেটিভ স্পোকেন অডিও টেস্ট\n"
@@ -540,6 +545,114 @@ async def vocab_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         vocab = await asyncio.to_thread(mentor_ai.generate_vocab_card, user_level)
         await update.message.reply_text(vocab, parse_mode=ParseMode.MARKDOWN)
+
+def format_zoom_skill_card(skill: dict) -> tuple[str, InlineKeyboardMarkup]:
+    sid = skill["id"]
+    cat = skill["category"]
+    title = skill["title"]
+    summary = skill["summary"]
+    bangla = skill["bangla"]
+    tech = skill["tech"]
+    spoken = skill["spoken"]
+    q = skill["interview_q"]
+    a = skill["interview_a"]
+
+    text = (
+        f"🎯 **Zoom Skill #{sid}: {title}**\n"
+        f"🏷️ **Category:** `{cat}`\n\n"
+        f"📖 **Summary:**\n{summary}\n\n"
+        f"🇧🇩 **বাস্তব প্রয়োগ:**\n{bangla}\n\n"
+        f"🛠️ **Tech Stack & Endpoints:**\n`{tech}`\n\n"
+        f"🗣️ **Client Spoken Pitch (ক্লায়েন্টকে যা বলবেন):**\n*\"{spoken}\"*\n\n"
+        f"━━━━━━━━━━━━━━━━━━━\n"
+        f"🎙️ **Client Interview Challenge:**\n"
+        f"❓ **Client Asks:** *\"{q}\"*\n"
+        f"💡 **Winning Answer:**\n{a}\n\n"
+        f"👉 নিচে 'উচ্চারণ শুনুন' বাটনে চাপ দিয়ে স্পোকেন স্ক্রিপ্টের অডিও শুনুন, অথবা সরাসরি মুখে অডিও পাঠিয়ে উত্তর প্র্যাকটিস করুন!"
+    )
+
+    keyboard = [
+        [
+            InlineKeyboardButton("🔊 উচ্চারণ শুনুন", callback_data=f"zoom_audio:{sid}"),
+            InlineKeyboardButton("🎙️ ইন্টারভিউ চ্যালেঞ্জ", callback_data=f"zoom_q:{sid}")
+        ],
+        [
+            InlineKeyboardButton("🎲 আরেকটি জুম স্কিল", callback_data="zoom_rand"),
+            InlineKeyboardButton("📂 সকল ক্যাটাগরি", callback_data="zoom_cats")
+        ]
+    ]
+    return text, InlineKeyboardMarkup(keyboard)
+
+async def zoom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    args = context.args if context.args else []
+
+    if len(args) >= 2 and args[0].lower() == "search":
+        term = " ".join(args[1:])
+        results = zoom_skills_data.search_zoom_skills(term, limit=6)
+        if not results:
+            await update.message.reply_text(f"🔍 '{term}' দিয়ে কোনো জুম স্কিল পাওয়া যায়নি।")
+            return
+        lines = [f"🔍 **৮০ জুম স্কিলস কোষে '{term}' এর অনুসন্ধান ফলাফল:**\n"]
+        for s in results:
+            lines.append(f"• **#{s['id']} {s['title']}** (`{s['category']}`)\n  ➔ `/zoom {s['id']}`")
+        lines.append("\n👉 বিস্তারিত ও অডিও শুনতে যেকোনো কমান্ডে ক্লিক করুন।")
+        await update.message.reply_text("\n".join(lines), parse_mode=ParseMode.MARKDOWN)
+        return
+
+    if len(args) >= 1:
+        arg_val = args[0].strip().lower()
+        if arg_val.isdigit():
+            sid = int(arg_val)
+            skill = zoom_skills_data.get_zoom_skill_by_id(sid)
+            if skill:
+                msg, markup = format_zoom_skill_card(skill)
+                await update.message.reply_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+                return
+            else:
+                await update.message.reply_text("❌ ১ থেকে ৮০ এর মধ্যে একটি স্কিল নম্বর দিন (যেমন: `/zoom 45`)।")
+                return
+
+        results = zoom_skills_data.search_zoom_skills(arg_val, limit=6)
+        if results:
+            if len(results) == 1:
+                msg, markup = format_zoom_skill_card(results[0])
+                await update.message.reply_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+                return
+            lines = [f"🔍 **'{arg_val}' সম্পর্কিত জুম স্কিলসমূহ:**\n"]
+            for s in results:
+                lines.append(f"• **#{s['id']} {s['title']}** ➔ `/zoom {s['id']}`")
+            await update.message.reply_text("\n".join(lines), parse_mode=ParseMode.MARKDOWN)
+            return
+
+    cat_msg = (
+        "🎯 **৮০ জুম এন্টারপ্রাইজ ও ডেভেলপার স্কিলস হাব (80 Zoom Skills Hub)**\n\n"
+        "জুম মিটিং, এন্টারপ্রাইজ ওয়েবিনার, REST API v2, OAuth, ওয়েবহুক, মার্কেটিং অটোমেশন, GA4 ও GTM ট্র্যাকিং এবং মিটিং/ভিডিও SDK-এর সম্পূর্ণ মাস্টার ডেটাবেস।\n\n"
+        "📂 **ক্যাটাগরি নির্বাচন করুন অথবা যেকোনো স্কিল দেখতে লিখুন:** `/zoom <১-৮০>`\n"
+        "(যেমন: `/zoom 45` for GTM, `/zoom 23` for Server-to-Server OAuth)"
+    )
+
+    keyboard = [
+        [
+            InlineKeyboardButton("⚙️ 1. Core (1-10)", callback_data="zoom_cat:1"),
+            InlineKeyboardButton("🎥 2. Webinar (11-20)", callback_data="zoom_cat:2")
+        ],
+        [
+            InlineKeyboardButton("🔌 3. API & Webhook (21-30)", callback_data="zoom_cat:3"),
+            InlineKeyboardButton("⚡ 4. Automation (31-40)", callback_data="zoom_cat:4")
+        ],
+        [
+            InlineKeyboardButton("📈 5. Tracking & GA4 (41-50)", callback_data="zoom_cat:5"),
+            InlineKeyboardButton("🤖 6. AI Workflows (51-60)", callback_data="zoom_cat:6")
+        ],
+        [
+            InlineKeyboardButton("📞 7. Contact Center (61-70)", callback_data="zoom_cat:7"),
+            InlineKeyboardButton("💻 8. Advanced SDK (71-80)", callback_data="zoom_cat:8")
+        ],
+        [
+            InlineKeyboardButton("🎲 র‍্যান্ডম জুম ইন্টারভিউ চ্যালেঞ্জ", callback_data="zoom_rand")
+        ]
+    ]
+    await update.message.reply_text(cat_msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
 
 async def quiz_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -1089,6 +1202,93 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
                 f"সঠিক অর্থ নির্বাচন করুন:"
             )
             await context.bot.send_message(chat_id=chat_id, text=quiz_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("zoom_audio:"):
+        sid = int(data.replace("zoom_audio:", ""))
+        skill = zoom_skills_data.get_zoom_skill_by_id(sid)
+        if skill:
+            accent = database.get_or_create_user(user_id=user_id, chat_id=chat_id).get("accent", "US")
+            voice = VOICE_MAP.get(accent, "en-US-ChristopherNeural")
+            audio_text = f"Zoom Skill #{skill['id']}. {skill['title']}. Spoken pitch: {skill['spoken']}"
+            audio_bytes = await tts_service.text_to_speech_bytes(audio_text, voice=voice)
+            if audio_bytes:
+                await context.bot.send_voice(
+                    chat_id=chat_id,
+                    voice=audio_bytes,
+                    caption=f"🗣️ **Zoom Skill #{skill['id']}: {skill['title']}**\n*\"{skill['spoken']}\"*",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            else:
+                await query.answer("উচ্চারণ অডিও প্রস্তুত করা যায়নি।", show_alert=True)
+        else:
+            await query.answer("স্কিল পাওয়া যায়নি।", show_alert=True)
+
+    elif data.startswith("zoom_q:"):
+        sid = int(data.replace("zoom_q:", ""))
+        skill = zoom_skills_data.get_zoom_skill_by_id(sid)
+        if skill:
+            database.set_interview_state(user_id, f"Zoom Skill #{sid}: {skill['title']}")
+            database.add_chat_history(user_id, "model", skill["interview_q"])
+            prompt_text = (
+                f"🎙️ **Zoom Client Interview Challenge (#{sid} {skill['title']}):**\n\n"
+                f"👤 **Client Asks:**\n*\"{skill['interview_q']}\"*\n\n"
+                f"👉 আপনি টেক্সট লিখে অথবা **মুখে কথা বলে ভয়েস মেসেজ পাঠিয়ে** উত্তর দিন! বট আপনার টেকনিক্যাল যুক্তি ও ফ্লুয়েন্সি রিভিউ করবে।"
+            )
+            await context.bot.send_message(chat_id=chat_id, text=prompt_text, parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("zoom_cat:"):
+        cid = int(data.replace("zoom_cat:", ""))
+        cat_skills = zoom_skills_data.get_skills_by_category(cid)
+        cat_info = next((c for c in zoom_skills_data.ZOOM_CATEGORIES if c["id"] == cid), None)
+        cat_name = cat_info["name"] if cat_info else f"Category {cid}"
+
+        msg = f"📂 **{cat_name} (Skills {cat_info['range'] if cat_info else ''}):**\n\nযে স্কিলটি দেখতে চান নির্বাচন করুন:"
+        keyboard = []
+        for s in cat_skills:
+            keyboard.append([InlineKeyboardButton(f"#{s['id']} {s['title']}", callback_data=f"zoom_skill:{s['id']}")])
+        keyboard.append([InlineKeyboardButton("🔙 সকল ক্যাটাগরি", callback_data="zoom_cats")])
+        await query.edit_message_text(msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
+
+    elif data.startswith("zoom_skill:"):
+        sid = int(data.replace("zoom_skill:", ""))
+        skill = zoom_skills_data.get_zoom_skill_by_id(sid)
+        if skill:
+            msg, markup = format_zoom_skill_card(skill)
+            await query.edit_message_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+
+    elif data == "zoom_rand":
+        rand_skill = random.choice(zoom_skills_data.ZOOM_SKILLS)
+        msg, markup = format_zoom_skill_card(rand_skill)
+        await query.edit_message_text(msg, reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+
+    elif data == "zoom_cats":
+        cat_msg = (
+            "🎯 **৮০ জুম এন্টারপ্রাইজ ও ডেভেলপার স্কিলস হাব (80 Zoom Skills Hub)**\n\n"
+            "জুম মিটিং, এন্টারপ্রাইজ ওয়েবিনার, REST API v2, OAuth, ওয়েবহুক, মার্কেটিং অটোমেশন, GA4 ও GTM ট্র্যাকিং এবং মিটিং/ভিডিও SDK-এর সম্পূর্ণ মাস্টার ডেটাবেস।\n\n"
+            "📂 **ক্যাটাগরি নির্বাচন করুন অথবা যেকোনো স্কিল দেখতে লিখুন:** `/zoom <১-৮০>`"
+        )
+        keyboard = [
+            [
+                InlineKeyboardButton("⚙️ 1. Core (1-10)", callback_data="zoom_cat:1"),
+                InlineKeyboardButton("🎥 2. Webinar (11-20)", callback_data="zoom_cat:2")
+            ],
+            [
+                InlineKeyboardButton("🔌 3. API & Webhook (21-30)", callback_data="zoom_cat:3"),
+                InlineKeyboardButton("⚡ 4. Automation (31-40)", callback_data="zoom_cat:4")
+            ],
+            [
+                InlineKeyboardButton("📈 5. Tracking & GA4 (41-50)", callback_data="zoom_cat:5"),
+                InlineKeyboardButton("🤖 6. AI Workflows (51-60)", callback_data="zoom_cat:6")
+            ],
+            [
+                InlineKeyboardButton("📞 7. Contact Center (61-70)", callback_data="zoom_cat:7"),
+                InlineKeyboardButton("💻 8. Advanced SDK (71-80)", callback_data="zoom_cat:8")
+            ],
+            [
+                InlineKeyboardButton("🎲 র‍্যান্ডম জুম ইন্টারভিউ চ্যালেঞ্জ", callback_data="zoom_rand")
+            ]
+        ]
+        await query.edit_message_text(cat_msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
 
     elif data.startswith("start_interview_"):
         scen_type = data.replace("start_interview_", "")
@@ -1732,6 +1932,7 @@ def main():
     app.add_handler(CommandHandler("skill", skill_command))
     app.add_handler(CommandHandler("fast", fast_command))
     app.add_handler(CommandHandler("speed", fast_command))
+    app.add_handler(CommandHandler("zoom", zoom_command))
 
     # Callback queries (Buttons)
     app.add_handler(CallbackQueryHandler(handle_callback_query))
