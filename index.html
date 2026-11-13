@@ -9,7 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="skills200.js"></script>
     <script src="vocab10k.js"></script>
-    <script src="zoom_skills.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -123,16 +122,9 @@
                 <span class="text-amber-400">⚡</span>
                 <span class="font-semibold text-indigo-300">200 Fast-Speech Skills</span>
             </button>
-            <button onclick="switchTab('zoom80')" id="tab-btn-zoom80" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-cyan-500/20 bg-cyan-950/20">
-                <span class="text-cyan-400">🎯</span>
-                <span class="font-bold text-cyan-300">80 Zoom Skills</span>
-            </button>
             <button onclick="switchTab('caller')" id="tab-btn-caller" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-rose-500/20 bg-rose-950/10">
                 <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
                 <span class="font-bold text-rose-300">📹 Zoom AI Interview Studio</span>
-            </button>
-            <button onclick="switchTab('freelance')" id="tab-btn-freelance" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition">
-                <span>💼 Upwork & Client</span>
             </button>
             <button onclick="switchTab('wordbank')" id="tab-btn-wordbank" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2 transition border border-emerald-500/20 bg-emerald-950/10">
                 <span class="text-emerald-400">📚</span>
@@ -398,13 +390,8 @@
 
                         <select id="meeting-dialogue-mode" onchange="changeDialogueMode()" class="bg-slate-900 border border-slate-700 text-indigo-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer">
                             <option value="interview">🎯 Mode: Client Interviewing Me</option>
-                            <option value="zoom80">🎯 Mode: 80 Zoom Enterprise Skills</option>
                             <option value="qa">💬 Mode: Free Q&A (Ask Client Anything)</option>
                             <option value="skills">⚡ Mode: 200 Fast-Speech Skill Drill</option>
-                        </select>
-
-                        <select id="meeting-zoom-skill-select" onchange="onZoomSkillSelectChange(this.value)" class="bg-slate-900 border border-cyan-500/40 text-cyan-300 rounded-xl px-2.5 py-1 text-xs font-semibold focus:outline-none cursor-pointer max-w-[220px] truncate" title="Select specific Zoom Technical Skill to be interviewed on">
-                            <option value="all">🎯 Zoom Focus: All 80 Skills</option>
                         </select>
                     </div>
                 </div>
@@ -1562,54 +1549,6 @@
 
         </section>
 
-        <!-- TAB 3: FREELANCE & UPWORK CHEAT SHEET -->
-        <section id="tab-freelance" class="hidden space-y-6">
-            <div class="glass rounded-3xl p-6 sm:p-8">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-white">💼 Web Analytics & Tracking Emergency Client Scripts</h3>
-                    <p class="text-xs text-slate-400 mt-1">জুম কল বা ক্লায়েন্ট চ্যাটে আত্মবিশ্বাসের সাথে ব্যবহার করার মতো রেডিমেড আমেরিকান স্ক্রিপ্ট</p>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Script Card 1 -->
-                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Meta CAPI Deduplication Issue</span>
-                            <button onclick="copyText('script-1')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
-                        </div>
-                        <p id="script-1" class="text-sm text-slate-200 leading-relaxed font-mono">
-                            "The drop in event match quality is typically caused when the browser and server payloads don't share identical event_id tokens. I can open Tag Assistant right now, audit the dataLayer pushes, and make sure every purchase event deduplicates cleanly."
-                        </p>
-                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> ব্রাউজার ও সার্ভারের event_id মিল না থাকলে এই সমস্যা হয়। আমি এখনই ট্যাগ অ্যাসিস্ট্যান্টে পরীক্ষা করে সমাধান করছি।</div>
-                    </div>
-
-                    <!-- Script Card 2 -->
-                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hourly Rate Increase ($30 to $60/hr)</span>
-                            <button onclick="copyText('script-2')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
-                        </div>
-                        <p id="script-2" class="text-sm text-slate-200 leading-relaxed font-mono">
-                            "I totally get where you're coming from with the quarterly budget. The reason for my updated rate is that I specialize strictly in server-side infrastructure and ad signal recovery. We typically recover 20 to 25% of lost attribution, which directly reduces your customer acquisition cost."
-                        </p>
-                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> বায়ারের বাজেটকে সম্মান জানিয়ে নিজের ভ্যালু ও বিজ্ঞাপনে অপচয় বাঁচানোর যুক্তি দিয়ে রেট বাড়ানো।</div>
-                    </div>
-
-                    <!-- Script Card 3 -->
-                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Angry Client De-escalation</span>
-                            <button onclick="copyText('script-3')" class="text-xs px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Copy</button>
-                        </div>
-                        <p id="script-3" class="text-sm text-slate-200 leading-relaxed font-mono">
-                            "I hear you loud and clear, and I understand how stressful sudden campaign dips are. Rest assured, your core tracking tags are intact. Let me hop into Meta Events Manager right now, pull the raw payload logs, and send you a 2-minute video breakdown of exactly what's happening."
-                        </p>
-                        <div class="mt-2 text-xs text-slate-400">🇧🇩 <strong>বাংলা অর্থ:</strong> রাগ প্রকাশ না করে ক্লায়েন্টকে শান্ত করা এবং দ্রুত ভিডিও ব্রেকডাউন পাঠানোর প্রতিশ্রুতি দেওয়া।</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- TAB 4: 10,000 ESSENTIAL VOCABULARY & SLANG BANK -->
         <section id="tab-wordbank" class="hidden space-y-6">
             <!-- Header card -->
@@ -1755,82 +1694,6 @@
             </div>
         </section>
 
-        <!-- TAB: 80 ZOOM ENTERPRISE & DEVELOPER SKILLS -->
-        <section id="tab-zoom80" class="hidden space-y-6">
-            <!-- Header card -->
-            <div class="glass p-6 sm:p-8 rounded-3xl glow border border-cyan-500/20 bg-gradient-to-br from-cyan-950/40 via-slate-900/60 to-slate-950">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                            <span>🎯 80 Zoom Enterprise & Developer Skills</span>
-                            <span>•</span>
-                            <span>Core, API, Webhooks, GA4/GTM, Automation & SDK</span>
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                            <span>Zoom Technical Skills Hub</span>
-                            <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono">80 Skills</span>
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
-                            জুম অ্যাডমিনিস্ট্রেশন, ওয়েবিনার অটোমেশন, সার্ভার-টু-সার্ভার OAuth API, GA4 ও GTM ট্র্যাকিং, GoHighLevel/HubSpot সিঙ্ক, এবং মিটিং ও ভিডিও SDK-এর প্রফেশনাল টেকনিক্যাল গাইড ও ক্লায়েন্ট ইন্টারভিউ স্ক্রিপ্ট।
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3 flex-wrap">
-                        <button onclick="launchZoomSkillInterviewRandom()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition">
-                            <span>📹 Practice in Zoom Studio</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 8 Category Filter Pills Bar -->
-                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin text-xs">
-                    <button onclick="filterZoomCategory(0)" id="zcat-btn-0" class="zcat-btn px-3 py-1.5 rounded-xl bg-cyan-600 text-white font-bold transition shrink-0">
-                        🌟 All 80 Skills
-                    </button>
-                    <button onclick="filterZoomCategory(1)" id="zcat-btn-1" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        ⚙️ 1. Core (1-10)
-                    </button>
-                    <button onclick="filterZoomCategory(2)" id="zcat-btn-2" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        🎥 2. Webinar & Events (11-20)
-                    </button>
-                    <button onclick="filterZoomCategory(3)" id="zcat-btn-3" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        🔌 3. API & Webhooks (21-30)
-                    </button>
-                    <button onclick="filterZoomCategory(4)" id="zcat-btn-4" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        ⚡ 4. Marketing Automation (31-40)
-                    </button>
-                    <button onclick="filterZoomCategory(5)" id="zcat-btn-5" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        📈 5. Analytics & Tracking (41-50)
-                    </button>
-                    <button onclick="filterZoomCategory(6)" id="zcat-btn-6" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        🤖 6. AI & Automation (51-60)
-                    </button>
-                    <button onclick="filterZoomCategory(7)" id="zcat-btn-7" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        📞 7. Contact Center & Phone (61-70)
-                    </button>
-                    <button onclick="filterZoomCategory(8)" id="zcat-btn-8" class="zcat-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition shrink-0">
-                        💻 8. Advanced SDK & Code (71-80)
-                    </button>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="mt-4 relative">
-                    <input type="text" id="zoom-skill-search" oninput="filterZoomSkillsSearch()" placeholder="🔍 Search Zoom skills (e.g. OAuth, Google Tag Manager, GoHighLevel, SDK, Webhooks...)" class="w-full pl-11 pr-10 py-3 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-500">
-                    <span class="absolute left-4 top-3.5 text-slate-400">🔍</span>
-                    <button onclick="clearZoomSearch()" class="absolute right-3.5 top-3 text-slate-400 hover:text-white text-sm">✕</button>
-                </div>
-
-                <div class="mt-3 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800/80 pt-3">
-                    <span id="zoom-skills-count">Showing 80 of 80 Zoom Skills</span>
-                    <span class="text-cyan-400 font-mono text-[11px]">Upwork & Client Technical Ready</span>
-                </div>
-            </div>
-
-            <!-- Skills Cards Grid -->
-            <div id="zoom-skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Dynamically populated by renderZoomSkills() -->
-            </div>
-        </section>
-
         <!-- TAB 5: 200 FAST-SPEECH SKILLS EXPLORER -->
         <section id="tab-skills200" class="hidden space-y-6">
             <!-- Header card -->
@@ -1934,7 +1797,7 @@
 
         // Tab Switching
         function switchTab(tabName) {
-            const tabs = ['dashboard', 'skills200', 'zoom80', 'caller', 'freelance', 'wordbank'];
+            const tabs = ['dashboard', 'skills200', 'caller', 'wordbank'];
             tabs.forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 const btn = document.getElementById('tab-btn-' + t);
@@ -1951,9 +1814,6 @@
             });
             if (tabName === 'wordbank') {
                 initVocab10k();
-            }
-            if (tabName === 'zoom80') {
-                initZoomSkills();
             }
         }
 
